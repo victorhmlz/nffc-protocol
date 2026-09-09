@@ -156,16 +156,11 @@ Pull Request opened against `main` (see below); this report generated and commit
 
 Branch: `task/TASK-00-product-architecture-spec` (from `main` @ `18f6689`).
 
-`gh` CLI is not available in this environment, so the PR is opened manually by the Project Lead.
-Open it from:
-
-`https://github.com/victorhmlz/nffc-protocol/compare/main...task/TASK-00-product-architecture-spec?expand=1`
-
-Suggested PR title: `TASK-00 — Product & Architecture Specification`.
-Suggested PR body: this report (`docs/reports/TASK-00-REPORT.md`).
+**PR: https://github.com/victorhmlz/nffc-protocol/pull/1** — "TASK-00 — Product & Architecture
+Specification", base `main`. Opened with `gh` 2.100.0 (authenticated as `victorhmlz`) once the CLI
+was located at `C:\Program Files\GitHub CLI\gh.exe`.
 
 **Do not merge** — the Project Lead reviews and authorizes the merge and the start of TASK-01.
-Once the PR URL exists, it can be recorded here in a follow-up commit on this branch.
 
 ## NEXT TASK
 
