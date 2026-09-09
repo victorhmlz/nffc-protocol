@@ -116,3 +116,24 @@ settled (see `docs/reports/TASK-02-REPORT.md`). The harness and template are run
   `domain/shared/branded.ts` and the per-concept modules — not bare `string` / `number`.
 - Prefer `readonly` fields and `readonly T[]` on domain types; they describe records, not mutable
   state.
+
+## 6. Contracts (`contracts/`)
+
+A separate toolchain — **Hardhat 3** (`hardhat.config.ts` at the repo root), solc **0.8.34** pinned.
+Not covered by `pnpm verify`; runs as its own CI job.
+
+```bash
+pnpm contracts:build   # hardhat compile
+pnpm contracts:test    # hardhat test — Solidity tests
+```
+
+- **Node ≥ 22.13** is required (Hardhat 3). `.nvmrc` resolves to a supported 22.x in CI.
+- Tests are **Solidity** (`contracts/*.t.sol`, forge-std `Test` base). One assertion focus per
+  `test_*`; `testFuzz_*` for property tests. Mocks in `contracts/mocks/`.
+- Concrete contracts: `pragma solidity 0.8.34;` (pinned — no floating pragma for deployables);
+  interfaces `pragma solidity ^0.8.20;`.
+- OpenZeppelin (`@openzeppelin/contracts`) via npm; `forge-std` via a pinned Git dependency.
+- `contracts/`, `hardhat.config.ts`, `artifacts/`, `cache/` are excluded from the root `tsconfig`,
+  ESLint, and Prettier — the Solidity toolchain owns them.
+- Security rules: `docs/spec/08-security-principles.md` (AccessControl, custom errors, complete
+  events, checks-effects-interactions, no `tx.origin`, pinned pragma, multisig admin).

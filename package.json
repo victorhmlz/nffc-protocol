@@ -4,7 +4,7 @@
   "private": true,
   "description": "NFFC Protocol — DApp for Non-Fungible Financial Collectibles.",
   "engines": {
-    "node": ">=20.9.0"
+    "node": ">=22.13.0"
   },
   "packageManager": "pnpm@12.3.4",
   "scripts": {
@@ -19,6 +19,8 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "db:migrate": "node db/migrate.mjs",
+    "contracts:build": "hardhat compile",
+    "contracts:test": "hardhat test",
     "verify": "pnpm run lint && pnpm run typecheck && pnpm run test && pnpm run build"
   },
   "dependencies": {
@@ -39,17 +41,21 @@
     "zod": "^4.6.0"
   },
   "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox-viem": "^5.0.7",
+    "@openzeppelin/contracts": "^5.6.1",
     "@tailwindcss/postcss": "^4",
     "@testing-library/dom": "^10.4.1",
-    "@types/pg": "^8.23.1",
     "@testing-library/jest-dom": "^7.0.1",
     "@testing-library/react": "^16.3.3",
     "@types/node": "^22",
+    "@types/pg": "^8.23.1",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.3.4",
     "eslint-config-prettier": "^10.1.8",
+    "forge-std": "github:foundry-rs/forge-std#v1.16.2",
+    "hardhat": "^3.16.0",
     "jsdom": "^25.0.1",
     "prettier": "^3.9.6",
     "tailwindcss": "^4",
