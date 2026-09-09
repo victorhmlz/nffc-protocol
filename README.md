@@ -12,10 +12,11 @@ supported providers from V1.
   `NFFC_Whitepaper.md` (v1.1), `NFFC_Roadmap.md` (v1.1)
 - Per-task reports: [`docs/reports/`](docs/reports/)
 
-> **Status: asset registry (TASK-05).** Toolchain (TASK-01), module skeleton + boundaries (TASK-02),
-> design system (TASK-03), infrastructure (TASK-04), and now the first on-chain contracts:
-> `AssetIdentityRegistry` + `RepresentationRegistry` (Hardhat 3 / Solidity 0.8.34). No product
-> surfaces or off-chain domain behaviour yet.
+> **Status: Robinhood adapter (TASK-06).** Toolchain (TASK-01), module skeleton + boundaries
+> (TASK-02), design system (TASK-03), infrastructure (TASK-04), asset + representation registries
+> (TASK-05), and now `RobinhoodAdapter` + the first real off-chain sync worker
+> (`workers/robinhood-sync/`). No product surfaces yet; the worker is not operational until the
+> contracts are deployed (TASK-31).
 
 ## Stack
 
@@ -67,6 +68,7 @@ infrastructure configured; `staging`/`production` require `DATABASE_URL`, `REDIS
 | `pnpm test` | Vitest (run once) |
 | `pnpm test:watch` | Vitest (watch) |
 | `pnpm db:migrate` | Apply `db/migrations/*.sql` (`--dry-run` to preview). Needs `DATABASE_URL`. |
+| `pnpm worker <path>` | Run a worker, e.g. `pnpm worker workers/robinhood-sync/index.ts` (via `tsx`; Node ≥ 22.13). |
 | `pnpm contracts:build` | Compile `contracts/` (Hardhat 3). Needs Node ≥ 22.13. |
 | `pnpm contracts:test` | Run the Solidity tests (`contracts/*.t.sol`). |
 | `pnpm verify` | lint → typecheck → test → build (JS/TS gate; contracts are a separate CI job) |
@@ -83,7 +85,8 @@ adapters/           per-provider adapters (one shared interface) + provider-adap
 infra/              server-only runtime plumbing: env, logger, RPC, PostgreSQL, Redis, health (TASK-04)
 config/             typed configuration; fixed chain facts
 workers/            long-running / scheduled processes, outside the Next request cycle
-contracts/          Solidity — Hardhat 3; AssetIdentityRegistry + RepresentationRegistry (TASK-05)
+                    (robinhood-sync — TASK-06)
+contracts/          Solidity — Hardhat 3; registries (TASK-05) + RobinhoodAdapter (TASK-06)
 db/                 PostgreSQL migrations + runner (TASK-04)
 docs/spec/          product & architecture specification (TASK-00)
 docs/conventions.md module boundaries, Server/Client rules, test layout (TASK-02)

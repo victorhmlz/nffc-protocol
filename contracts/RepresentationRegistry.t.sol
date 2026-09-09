@@ -196,6 +196,9 @@ contract RepresentationRegistryTest is Test {
         assertTrue(reps.isActiveRepresentation(rh));
         assertTrue(reps.isActiveRepresentation(cr));
         assertTrue(reps.resolvesTo(cr, btc));
+        assertEq(reps.getRepresentationsByProvider(ROBINHOOD).length, 1);
+        assertEq(reps.getRepresentationsByProvider(CRYPTO).length, 1);
+        assertEq(reps.getRepresentationsByProvider(ROBINHOOD)[0], rh);
 
         IRepresentationRegistry.Representation memory r = reps.getRepresentation(cr);
         assertEq(r.providerId, CRYPTO);

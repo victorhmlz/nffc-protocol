@@ -20,6 +20,7 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "db:migrate": "node db/migrate.mjs",
+    "worker": "tsx",
     "contracts:build": "hardhat compile",
     "contracts:test": "hardhat test",
     "verify": "pnpm run lint && pnpm run typecheck && pnpm run test && pnpm run build"
@@ -60,6 +61,7 @@
     "jsdom": "^25.0.1",
     "prettier": "^3.9.6",
     "tailwindcss": "^4",
+    "tsx": "^4.23.13",
     "typescript": "^5",
     "vite": "^6.4.3",
     "vitest": "^3.2.7"
