@@ -2,6 +2,7 @@
   "name": "nffc-protocol",
   "version": "0.0.0",
   "private": true,
+  "type": "module",
   "description": "NFFC Protocol — DApp for Non-Fungible Financial Collectibles.",
   "engines": {
     "node": ">=22.13.0"
