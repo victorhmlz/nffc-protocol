@@ -12,9 +12,10 @@ supported providers from V1.
   `NFFC_Whitepaper.md` (v1.1), `NFFC_Roadmap.md` (v1.1)
 - Per-task reports: [`docs/reports/`](docs/reports/)
 
-> **Status: design system (TASK-03).** Toolchain (TASK-01) + module skeleton and boundaries
-> (TASK-02) + the visual foundation: design tokens (light/dark), base components
-> (`src/components/ui/`), and the theming mechanism. No product surfaces or domain behaviour yet.
+> **Status: infrastructure (TASK-04).** Toolchain (TASK-01), module skeleton + boundaries (TASK-02),
+> design system (TASK-03), and now the runtime plumbing: typed env loader, structured logging,
+> multi-provider RPC abstraction, PostgreSQL + Redis connections, migration runner, Next error
+> boundaries, health/readiness probes. No product surfaces or domain behaviour yet.
 
 ## Stack
 
@@ -44,8 +45,12 @@ supported providers from V1.
 ```bash
 corepack enable          # first time only
 pnpm install
-cp .env.example .env.local   # no variables are required for TASK-01
+cp .env.example .env.local   # dev/test need no variables; see the file for RPC/DB/Redis
 ```
+
+`.env.example` documents every variable. `development` and `test` run with none of the
+infrastructure configured; `staging`/`production` require `DATABASE_URL`, `REDIS_URL`, and
+`RPC_4663_URLS` (validated by `infra/env.ts`).
 
 ## Scripts
 
@@ -61,6 +66,7 @@ cp .env.example .env.local   # no variables are required for TASK-01
 | `pnpm typecheck` | `next typegen` then `tsc --noEmit` |
 | `pnpm test` | Vitest (run once) |
 | `pnpm test:watch` | Vitest (watch) |
+| `pnpm db:migrate` | Apply `db/migrations/*.sql` (`--dry-run` to preview). Needs `DATABASE_URL`. |
 | `pnpm verify` | lint → typecheck → test → build (same gate as CI) |
 
 ## Layout
@@ -72,8 +78,10 @@ src/components/ui/  design-system primitives (TASK-03)
 src/lib/            cn(), wallet state machine types, shared client helpers
 domain/             framework- and provider-agnostic core: types + ports/ interfaces
 adapters/           per-provider adapters (one shared interface) + provider-adapter registry
-config/             typed configuration; fixed chain facts. Loader is TASK-04
+infra/              server-only runtime plumbing: env, logger, RPC, PostgreSQL, Redis, health (TASK-04)
+config/             typed configuration; fixed chain facts
 workers/            long-running / scheduled processes, outside the Next request cycle
+db/                 PostgreSQL migrations + runner (TASK-04)
 docs/spec/          product & architecture specification (TASK-00)
 docs/conventions.md module boundaries, Server/Client rules, test layout (TASK-02)
 docs/design-system.md  tokens, components, theming, responsive rules (TASK-03)
@@ -81,9 +89,9 @@ docs/reports/       TASK-XX-REPORT.md per task
 .github/workflows/  CI
 ```
 
-Import via path aliases: `@/*` → `src/*`, `@domain/*`, `@adapters/*`, `@config/*`, `@workers/*`.
-The `domain → adapters → src/workers` dependency direction is one-way and enforced by ESLint
-(`docs/conventions.md` §1).
+Import via path aliases: `@/*` → `src/*`, `@domain/*`, `@adapters/*`, `@infra/*`, `@config/*`,
+`@workers/*`. The dependency direction (`domain` ← `config`/`infra`/`adapters` ← `src`/`workers`) is
+one-way and enforced by ESLint (`docs/conventions.md` §1).
 
 ## Contributing / task workflow
 
