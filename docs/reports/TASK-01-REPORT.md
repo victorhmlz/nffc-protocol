@@ -4,8 +4,9 @@
 
 COMPLETED
 
-(Local gate `pnpm verify` — lint · typecheck · test · build — is green. The GitHub Actions CI run
-is triggered on push of this branch; its result is recorded in the PULL REQUEST section below.)
+Local gate `pnpm verify` (lint · typecheck · test · build) is green, and the GitHub Actions CI run
+on PR #2 passed — all steps (install · lint · typecheck · test · build) succeeded in ~30s. See the
+PULL REQUEST section.
 
 ## OBJECTIVE
 
@@ -184,7 +185,7 @@ Not applicable to the bootstrap. Cold `pnpm install` ~2m26s (first run, empty st
 |---|---|---|
 | Repo initialized with Next.js (App Router) + TypeScript | Met | `create-next-app@16.3.4`, `src/app/`, `tsconfig.json` |
 | `tsconfig.json` `strict`, package manager, linter (flags explicit `any`), formatter, test runner — configured and working from the first commit | Met | `strict` + extras; pnpm@12.3.4 pinned; ESLint `no-explicit-any: error`; Prettier; Vitest — all green |
-| Minimal CI (build + lint + typecheck + test) | Met (workflow committed) | `.github/workflows/ci.yml`; run result in PULL REQUEST below |
+| Minimal CI (build + lint + typecheck + test) | Met | `.github/workflows/ci.yml`; run `34356919426` on PR #2 — **success**, all steps green in ~30s |
 | README with local setup instructions | Met | `README.md` (prerequisites, `corepack enable`, `pnpm install`, scripts) |
 | Build, lint, typecheck, test green from the first commit, no domain code | Met | §TESTS, §BUILD, §LINT/TYPECHECK; only a smoke test + empty skeleton |
 | No feature code or domain mocks mixed into the bootstrap | Met | §FILES CREATED — toolchain + one smoke test + skeleton READMEs only |
@@ -195,8 +196,13 @@ Not applicable to the bootstrap. Cold `pnpm install` ~2m26s (first run, empty st
 
 Branch `task/TASK-01-project-initialization` from `main` @ `18f6689`.
 
-PR: _to be filled after `gh pr create`._
-CI run: _to be filled after the GitHub Actions run completes._
+**PR: https://github.com/victorhmlz/nffc-protocol/pull/2** — "TASK-01 — Project Initialization",
+base `main`.
+
+**CI: https://github.com/victorhmlz/nffc-protocol/actions/runs/34356919426 — success.** Steps
+install · lint · typecheck · test · build all green (~30s). A follow-up commit bumps
+`actions/checkout` and `actions/setup-node` to `v5` (the `v4` pair triggered a GitHub deprecation
+annotation about their Node 20 runtime — non-fatal); re-run linked on the PR.
 
 **Do not merge** — the Project Lead reviews and authorizes the merge and the start of TASK-02.
 Recommended merge order: PR #1 (TASK-00) first, then this PR.
