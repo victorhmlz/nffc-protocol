@@ -1,1 +1,259 @@
 @import "tailwindcss";
+
+/* Dark mode is driven by `data-theme` on <html> (set before paint by ThemeScript,
+   toggled by ThemeToggle). `dark:` utilities respond to it. */
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
+/* ---------------------------------------------------------------------------
+   Static design tokens → Tailwind utilities + CSS variables.
+   See docs/design-system.md for the written specification.
+   --------------------------------------------------------------------------- */
+@theme {
+  --font-sans:
+    var(--font-inter), ui-sans-serif, system-ui, -apple-system, "Segoe UI",
+    sans-serif;
+  --font-mono:
+    var(--font-jetbrains-mono), ui-monospace, "SFMono-Regular",
+    "JetBrains Mono", "Menlo", monospace;
+
+  --radius-xs: 0.25rem;
+  --radius-sm: 0.375rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+
+  --shadow-xs: 0 1px 2px 0 rgb(11 11 11 / 0.04);
+  --shadow-sm:
+    0 1px 3px 0 rgb(11 11 11 / 0.06), 0 1px 2px -1px rgb(11 11 11 / 0.06);
+  --shadow-md:
+    0 4px 12px -2px rgb(11 11 11 / 0.08), 0 2px 6px -2px rgb(11 11 11 / 0.06);
+  --shadow-lg:
+    0 12px 32px -8px rgb(11 11 11 / 0.14), 0 4px 12px -4px rgb(11 11 11 / 0.08);
+
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --duration-fast: 120ms;
+  --duration-base: 180ms;
+}
+
+/* ---------------------------------------------------------------------------
+   Semantic tokens — the themeable layer. Components reference ONLY these
+   (via `bg-surface`, `text-muted-foreground`, `border-border`, …), never raw hex.
+   --------------------------------------------------------------------------- */
+:root,
+:root[data-theme="light"] {
+  color-scheme: light;
+
+  --background: #f9f9f7;
+  --foreground: #0b0b0b;
+
+  --surface: #ffffff;
+  --surface-foreground: #0b0b0b;
+  --surface-raised: #ffffff;
+
+  --muted: #f1f1ee;
+  --muted-foreground: #52514e;
+  --subtle-foreground: #898781;
+
+  --border: #e1e0d9;
+  --border-strong: #c3c2b7;
+  --input: #d7d6ce;
+  --ring: #2a78d6;
+
+  --primary: #2a78d6;
+  --primary-foreground: #ffffff;
+  --accent: #eef4fc;
+  --accent-foreground: #184f95;
+
+  /* Financial deltas — always paired with an arrow/label, never colour alone. */
+  --gain: #006300;
+  --gain-foreground: #ffffff;
+  --loss: #d03b3b;
+  --loss-foreground: #ffffff;
+
+  /* Status — reserved; fixed across themes; shipped with icon + label. */
+  --status-good: #0ca30c;
+  --status-warning: #fab219;
+  --status-serious: #ec835a;
+  --status-critical: #d03b3b;
+
+  /* Chart — from the validated data-viz reference palette (light steps). */
+  --chart-surface: #fcfcfb;
+  --chart-grid: #e1e0d9;
+  --chart-axis: #c3c2b7;
+  --chart-label: #898781;
+  --chart-1: #2a78d6;
+  --chart-2: #eb6834;
+  --chart-3: #1baf7a;
+  --chart-4: #eda100;
+  --chart-5: #e87ba4;
+  --chart-6: #008300;
+  --chart-7: #4a3aa7;
+  --chart-8: #e34948;
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+
+  --background: #0d0d0d;
+  --foreground: #ffffff;
+
+  --surface: #1a1a19;
+  --surface-foreground: #ffffff;
+  --surface-raised: #212120;
+
+  --muted: #242423;
+  --muted-foreground: #c3c2b7;
+  --subtle-foreground: #898781;
+
+  --border: #2c2c2a;
+  --border-strong: #383835;
+  --input: #383835;
+  --ring: #3987e5;
+
+  --primary: #3987e5;
+  --primary-foreground: #0b0b0b;
+  --accent: #17263b;
+  --accent-foreground: #cde2fb;
+
+  --gain: #0ca30c;
+  --gain-foreground: #0b0b0b;
+  --loss: #e66767;
+  --loss-foreground: #0b0b0b;
+
+  --status-good: #0ca30c;
+  --status-warning: #fab219;
+  --status-serious: #ec835a;
+  --status-critical: #d03b3b;
+
+  --chart-surface: #1a1a19;
+  --chart-grid: #2c2c2a;
+  --chart-axis: #383835;
+  --chart-label: #898781;
+  --chart-1: #3987e5;
+  --chart-2: #d95926;
+  --chart-3: #199e70;
+  --chart-4: #c98500;
+  --chart-5: #d55181;
+  --chart-6: #008300;
+  --chart-7: #9085e9;
+  --chart-8: #e66767;
+}
+
+/* OS dark preference, when the viewer has made no explicit choice. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+
+    --background: #0d0d0d;
+    --foreground: #ffffff;
+    --surface: #1a1a19;
+    --surface-foreground: #ffffff;
+    --surface-raised: #212120;
+    --muted: #242423;
+    --muted-foreground: #c3c2b7;
+    --subtle-foreground: #898781;
+    --border: #2c2c2a;
+    --border-strong: #383835;
+    --input: #383835;
+    --ring: #3987e5;
+    --primary: #3987e5;
+    --primary-foreground: #0b0b0b;
+    --accent: #17263b;
+    --accent-foreground: #cde2fb;
+    --gain: #0ca30c;
+    --gain-foreground: #0b0b0b;
+    --loss: #e66767;
+    --loss-foreground: #0b0b0b;
+    --chart-surface: #1a1a19;
+    --chart-grid: #2c2c2a;
+    --chart-axis: #383835;
+    --chart-1: #3987e5;
+    --chart-2: #d95926;
+    --chart-3: #199e70;
+    --chart-4: #c98500;
+    --chart-5: #d55181;
+    --chart-6: #008300;
+    --chart-7: #9085e9;
+    --chart-8: #e66767;
+  }
+}
+
+/* Map semantic vars onto Tailwind colour utilities. `inline` keeps the
+   var reference live so utilities follow the active theme. */
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-surface: var(--surface);
+  --color-surface-foreground: var(--surface-foreground);
+  --color-surface-raised: var(--surface-raised);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-subtle-foreground: var(--subtle-foreground);
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-gain: var(--gain);
+  --color-gain-foreground: var(--gain-foreground);
+  --color-loss: var(--loss);
+  --color-loss-foreground: var(--loss-foreground);
+  --color-status-good: var(--status-good);
+  --color-status-warning: var(--status-warning);
+  --color-status-serious: var(--status-serious);
+  --color-status-critical: var(--status-critical);
+  --color-chart-surface: var(--chart-surface);
+  --color-chart-grid: var(--chart-grid);
+  --color-chart-axis: var(--chart-axis);
+  --color-chart-label: var(--chart-label);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-chart-6: var(--chart-6);
+  --color-chart-7: var(--chart-7);
+  --color-chart-8: var(--chart-8);
+}
+
+@layer base {
+  * {
+    border-color: var(--border);
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-sans);
+    font-feature-settings: "cv05", "ss01";
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* One consistent focus ring everywhere. */
+  :focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+    border-radius: var(--radius-xs);
+  }
+
+  ::selection {
+    background-color: color-mix(in oklab, var(--primary) 24%, transparent);
+  }
+
+  /* Monospace, tabular figures for anything that must align in a column:
+     prices, quantities, addresses, hashes. */
+  .tabular {
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: "tnum";
+  }
+}

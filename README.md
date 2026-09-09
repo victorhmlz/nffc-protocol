@@ -7,14 +7,14 @@ supported providers from V1.
 
 - Product & architecture spec: [`docs/spec/`](docs/spec/00-README.md)
 - Engineering conventions: [`docs/conventions.md`](docs/conventions.md)
+- Design system: [`docs/design-system.md`](docs/design-system.md) · live at `/style-guide`
 - Governance: `NFFC_Claude_Master_Prompt.md` (v2.1), `NFFC_Development_Plan.md` (v3.2),
   `NFFC_Whitepaper.md` (v1.1), `NFFC_Roadmap.md` (v1.1)
 - Per-task reports: [`docs/reports/`](docs/reports/)
 
-> **Status: architecture foundation (TASK-02).** Toolchain (TASK-01) plus the module skeleton and
-> boundaries: `domain/` (types + `ports/` interfaces), `adapters/` (registry + shared interface),
-> `config/`, `workers/` (harness). No domain behaviour yet — validators, NAV math, adapters, and
-> rarity land in later TASKS.
+> **Status: design system (TASK-03).** Toolchain (TASK-01) + module skeleton and boundaries
+> (TASK-02) + the visual foundation: design tokens (light/dark), base components
+> (`src/components/ui/`), and the theming mechanism. No product surfaces or domain behaviour yet.
 
 ## Stack
 
@@ -68,12 +68,15 @@ cp .env.example .env.local   # no variables are required for TASK-01
 ```
 src/app/            Next.js App Router; Server-first, Client Components only for wallet/signing
 src/app/api/        Route Handlers (short request/response only — see docs/conventions.md §3)
+src/components/ui/  design-system primitives (TASK-03)
+src/lib/            cn(), wallet state machine types, shared client helpers
 domain/             framework- and provider-agnostic core: types + ports/ interfaces
 adapters/           per-provider adapters (one shared interface) + provider-adapter registry
 config/             typed configuration; fixed chain facts. Loader is TASK-04
 workers/            long-running / scheduled processes, outside the Next request cycle
 docs/spec/          product & architecture specification (TASK-00)
 docs/conventions.md module boundaries, Server/Client rules, test layout (TASK-02)
+docs/design-system.md  tokens, components, theming, responsive rules (TASK-03)
 docs/reports/       TASK-XX-REPORT.md per task
 .github/workflows/  CI
 ```
