@@ -1,22 +1,22 @@
 # `domain/`
 
-Framework-agnostic, provider-agnostic core. Plain TypeScript.
+Framework-agnostic, provider-agnostic core. Plain TypeScript, no runtime dependencies.
 
-**Rules** (`docs/spec/03-architecture.md` §3):
+**Boundaries** (enforced by ESLint — `docs/conventions.md` §1): imports nothing from `next`,
+`react`, `adapters/`, `src/`, `workers/`, or `config/`. Depends only on itself.
 
-- Imports **nothing** from Next.js (`next/*`, `next/headers`, React).
-- Imports **nothing** provider-specific (`adapters/robinhood/*`, `adapters/crypto/*`) — depends only
-  on `domain/ports/*` interfaces.
-- Consumed by `src/` (app), `workers/`, and tests alike.
+## Layout (TASK-02)
 
-**Planned submodules** (populated from TASK-02 onward):
-
-| Path | Contents | First TASK |
+| Path | Contents | Fleshed out in |
 |---|---|---|
-| `domain/ports/` | Interfaces: `IProviderAdapter`, `IPriceOracle`, `IChainReader`, `IEventSource`, … | TASK-02 |
-| `domain/nffc/` | Composition rules, invariants I1–I8 | TASK-09 |
-| `domain/registry/` | Asset Identity / Representation model + validation | TASK-05 |
-| `domain/valuation/` | Reference NAV math | TASK-23 |
-| `domain/rarity/` | Static rarity formula | TASK-14 |
+| `shared/branded.ts` | Nominal id/time/address types | — |
+| `registry/types.ts` | `AssetIdentity`, `Provider`, `Network`, `Representation`, `OracleMetadata` | TASK-05 |
+| `nffc/composition.ts` | `Component`, `Composition`, `CompositionSegment`, invariant constants (`BPS_TOTAL`, `MIN/MAX_COMPONENTS`) | TASK-09 |
+| `pricing/types.ts` | `NormalizedPrice`, `PriceSource` | TASK-22 |
+| `valuation/types.ts` | `ReferenceNav`, `NavPoint`, performance windows | TASK-23 |
+| `rarity/types.ts` | `StaticRarity`, `StaticRarityInputs` | TASK-14 |
+| `ports/` | `Clock`, `ChainReader`, `BlockchainEventSource`, `PriceOracle`, `ProviderAdapter` | implementations live in `adapters/` + `workers/` per their TASKS |
+| `index.ts` | Public barrel | — |
 
-Empty in TASK-01 by design — no domain code is written during the bootstrap.
+TASK-02 defines the **types and interfaces only**. Validators (I1–I8), NAV math, and the rarity
+formula are added by the TASKS above.

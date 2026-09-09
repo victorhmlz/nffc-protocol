@@ -6,14 +6,15 @@ Chain (Chain ID 4663). Robinhood Stock Tokens and native crypto (BTC, ETH via Ch
 supported providers from V1.
 
 - Product & architecture spec: [`docs/spec/`](docs/spec/00-README.md)
+- Engineering conventions: [`docs/conventions.md`](docs/conventions.md)
 - Governance: `NFFC_Claude_Master_Prompt.md` (v2.1), `NFFC_Development_Plan.md` (v3.2),
   `NFFC_Whitepaper.md` (v1.1), `NFFC_Roadmap.md` (v1.1)
 - Per-task reports: [`docs/reports/`](docs/reports/)
 
-> **Status: bootstrap (TASK-01).** This repository currently contains only project infrastructure —
-> Next.js + TypeScript toolchain, linter, formatter, test runner, CI. No domain code yet. Module
-> directories (`domain/`, `adapters/`, `workers/`, `config/`) are intentionally empty and populated
-> from TASK-02 onward.
+> **Status: architecture foundation (TASK-02).** Toolchain (TASK-01) plus the module skeleton and
+> boundaries: `domain/` (types + `ports/` interfaces), `adapters/` (registry + shared interface),
+> `config/`, `workers/` (harness). No domain behaviour yet — validators, NAV math, adapters, and
+> rarity land in later TASKS.
 
 ## Stack
 
@@ -65,15 +66,21 @@ cp .env.example .env.local   # no variables are required for TASK-01
 ## Layout
 
 ```
-src/app/            Next.js App Router (Server-first; Client Components only for wallet/signing)
-domain/             framework- and provider-agnostic core          (TASK-02+)
-adapters/           per-provider adapters, one shared interface     (TASK-06 / TASK-07)
-workers/            indexer, sync, materialization — off request cycle (TASK-24 / TASK-06 / TASK-07)
-config/             typed env-keyed configuration, no secrets       (TASK-04+)
-docs/spec/          product & architecture specification
+src/app/            Next.js App Router; Server-first, Client Components only for wallet/signing
+src/app/api/        Route Handlers (short request/response only — see docs/conventions.md §3)
+domain/             framework- and provider-agnostic core: types + ports/ interfaces
+adapters/           per-provider adapters (one shared interface) + provider-adapter registry
+config/             typed configuration; fixed chain facts. Loader is TASK-04
+workers/            long-running / scheduled processes, outside the Next request cycle
+docs/spec/          product & architecture specification (TASK-00)
+docs/conventions.md module boundaries, Server/Client rules, test layout (TASK-02)
 docs/reports/       TASK-XX-REPORT.md per task
 .github/workflows/  CI
 ```
+
+Import via path aliases: `@/*` → `src/*`, `@domain/*`, `@adapters/*`, `@config/*`, `@workers/*`.
+The `domain → adapters → src/workers` dependency direction is one-way and enforced by ESLint
+(`docs/conventions.md` §1).
 
 ## Contributing / task workflow
 

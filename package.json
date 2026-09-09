@@ -2,7 +2,7 @@
   "name": "nffc-protocol",
   "version": "0.0.0",
   "private": true,
-  "description": "NFFC Protocol — DApp for Non-Fungible Financial Collectibles. Bootstrap (TASK-01).",
+  "description": "NFFC Protocol — DApp for Non-Fungible Financial Collectibles.",
   "engines": {
     "node": ">=20.9.0"
   },
