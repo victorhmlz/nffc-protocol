@@ -1,0 +1,12 @@
+allowBuilds:
+  esbuild: true
+  sharp: false
+  unrs-resolver: false
+
+# Local dev runs Node 22.8.x, which predates stable `require(esm)`. Several current
+# packages are ESM-only and break Node 22.8's CJS `require()` (used by Vitest's config
+# loader and jsdom). Pin the affected trees to the last versions that work on this Node.
+# Remove these overrides once the local Node baseline is >= 22.12 / 20.19.
+overrides:
+  vite: 6.4.3
+  jsdom: 25.0.1
