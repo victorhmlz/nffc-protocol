@@ -4,8 +4,8 @@
 
 COMPLETED
 
-Local gate `pnpm verify` (lint · typecheck · test · build) is green. The GitHub Actions CI result
-on PR #3 is recorded in the PULL REQUEST section.
+Local gate `pnpm verify` (lint · typecheck · test · build) is green, and the GitHub Actions CI run
+on PR #3 passed — all steps in ~31s. See the PULL REQUEST section.
 
 ## OBJECTIVE
 
@@ -217,8 +217,9 @@ Not applicable — types, interfaces, and a liveness route. `next build` ~5s; `p
 Branch `task/TASK-02-architecture-foundation`, based on **`task/TASK-01-project-initialization`**
 (TASK-02 depends on TASK-01, which is not yet merged — this is a stacked PR).
 
-**PR: to be filled after `gh pr create` (base = `task/TASK-01-project-initialization`).**
-**CI: to be filled after the GitHub Actions run.**
+**PR: https://github.com/victorhmlz/nffc-protocol/pull/3** — base `task/TASK-01-project-initialization`.
+**CI: https://github.com/victorhmlz/nffc-protocol/actions/runs/34359379955 — success** (install ·
+lint · typecheck · test · build, ~31s).
 
 When PR #2 (TASK-01) merges to `main`, this branch is rebased onto `main` and the PR base retargeted
 to `main`. **Do not merge** — Project Lead reviews and authorizes. Merge order: PR #1 → PR #2 →
