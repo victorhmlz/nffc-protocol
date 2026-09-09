@@ -1,7 +1,11 @@
 # NFFC Protocol — Plan de Desarrollo Detallado (Marketplace App)
 
-**Versión:** 3.0 — actualiza y reemplaza la sección `## TASKS` del `NFFC_Claude_Master_Prompt.md` original.
-**Vigente sin cambios:** Rol, Reglas absolutas, Protocolo de ejecución por TASK, Git/Patch policy, Definition of Done y Comunicación del Master Prompt original. Este documento solo redefine **qué** se construye y **en qué orden**.
+**Versión:** 3.2 — actualiza y reemplaza la sección `## TASKS` del `NFFC_Claude_Master_Prompt.md` original.
+**Vigente sin cambios:** Rol, Reglas absolutas, Protocolo de ejecución por TASK, Git/PR policy, Definition of Done y Comunicación del `NFFC_Claude_Master_Prompt.md` v2.1. Este documento solo redefine **qué** se construye y **en qué orden**.
+
+**Cambios de la v3.2 respecto a la v3.1:**
+- Corregidas 4 referencias cruzadas a `NFFC_Whitepaper.md` que apuntaban a la numeración del artefacto HTML (§08, §06) en vez de a la numeración real del `.md` v1.1 (§14 riesgos, §16 características de los NFFC) — TASK-08, TASK-32, TASK-40, TASK-42.
+- Corregido el resumen de protocolo más abajo en este documento: seguía diciendo `...AUDIT → REPORT → PATCH`, desalineado con el Master Prompt v2.0/2.1 (`...AUDIT → PULL REQUEST → REPORT`, sin `.patch` sueltos).
 
 **Cambios de la v3.1 respecto a la v3.0:**
 - Stack de frontend fijado en **TypeScript** (no JavaScript). El equipo/agente que ejecute estas TASKS debe asumir `strict` mode desde TASK-01 — ver criterios actualizados de TASK-01 y TASK-02.
@@ -15,7 +19,7 @@
 
 **Documentos relacionados:** Whitepaper (público) y Roadmap (público) — ambos publicados como referencia de producto y actualizados junto con este plan.
 
-**Protocolo de cada TASK (sin cambios):** `INSPECT → PLAN → IMPLEMENT → TEST → AUDIT → REPORT → PATCH`. Ninguna TASK se declara `COMPLETED` si build, lint o tests relevantes fallan. Cada TASK produce: cambios de código, tests, documentación afectada, `TASK-XX.patch` y `TASK-XX-REPORT.md`.
+**Protocolo de cada TASK (definido en el Master Prompt v2.1, no en este documento):** `INSPECT → PLAN → IMPLEMENT → TEST → AUDIT → PULL REQUEST → REPORT`. Ninguna TASK se declara `COMPLETED` si build, lint, typecheck o tests relevantes fallan. Cada TASK produce: cambios de código, tests, documentación afectada, un Pull Request contra `main` y `docs/reports/TASK-XX-REPORT.md`.
 
 ---
 
@@ -188,7 +192,7 @@ Cada TASK incluye: **Objetivo**, **Entregables**, **Depende de** y **Criterios d
 
 **Criterios de aceptación:**
 - La etiqueta se deriva automáticamente de la composición, nunca se declara manualmente
-- La UI comunica con claridad la diferencia de disponibilidad geográfica entre composiciones cripto-only y mixtas (ver Whitepaper, sección 08)
+- La UI comunica con claridad la diferencia de disponibilidad geográfica entre composiciones cripto-only y mixtas (ver Whitepaper, sección 14)
 
 ---
 
@@ -496,7 +500,7 @@ Cada TASK incluye: **Objetivo**, **Entregables**, **Depende de** y **Criterios d
 **Depende de:** Todas las TASKS de contratos (05–31).
 
 **Criterios de aceptación:**
-- Threat model documenta explícitamente el riesgo de clasificación regulatoria como fondo/producto compuesto (ver Whitepaper, sección 08) como hallazgo abierto, no cerrado
+- Threat model documenta explícitamente el riesgo de clasificación regulatoria como fondo/producto compuesto (ver Whitepaper, sección 14) como hallazgo abierto, no cerrado
 - Cobertura de tests de contratos con fuzzing en las rutas críticas (mint, marketplace)
 
 ---
@@ -569,7 +573,7 @@ Cada TASK incluye: **Objetivo**, **Entregables**, **Depende de** y **Criterios d
 - Scripts de deployment y verificación probados en testnet
 - Monitoreo y backups operativos
 - Procedimientos de emergencia documentados
-- **Revisión legal apropiada al alcance de lanzamiento** — incluyendo, como mínimo, opinión sobre la exclusión geográfica heredada de Robinhood Stock Tokens y sobre el riesgo de clasificación como instrumento compuesto (Whitepaper, sección 08)
+- **Revisión legal apropiada al alcance de lanzamiento** — incluyendo, como mínimo, opinión sobre la exclusión geográfica heredada de Robinhood Stock Tokens y sobre el riesgo de clasificación como instrumento compuesto (Whitepaper, sección 14)
 
 ---
 
@@ -594,7 +598,7 @@ Cada TASK incluye: **Objetivo**, **Entregables**, **Depende de** y **Criterios d
 **Depende de:** TASK-23, TASK-41.
 
 **Criterios de aceptación:**
-- Copy y UI revisados junto con asesoría legal antes de publicarse — enmarcado como "estado del mercado", nunca como "rendimiento de tu inversión" (ver Whitepaper, sección 06)
+- Copy y UI revisados junto con asesoría legal antes de publicarse — enmarcado como "estado del mercado", nunca como "rendimiento de tu inversión" (ver Whitepaper, sección 16)
 - No se filtra ni destaca automáticamente solo a los NFFCs con mejor desempeño sin mostrar también el panorama completo
 
 ---
