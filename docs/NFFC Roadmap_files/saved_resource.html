@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<!-- saved from url=(0253)https://d2640f11-4290-4a18-898c-056917e02511.frame.claudeusercontent.com/_f/1788904833-7a9e/?__frame_t=rwOtTuUmGb7XO00qwrlwnnsq.6134abf0-b764-4020-9110-ec652b0dcee6.32f4e24d-2f07-4d2a-b769-4cce578a25a4.1788909284&__frame_v=manifest.3c02a3bacf35f1ad.json -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><!-- frame-runtime --><script>window.__FRAME_PREAMBLE={"v":1,"capabilities":{"artifact":"artifact.B_zN8nKT.js","assets":"assets.8Gk803W0.js","comments":"comments.hEoja5zd.js","db":"db.DoKNwgX8.js","downloads":"downloads.th1YuAIk.js","embed":"embed.eqL6deQM.js","endpoints":"endpoints.CooJFPzL.js","mcp":"mcp.ucFnBqWT.js","network":"network.B5UA9Su4.js","permissions":"permissions.BNySkLV5.js","room":"room.Dc3WDo3b.js","sample":"sample.C2869FGz.js","self":"artifact.B_zN8nKT.js","user":"user.BpKav-Rf.js"},"transforms":"_transforms.-IAc0qoT.js","comments":"_comments.CZkcrrUD.js","translate":"_translate.5HCW4BJh.js","ldx":"_ldx.DycbNc-Q.js"}</script><script>(function(){"use strict";var fe=["light","dark","system"],de=/^[A-Za-z0-9_-]{1,64}$/,te=/^[a-zA-Z_:][a-zA-Z0-9_:.-]{0,127}$/,pe=new Set(["class","hidden","value","checked","style","title","alt","placeholder","lang","dir","role","tabindex","disabled","readonly","contenteditable","open","colspan","rowspan"]);function me(e){const t=e.toLowerCase();return t.startsWith("data-")||t.startsWith("aria-")||pe.has(t)}var $e="http://www.w3.org/1999/xhtml",he="http://www.w3.org/2000/svg",_e=new Set(["script","style","iframe","noscript","noframes","noembed","xmp","plaintext","template","title","textarea","object","embed"]),ve=new Set(["script","style"]);function ye(e){const t=e.localName.toLowerCase();return e.namespaceURI==="http://www.w3.org/1999/xhtml"?!_e.has(t):e.namespaceURI===he?!ve.has(t):!1}function x(e,t){return e===t||(e===160||e===32)&&(t===160||t===32)}function we(e,t){const r=e.length,n=t.length;let a=0;for(;a<r&&a<n&&x(e.charCodeAt(a),t.charCodeAt(a));)a++;let o=0;for(;o<r-a&&o<n-a&&x(e.charCodeAt(r-1-o),t.charCodeAt(n-1-o));)o++;return{p:a,s:o}}function Ee(e,t){const r=e.firstChild;if(e.childNodes.length!==1||r===null||r.nodeType!==Node.TEXT_NODE){e.textContent=t;return}const n=r.data,a=n.length,o=t.length,{p:c,s:i}=we(n,t);c===a&&i===0&&a===o||r.replaceData(c,a-c-i,t.slice(c,o-i));const m=r.data,f=e.ownerDocument.getSelection?.()??null,y=f!==null&&f.rangeCount>0&&(f.anchorNode===r||f.focusNode===r)?{anchor:f.anchorNode,anchorOffset:f.anchorOffset,focus:f.focusNode,focusOffset:f.focusOffset}:null;let d=-1,E=-1;for(let v=0;v<m.length&&v<t.length;v++){const A=m.charCodeAt(v),k=t.charCodeAt(v);A!==k&&x(A,k)&&(d<0&&(d=v),E=v)}const b=d>=0;if(b&&r.replaceData(d,E-d+1,t.slice(d,E+1)),b&&y!==null&&y.anchor!==null&&y.focus!==null)try{f.setBaseAndExtent(y.anchor,y.anchorOffset,y.focus,y.focusOffset)}catch{}}var be=new Set(["html","head","body","frameset"]);function ge(e){return e.namespaceURI==="http://www.w3.org/1999/xhtml"&&be.has(e.localName)}function Ae(e){if(e===null||typeof e!="object")return!1;const t=e;if(typeof t.target!="string"||!de.test(t.target)||t.text!==void 0&&typeof t.text!="string")return!1;if(t.attrsSet!==void 0){if(t.attrsSet===null||typeof t.attrsSet!="object")return!1;for(const[r,n]of Object.entries(t.attrsSet))if(!te.test(r)||typeof n!="string")return!1}if(t.attrsRemoved!==void 0){if(!Array.isArray(t.attrsRemoved))return!1;for(const r of t.attrsRemoved)if(typeof r!="string"||!te.test(r))return!1}return!0}function Le(e,t){if(e===null||typeof e!="object")return!1;const{seq:r,elements:n}=e;if(typeof r!="number"||!Number.isSafeInteger(r)||!Array.isArray(n)||n.length===0||n.length>64)return!1;for(let a=0;a<n.length;a++)if(!t(n[a]))return!1;return!0}function Te(e){return e===null||typeof e!="object"?!1:Le(e.__frame_patch,Ae)}function Se(e){if(e===null||typeof e!="object")return!1;const t=e.__frame_init;return t!==null&&typeof t=="object"}function Re(e){return e!==null&&typeof e=="object"&&e.__frame_size_poke===!0}function ke(e){if(e===null||typeof e!="object")return!1;const t=e.__frame_theme;if(t===null||typeof t!="object")return!1;const r=t.theme;return typeof r=="string"&&fe.includes(r)}var O=/^[\w.-]+\.js$/;function Pe(e,t,r){return r?"inert":typeof t=="string"&&O.test(t)?e?[t]:"inert":e?"inert":"framed"}var Ye="frame_ldx_runtime",Oe="frame_ldx_build",Ge="script#an-form";function Ce(){return{post(e,t){parent.postMessage(e,t)},on(e){const t=r=>{r.source===parent&&e(r.data,r.origin,r.isTrusted)};return addEventListener("message",t),()=>removeEventListener("message",t)}}}function Me(){return{post:()=>{},on:()=>()=>{}}}var F="__frame_scroll",je=150,Ne=310,De=160,Be=3e4;function Ie(){let e=0,t=!1,r=!1,n=!1,a=0,o=null;const c=u=>{try{sessionStorage.setItem(F,JSON.stringify({y:u}))}catch{}},i=()=>{if(clearTimeout(e),o===null)return;const u=o;o=null,c(u)},m=()=>{if(t){t=!1;return}r=!0,o=scrollY,clearTimeout(e),e=setTimeout(i,je)};try{addEventListener("scroll",m,{passive:!0}),addEventListener("pagehide",i)}catch{}const f=()=>{let u;try{u=sessionStorage.getItem(F)}catch{return null}if(u===null)return null;let g;try{g=JSON.parse(u)}catch{g=null}const w=g?.y;if(!(typeof w=="number"&&Number.isFinite(w)&&w>=0)){try{sessionStorage.removeItem(F)}catch{}return null}return w};let y=!1;const d=u=>{try{const g=scrollY;scrollTo({top:u,left:0,behavior:"instant"}),a=u,n=!0,clearTimeout(e),o=null,c(u);const w=scrollY;w!==g&&(t=!0),w!==u&&!y&&(y=!0,addEventListener("load",()=>{try{if(scrollY===w){const M=f();d(M!==null?M:a)}}catch{}},{once:!0}))}catch{}},E=()=>{try{return!!location.hash}catch{return!0}};let b=!1;const v=()=>{try{if(b||innerWidth>Ne||innerHeight>De)return;b=!0;const u=Date.now(),g=()=>{try{removeEventListener("resize",g)}catch{}if(Date.now()-u>Be||r||E())return;const w=f();d(w!==null?w:a)};addEventListener("resize",g)}catch{}};let A=!1,k=!1;return{restore(){if(A||(A=!0,E()))return;const u=f();u!==null&&(d(u),v())},promoted(){if(k||(k=!0,E()))return;const u=f();u!==null?(d(u),v()):n&&d(a)}}}function Ue(e,t,r,n){let a=null;try{a=window.trustedTypes?.createPolicy("frame-runtime",{createScriptURL:m=>m})??null}catch{}const o=window.Worker,c=o?.prototype,i=Object.freeze({Worker:o,workerOn:c?.addEventListener,workerPost:c?.postMessage,workerTerminate:c?.terminate,fetch:window.fetch.bind(window),preventDefault:Event.prototype.preventDefault,policy:a,origins:t});r(e).then(m=>m?.bootTopLevel?m.bootTopLevel(i,n):n.settle()).catch(()=>n.settle())}var Ve="modulepreload",Ze=function(e){return"/"+e},Je={},xe=function(t,r,n){let a=Promise.resolve();function o(c){const i=new Event("vite:preloadError",{cancelable:!0});if(i.payload=c,window.dispatchEvent(i),!i.defaultPrevented)throw c}return a.then(c=>{for(const i of c||[])i.status==="rejected"&&o(i.reason);return t().catch(o)})},Fe=window===top,re=Object.getOwnPropertyDescriptor(window,"claude"),j=Pe(Fe,window.__FRAME_PREAMBLE?.topLevel,re?.writable===!1),H=typeof j=="object"&&j[0],_=H?Me():Ce();(function(){const e=Object.defineProperty,t=globalThis,r=["RTCPeerConnection","webkitRTCPeerConnection","RTCDataChannel","RTCIceCandidate","RTCSessionDescription","RTCRtpSender","RTCRtpReceiver"];let n=0;for(let a=0;a<r.length;a++){const o=r[a];try{e(t,o,{value:void 0,writable:!1,configurable:!1})}catch{try{delete t[o]}catch{}try{e(t,o,{value:void 0,writable:!1,configurable:!0})}catch{}}typeof t[o]=="function"&&n++}if(n&&j==="framed")try{_.post({__frame_rtc_lockdown_failed:n},"*")}catch{}})();var He=1e4,ze=2e3,We=2e3,ne=Object.freeze([...window.__FRAME_PREAMBLE?.origins??["https://claude.ai","https://preview.claude.ai"]]);function oe(e){for(const t of ne)if(t.endsWith(":*"))try{const r=new URL(e);if(`${r.protocol}//${r.hostname}:*`===t)return!0}catch{}else if(e===t)return!0;return!1}var N=Object.freeze({...window.__FRAME_PREAMBLE?.capabilities}),z=window.__FRAME_PREAMBLE?.transforms,W=window.__FRAME_PREAMBLE?.comments,q=window.__FRAME_PREAMBLE?.translate,K=window.__FRAME_PREAMBLE?.ldx;function C(e){return xe(()=>import("/_runtime/"+e),void 0)}function se(e,t){return{contract:e.contract,changes:new Set(e.changes??[]),flags:new Set(e.flags??[]),capabilities:e.capabilities??{},capBudgets:e.capBudgets??{},transforms:new Map,shellOrigin:t,mount:Y,hooks:B,pipe:()=>({wrap:(r,n)=>(...a)=>{try{return n(...a)}catch(o){return Promise.reject(o)}}})}}var D=null,S=null;function ae(e,t,r){try{Object.defineProperty(e,t,{value:r,writable:!1,configurable:!1,enumerable:!0})}catch{try{Object.defineProperty(e,t,{value:r,writable:!1,configurable:!0,enumerable:!0})}catch{}}}var X=!1,B={editBefore:null,edit:null};function qe(e,t,r=!1){const n=[];let a;if(r)try{B.editBefore?.(e)}catch{}for(const o of e.elements){const c=document.querySelector(`[data-id="${o.target}"]`);if(!c){a=o.target;break}if([...Object.keys(o.attrsSet??{}),...o.attrsRemoved??[]].some(i=>!me(i))){a=o.target;break}if(o.text!==void 0&&(!ye(c)||ge(c))){a=o.target;break}for(const[i,m]of Object.entries(o.attrsSet??{}))if(!ce(c,i)){try{c.setAttribute(i,m)}catch{}ie(c,i,m)}for(const i of o.attrsRemoved??[])ce(c,i)||(c.removeAttribute(i),ie(c,i,null));typeof o.text=="string"&&Ee(c,o.text),n.push(o.target)}if(r)try{B.edit?.(e.seq,n,a)}catch{}if(a!==void 0){_.post({__frame_patch_miss:{seq:e.seq}},t);return}try{document.dispatchEvent(new CustomEvent("claude:edit",{detail:{seq:e.seq,targets:n}}))}catch{}}function ie(e,t,r){if(!(e instanceof HTMLInputElement))return;const n=t.toLowerCase();n==="checked"?e.checked=r!==null:n==="value"&&e.type!=="file"&&(e.value=r??"")}function ce(e,t){const r=t.toLowerCase(),n=e;return r==="data-id"||(r==="value"||r==="checked")&&(n.__artifactSecret===!0||/^(password|hidden|file)$/.test(n.type??"")||/(^|\s)(cc-|one-time-code|current-password|new-password)/i.test(`${e.getAttribute("autocomplete")??""} ${n.autocomplete??""}`))}function le(e){const t=document.documentElement;e==="light"||e==="dark"?(t.dataset.theme=e,t.style.colorScheme=e,X=!0):X&&(delete t.dataset.theme,t.style.colorScheme="",X=!1)}var I=new Map;function Ke(){let e;const t={u:new Promise(r=>{e=r}),r:r=>{t.done=!0,e(r)},done:!1,nulled:!1};return t}function $(){for(const e of I.values())e.done||(e.nulled=!0,e.r(null))}var Xe=Object.freeze(Object.assign(Object.create(null),{call:Function.prototype.call,apply:Function.prototype.apply,bind:Function.prototype.bind})),Y=(e,t)=>{const r=I.get(e);if(!r||r.done){r?.nulled&&S&&_.post({__frame_cap_telemetry:{kind:"cap-load-error",cap:e}},S);return}const n=typeof t=="function"?Object.setPrototypeOf(t,Xe):Object.assign(Object.create(null),t);typeof n.then=="function"&&delete n.then,r.r(Object.freeze(n))};function ue(){const e=re?.value??{};ae(window,"claude",e);for(const t of Object.keys(N)){if(e[t]!==void 0){ae(e,t,e[t]);continue}I.set(t,Ke())}if(e.use===void 0){const t=r=>{if(typeof r!="string"||!Object.hasOwn(N,r))return Promise.resolve(null);const n=I.get(r);return n?n.u:Promise.resolve(e[r]??null)};try{Object.defineProperty(e,"use",{value:t,writable:!0,configurable:!0,enumerable:!1})}catch{}}}if(j==="framed"){const e=z&&O.test(z)?C(z).catch(()=>{}):Promise.resolve(void 0),t=s=>{if(s.type==="auxclick"&&s.button!==1)return;const h=s.target,p=h&&h.closest?h.closest("a[href],area[href]"):null;if(!p)return;const P=p.getAttribute("href");if(!P)return;let L;try{L=new URL(P,document.baseURI)}catch{return}if((L.protocol==="http:"||L.protocol==="https:")&&L.origin!==location.origin){s.preventDefault();const R=(p.getAttribute("target")??"").toLowerCase(),T=s.type==="auxclick"||s.metaKey||s.ctrlKey||s.shiftKey||s.altKey||!["","_self","_top","_parent"].includes(R);_.post({__frame_nav:!0,url:L.href,newTab:T},"*")}};addEventListener("click",t,!0),addEventListener("auxclick",t,!0);const r={},n=s=>{s.isTrusted&&(r.pointer=!0)},a=s=>{s.isTrusted&&(r.click=!0)};addEventListener("pointermove",n,{capture:!0,passive:!0}),addEventListener("click",a,{capture:!0,passive:!0});const o={cb:null};addEventListener("keydown",s=>o.cb?.(s),!0),e.then(s=>s?.installEscapeForward?.(o,h=>{S&&_.post(h,S)})),e.then(s=>{s?.wireNav&&(s.wireNav(),removeEventListener("click",t,!0),removeEventListener("auxclick",t,!0),removeEventListener("pointermove",n,!0),removeEventListener("click",a,!0),s.wireEngagement?.(r))});let c=null;try{c=Ie()}catch{}ue();let i=null,m=null,f=0;const y=_.on((s,h)=>{oe(h)&&Se(s)&&(i=s.__frame_init,S=h,y(),clearTimeout(f),m?.())});_.post({__frame_connect:!0},"*");const d=setTimeout,E=clearTimeout;let b=0;const v=()=>{try{_.post({__frame_alive:!0},"*")}catch{}b=d(v,ze)},A=()=>E(b);v(),addEventListener("load",A,{once:!0});const k=new Promise(s=>{m=s,f=setTimeout(()=>{y(),s()},He)}),u=document.readyState==="loading"?new Promise(s=>document.addEventListener("DOMContentLoaded",()=>s(),{once:!0})):Promise.resolve(),g=new WeakSet;addEventListener("error",s=>{s.target&&g.add(s.target)},!0);const w=()=>{let s=[];try{s=[...document.querySelectorAll("link[rel~=stylesheet]:not([rel~=alternate])")].filter(p=>!p.sheet&&!p.disabled&&!g.has(p)&&p.getAttribute("href")&&URL.canParse(p.href)&&(!p.media||matchMedia(p.media).matches))}catch{}let h=s.length;return h===0?Promise.resolve():new Promise(p=>{try{const P=d(p,We),L=()=>{--h===0&&(E(P),p())};for(const R of s)R.addEventListener("load",L,{once:!0}),R.addEventListener("error",L,{once:!0})}catch{p()}})};u.then(()=>{try{c?.restore()}catch{}});const M={cb:null};_.on((s,h)=>{if(oe(h)&&Re(s)){try{c?.promoted()}catch{}M.cb?.()}}),k.then(async()=>{if(!i||!S){$();return}le(i.theme);const s=S;let h=!1,p=!1;_.on((l,Z,U)=>{if(Z!==s)return;ke(l)&&le(l.__frame_theme.theme),Te(l)&&qe(l.__frame_patch,s,U);const J=l?.__fc_mode;J&&typeof J=="object"&&!h&&W&&O.test(W)&&(h=!0,C(W).then(ee=>ee.install?.(s,J.on===!0)).catch(()=>{}));const Q=l?.__ft_cmd;Q&&typeof Q=="object"&&!p&&q&&O.test(q)&&(p=!0,C(q).then(ee=>ee.install?.(s,Q)).catch(()=>{}))});const P=Object.keys(i.capabilities??{}).filter(l=>Object.hasOwn(N,l)).map(l=>[l,N[l]]).filter(l=>typeof l[1]=="string"&&O.test(l[1])),L=await Promise.allSettled(P.map(([,l])=>C(l))),R=await e,T=S;if(R?.buildBoot||_.post({__frame_cap_telemetry:{kind:"cap-load-error",cap:"_transforms"}},T),R?.buildBoot)try{D=R.buildBoot(i,R.TRANSFORMS??{},{shellOrigin:T,mount:Y,hooks:B},l=>_.post({__frame_cap_telemetry:l},T))}catch{_.post({__frame_cap_telemetry:{kind:"cap-load-error",cap:"_transforms"}},T),D=se(i,T)}else D=se(i,T);const G=l=>_.post({__frame_cap_telemetry:{kind:"cap-load-error",cap:l}},T),V=D;L.forEach((l,Z)=>{const U=P[Z][0];if(l.status!=="fulfilled"){G(U);return}try{l.value?.install?.(V)}catch{G(U)}}),$(),await u,await w(),A(),_.post({__frame_ready:!0},S),e.then(l=>l?.installSizeReporter?.(T,M)),V.flags.has("frame_ldx_runtime")&&K&&O.test(K)&&document.querySelector("script#an-form")&&C(K).then(l=>l?.boot?.({shellOrigin:s,build:V.flags.has(Oe)})).catch(()=>!1).then(l=>{l!==!0&&G("_ldx")})})}else H&&(ue(),Ue(H,ne,C,{settle:$,mount:Y}))})();</script><!-- /frame-runtime --><meta name="viewport" content="width=device-width,initial-scale=1"><style>:root{color-scheme:light}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>NFFC Roadmap</title>
+<link rel="stylesheet" href="./css2">
+<style>
+  :root{
+    --bg:#F4F5F2;
+    --surface:#FFFFFF;
+    --surface-2:#EAEBE6;
+    --border:#D8D9D2;
+    --ink:#14161A;
+    --muted:#5B5F66;
+    --accent:#8A6A1E;
+    --accent-ink:#FFFFFF;
+    --positive:#2F7A54;
+    --negative:#B14328;
+    --signal:#215E82;
+    --live-bg:#E4EFE8;
+    --planned-bg:#EDE7D8;
+    --research-bg:#E8ECEF;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#0E1013;
+      --surface:#15171B;
+      --surface-2:#1B1E23;
+      --border:#2B2F36;
+      --ink:#ECEDE8;
+      --muted:#9AA0AC;
+      --accent:#D4AF5A;
+      --accent-ink:#14161A;
+      --positive:#55B98A;
+      --negative:#D9795F;
+      --signal:#6BB6E0;
+      --live-bg:#1B2B22;
+      --planned-bg:#2A2417;
+      --research-bg:#1B2229;
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#0E1013;
+    --surface:#15171B;
+    --surface-2:#1B1E23;
+    --border:#2B2F36;
+    --ink:#ECEDE8;
+    --muted:#9AA0AC;
+    --accent:#D4AF5A;
+    --accent-ink:#14161A;
+    --positive:#55B98A;
+    --negative:#D9795F;
+    --signal:#6BB6E0;
+    --live-bg:#1B2B22;
+    --planned-bg:#2A2417;
+    --research-bg:#1B2229;
+  }
+
+  *{box-sizing:border-box;}
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'IBM Plex Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:920px;margin:0 auto;padding:64px 24px 96px;}
+
+  .eyebrow{
+    font-family:'IBM Plex Mono', ui-monospace, monospace;
+    font-size:12px;
+    letter-spacing:.12em;
+    text-transform:uppercase;
+    color:var(--muted);
+    display:flex;align-items:center;gap:10px;
+  }
+  .eyebrow::before{
+    content:"";
+    width:8px;height:8px;
+    background:var(--accent);
+  }
+
+  h1{
+    font-family:'Fraunces', Georgia, serif;
+    font-optical-sizing:auto;
+    font-weight:560;
+    font-size:clamp(34px,5vw,54px);
+    line-height:1.05;
+    letter-spacing:-.01em;
+    margin:14px 0 18px;
+    text-wrap:balance;
+  }
+  .thesis{
+    font-size:17px;
+    color:var(--muted);
+    max-width:62ch;
+    margin:0 0 32px;
+  }
+
+  .meta-row{
+    display:flex;flex-wrap:wrap;gap:10px;
+    padding:16px 0 40px;
+    border-bottom:1px solid var(--border);
+    margin-bottom:48px;
+  }
+  .chip{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12px;
+    letter-spacing:.03em;
+    color:var(--muted);
+    border:1px solid var(--border);
+    padding:6px 10px;
+    display:flex; gap:6px; align-items:baseline;
+  }
+  .chip b{color:var(--ink); font-weight:600;}
+
+  .timeline{position:relative; padding-left:28px;}
+  .timeline::before{
+    content:"";
+    position:absolute; left:5px; top:8px; bottom:8px;
+    width:1px; background:var(--border);
+  }
+
+  .phase{position:relative; margin-bottom:56px;}
+  .phase:last-child{margin-bottom:0;}
+  .phase::before{
+    content:"";
+    position:absolute; left:-28px; top:6px;
+    width:11px; height:11px;
+    border-radius:50%;
+    background:var(--bg);
+    border:2px solid var(--accent);
+  }
+
+  .phase-head{
+    display:flex; align-items:baseline; gap:12px; flex-wrap:wrap;
+    margin-bottom:6px;
+  }
+  .serial{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12px; letter-spacing:.06em;
+    color:var(--accent);
+  }
+  .status{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:10.5px; letter-spacing:.08em; text-transform:uppercase;
+    padding:3px 8px;
+  }
+  .status.live{background:var(--live-bg); color:var(--positive);}
+  .status.planned{background:var(--planned-bg); color:var(--accent);}
+  .status.research{background:var(--research-bg); color:var(--signal);}
+
+  .phase h2{
+    font-family:'Fraunces', Georgia, serif;
+    font-weight:540;
+    font-size:26px;
+    margin:2px 0 8px;
+    text-wrap:balance;
+  }
+  .phase p.lede{
+    color:var(--muted);
+    max-width:60ch;
+    margin:0 0 20px;
+  }
+
+  .tracks{display:grid; grid-template-columns:1fr 1fr; gap:20px 28px;}
+  @media (max-width:640px){ .tracks{grid-template-columns:1fr;} }
+  .track h3{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px; letter-spacing:.1em; text-transform:uppercase;
+    color:var(--muted); margin:0 0 10px;
+    padding-bottom:8px; border-bottom:1px solid var(--border);
+  }
+  .track ul{list-style:none; margin:0; padding:0;}
+  .track li{
+    position:relative; padding-left:16px; margin-bottom:9px;
+    font-size:14.5px;
+  }
+  .track li::before{
+    content:"—"; position:absolute; left:0; color:var(--border);
+  }
+
+  .note{
+    margin-top:18px;
+    font-size:13px;
+    color:var(--muted);
+    border-left:2px solid var(--border);
+    padding-left:12px;
+  }
+  .note b{color:var(--ink);}
+
+  footer{
+    margin-top:72px;
+    padding-top:24px;
+    border-top:1px solid var(--border);
+    display:flex; justify-content:space-between; align-items:baseline; gap:16px; flex-wrap:wrap;
+  }
+  footer a{color:var(--signal); text-decoration:none; font-family:'IBM Plex Mono', monospace; font-size:13px;}
+  footer a:hover{text-decoration:underline;}
+  footer .fine{color:var(--muted); font-size:12px; max-width:60ch;}
+</style>
+
+<div class="wrap">
+  <div class="eyebrow">NFFC Protocol · Documento de hoja de ruta</div>
+  <h1>De la especificación al mercado secundario</h1>
+  <p class="thesis">Tres versiones, cada una con un criterio de salida verificable antes de avanzar a la siguiente. Ninguna fase se declara completa si build, lint o tests fallan — y ninguna versión se lanza si su revisión de seguridad y legal correspondiente no está resuelta.</p>
+
+  <div class="meta-row">
+    <div class="chip">Red <b>Robinhood Chain · Chain ID 4663</b></div>
+    <div class="chip">Estándar <b>ERC-721</b></div>
+    <div class="chip">Oráculo <b>Chainlink</b></div>
+    <div class="chip">Custodia V1 <b>Ninguna</b></div>
+  </div>
+
+  <div class="timeline">
+
+    <div class="phase">
+      <div class="phase-head">
+        <span class="serial">NFFC-V1</span>
+        <span class="status planned">En construcción</span>
+      </div>
+      <h2>Fundación del protocolo</h2>
+      <p class="lede">El NFFC como objeto: composición inmutable, representación verificada, valoración de referencia y un mercado secundario funcional. Sin custodia, sin promesas de rendimiento.</p>
+
+      <div class="tracks">
+        <div class="track">
+          <h3>Protocolo &amp; Contratos</h3>
+          <ul>
+            <li>Especificación de producto y arquitectura de dominio</li>
+            <li>Asset Identity Registry + Representation Registry — multi-provider desde el diseño</li>
+            <li>Robinhood Adapter — sincronización de Stock Tokens oficiales</li>
+            <li>Crypto Adapter — BTC, ETH y otras nativas, disponible desde el día uno</li>
+            <li>NFFC.sol — ERC-721, 1–20 componentes, suma 10.000 BPS, cualquier mezcla de providers</li>
+            <li>Collection.sol — fee de creación escalable por complejidad</li>
+            <li>Marketplace.sol — listar, cancelar, comprar, ofertas</li>
+            <li>Price Engine (oráculo Chainlink, stocks y cripto) + Reference NAV Engine</li>
+            <li>Indexer idempotente de eventos on-chain</li>
+          </ul>
+        </div>
+        <div class="track">
+          <h3>Producto &amp; Superficie</h3>
+          <ul>
+            <li>Design system — terminal financiero + collectible premium</li>
+            <li>Wallets de autocustodia — Robinhood Wallet + EVM genérica vía wagmi/viem. El protocolo nunca custodia claves ni fondos</li>
+            <li>Wizard de creación (7 pasos) + flujo de mint monitoreado — selección mixta de Stock Tokens y cripto</li>
+            <li>Arte generativo derivado de la composición real</li>
+            <li>Trait de condición de mercado al mint (inmutable)</li>
+            <li>Rareza estática por concentración de composición — primer eje del sistema dual</li>
+            <li>Marketplace, ficha de detalle, portfolio, actividad, perfil</li>
+            <li>Panel de administración de activos, fees y reportes</li>
+            <li>Hardening de seguridad, QA, testnet y checklist de mainnet</li>
+          </ul>
+        </div>
+      </div>
+      <div class="note"><b>Criterio de salida:</b> auditoría de seguridad independiente completa, despliegue verificado en testnet con datos reales de Robinhood Chain, y primera opinión legal sobre clasificación regulatoria documentada — no necesariamente resuelta, pero documentada.</div>
+    </div>
+
+    <div class="phase">
+      <div class="phase-head">
+        <span class="serial">NFFC-V1.5</span>
+        <span class="status planned">Planificado</span>
+      </div>
+      <h2>Capa de identidad y utilidad</h2>
+      <p class="lede">El NFFC deja de ser un objeto estático el día del mint: gana una segunda capa de rareza ganada con el tiempo, se abre a activos cripto nativos, y el protocolo introduce un token fungible con utilidad real dentro de la plataforma.</p>
+
+      <div class="tracks">
+        <div class="track">
+          <h3>Mecánicas del NFFC</h3>
+          <ul>
+            <li>Motor de badges de desempeño — segundo eje, dinámico, ganado con el tiempo</li>
+            <li>Estado del Mercado — posición relativa por Reference NAV</li>
+          </ul>
+        </div>
+        <div class="track">
+          <h3>Token nativo &amp; plataforma</h3>
+          <ul>
+            <li>Especificación ERC-20 del token de utilidad de plataforma</li>
+            <li>Descuentos de fee de mint/marketplace para holders</li>
+            <li>Acceso prioritario a whitelist de colecciones nuevas</li>
+            <li>Indexación ampliada vía subgraphs (Goldsky / Ormi)</li>
+          </ul>
+        </div>
+      </div>
+      <div class="note"><b>Nota:</b> cualquier mecanismo de reparto de ingresos asociado al token se define recién tras revisión legal — el diseño económico no se hardcodea antes de esa validación.</div>
+    </div>
+
+    <div class="phase">
+      <div class="phase-head">
+        <span class="serial">NFFC-V2</span>
+        <span class="status research">Investigación</span>
+      </div>
+      <h2>Composición respaldada</h2>
+      <p class="lede">El horizonte donde el NFFC podría pasar de referenciar a custodiar: <code style="font-family:&#39;IBM Plex Mono&#39;,monospace;font-size:13px;">NFFC → Vault → Stock Tokens</code>. Deliberadamente fuera de alcance hasta que la clasificación regulatoria de V1/V1.5 esté resuelta con asesoría especializada.</p>
+      <div class="note">Sin fecha de lanzamiento. Entrar a V2 requiere: revisión legal independiente sobre custodia y derechos económicos, diseño de vault auditado, y evidencia de tracción real en V1/V1.5.</div>
+    </div>
+
+  </div>
+
+  <footer>
+    <a href="https://claude.ai/code/artifact/76beb2c8-137f-4071-a950-92f921347a43">→ Leer el Whitepaper completo</a>
+    <span class="fine">Documento informativo de producto. No constituye asesoramiento de inversión ni oferta de valores. El Reference NAV es orientativo y no implica respaldo ni derechos sobre los activos subyacentes.</span>
+  </footer>
+</div>
+
+</body></html>
