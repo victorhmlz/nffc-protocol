@@ -1,5 +1,14 @@
 # NFFC Protocol — Roadmap de Proyecto
 
+## Changelog
+
+**v1.1 (2026-09-09)** — parche de reconciliación con `NFFC_Development_Plan.md` v3.1 y `NFFC_Claude_Master_Prompt.md` v2.0. Numeración de Fases sin cambios.
+- Fase 05 → se agrega el Crypto Adapter (BTC, ETH vía Chainlink) como parte de la misma fase que el Robinhood Adapter, no de una fase posterior.
+- Regla de ejecución → se corrige el orden de STEP 6/7 para que coincida con el Master Prompt v2.0: `PULL REQUEST` reemplaza a `PATCH` como STEP 6 (ya no se generan `.patch` sueltos — el repositorio es real, en GitHub, y cada TASK entrega un Pull Request contra `main`).
+- Regla de ejecución → se agrega `typecheck` a la lista de comprobaciones obligatorias (proyecto en TypeScript).
+
+**v1.0** — versión original.
+
 ## Objetivo
 
 Construir una DApp profesional para crear, explorar, valorar y comerciar NFFCs, empezando por Robinhood Chain pero con arquitectura agnóstica a red y proveedor.
@@ -30,6 +39,8 @@ Construir una DApp profesional para crear, explorar, valorar y comerciar NFFCs, 
 - compatibilidad con arquitectura objetivo.
 
 **Salida:** audit report + patch si procede.
+
+> Nota (v1.1): esta fase describe el caso general de un proyecto con historia previa. Para el arranque actual del repositorio (`github.com/victorhmlz/nffc-protocol`, vacío), la fase equivalente es la inicialización descrita en TASK-01 de `NFFC_Development_Plan.md` — no hay repositorio previo que auditar.
 
 ## Fase 02 — Arquitectura
 
@@ -86,7 +97,9 @@ Crear la abstracción:
 
 Implementar Robinhood adapter.
 
-Sincronizar activos activos oficiales.
+**Implementar Crypto Adapter (BTC, ETH vía Chainlink) en la misma fase — disponible desde V1, no como incorporación posterior.**
+
+Sincronizar activos activos oficiales (Stock Tokens y criptomonedas nativas).
 
 Validar contract addresses.
 
@@ -128,7 +141,9 @@ Implementar:
 - performance;
 - composition visualization;
 - rarity;
-- dynamic artwork hooks si procede.
+- dynamic artwork hooks.
+
+> Nota (v1.1): ver `NFFC_Whitepaper.md` §16 para la especificación de las cuatro características (arte generativo, doble eje de rareza, trait de condición de mercado al mint, Estado del Mercado).
 
 ## Fase 10 — Wallet
 
@@ -137,6 +152,8 @@ Implementar:
 - generic EVM wallets;
 - network detection;
 - transaction state machine.
+
+Todas las wallets soportadas son de autocustodia — el protocolo no implementa ni ofrece custodia.
 
 ## Fase 11 — Create UI
 
@@ -187,7 +204,7 @@ Implementar:
 - artwork;
 - reference value;
 - performance;
-- composition;
+- composición;
 - activity;
 - ownership;
 - listing;
@@ -195,7 +212,7 @@ Implementar:
 
 ## Fase 16 — Price Engine
 
-Integrar fuentes oficiales.
+Integrar fuentes oficiales — Chainlink como oráculo primario en Robinhood Chain, para Stock Tokens y criptomonedas por igual.
 
 Normalizar:
 
@@ -374,15 +391,14 @@ No mainnet hasta completar:
 
 Cada TASK debe seguir:
 
-**INSPECT → PLAN → IMPLEMENT → TEST → AUDIT → REPORT → PATCH**
+**INSPECT → PLAN → IMPLEMENT → TEST → AUDIT → PULL REQUEST → REPORT**
 
-Claude no puede declarar una TASK como COMPLETED si build/lint/tests relevantes fallan.
+Claude no puede declarar una TASK como COMPLETED si build/lint/typecheck/tests relevantes fallan.
 
 Cada TASK produce:
 
 1. cambios de código;
 2. tests;
 3. documentación afectada;
-4. `.patch`;
+4. Pull Request abierto contra `main`;
 5. `TASK-XX-REPORT.md`.
-
