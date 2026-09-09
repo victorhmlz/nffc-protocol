@@ -56,11 +56,10 @@ contract AssetIdentityRegistryTest is Test {
     }
 
     function test_nonAdmin_cannotRegister() public {
+        bytes32 role = registry.REGISTRY_ADMIN_ROLE();
         vm.prank(stranger);
         vm.expectRevert(
-            abi.encodeWithSelector(
-                IAccessControl.AccessControlUnauthorizedAccount.selector, stranger, registry.REGISTRY_ADMIN_ROLE()
-            )
+            abi.encodeWithSelector(IAccessControl.AccessControlUnauthorizedAccount.selector, stranger, role)
         );
         registry.registerAssetIdentity("NVDA", "NVIDIA", EQUITY);
     }

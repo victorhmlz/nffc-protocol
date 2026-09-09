@@ -248,11 +248,10 @@ contract RepresentationRegistryTest is Test {
     // ------------------------------------------------------------- providers ---
 
     function test_registerProvider_onlyAdmin() public {
+        bytes32 role = reps.REGISTRY_ADMIN_ROLE();
         vm.prank(stranger);
         vm.expectRevert(
-            abi.encodeWithSelector(
-                IAccessControl.AccessControlUnauthorizedAccount.selector, stranger, reps.REGISTRY_ADMIN_ROLE()
-            )
+            abi.encodeWithSelector(IAccessControl.AccessControlUnauthorizedAccount.selector, stranger, role)
         );
         reps.registerProvider(bytes32("X"), address(0));
     }
