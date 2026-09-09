@@ -4,8 +4,8 @@
 
 COMPLETED
 
-Local gate `pnpm verify` (lint · typecheck · test · build) is green. The GitHub Actions CI result
-on PR #4 is recorded in the PULL REQUEST section.
+Local gate `pnpm verify` (lint · typecheck · test · build) is green, and the GitHub Actions CI run
+on PR #4 passed — all steps in ~38s. See the PULL REQUEST section.
 
 ## OBJECTIVE
 
@@ -212,8 +212,9 @@ library pulled in yet. `/style-guide` prerenders static.
 Branch `task/TASK-03-design-system`, based on **`task/TASK-02-architecture-foundation`** (stacked;
 TASK-01 → TASK-02 → TASK-03 not yet merged).
 
-**PR: to be filled after `gh pr create` (base = `task/TASK-02-architecture-foundation`).**
-**CI: to be filled after the GitHub Actions run.**
+**PR: https://github.com/victorhmlz/nffc-protocol/pull/4** — base `task/TASK-02-architecture-foundation`.
+**CI: https://github.com/victorhmlz/nffc-protocol/actions/runs/34407826725 — success** (install ·
+lint · typecheck · test · build, ~38s).
 
 Rebase onto `main` and retarget the base as the parent PRs merge. **Do not merge** — Project Lead
 reviews and authorizes. Merge order: PR #1 → #2 → #3 → this PR.
