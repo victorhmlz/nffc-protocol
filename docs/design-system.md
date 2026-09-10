@@ -122,6 +122,7 @@ Chart chrome: `chart-surface`, `chart-grid` (hairline), `chart-axis` (baseline),
 | `ChartFrame`, `ChartLegendItem` | Shell a real chart mounts into: title, legend row, scroll container, caption + source/timestamp line. |
 | `Stat` | KPI: label + value + optional delta (always arrow + text). `aligned` for stat rows. |
 | `TransactionStatus` | Presentational view of the wallet state machine (`src/lib/wallet/transaction-state.ts`); icon + label + description, `role="status"` `aria-live="polite"`. |
+| `SegmentBadge` / `GeoEligibilityNotice` | The derived composition segment (`CRYPTO_ONLY` / `STOCK_ONLY` / `MIXED`, from `@domain/nffc/segment`) + the geographic-eligibility disclosure. Presentational — the segment is computed, never chosen (TASK-08; `docs/spec/07-ux-map.md` §6). Copy is legal-reviewed before mainnet (TASK-40). |
 | `Container` | Page gutter + max width (`max-w-6xl`, or `wide` → `1600px` for dense market views). |
 | `Skeleton` | Loading placeholder — every async surface shows this or an explicit error. |
 

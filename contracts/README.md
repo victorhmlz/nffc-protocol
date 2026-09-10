@@ -13,23 +13,28 @@ pnpm contracts:test    # hardhat test  (runs contracts/*.t.sol via forge-std)
 
 ## Layout
 
-| Path                                     | Contents                                                                               | TASK    |
-| ---------------------------------------- | -------------------------------------------------------------------------------------- | ------- |
-| `interfaces/IAssetIdentityRegistry.sol`  | Asset Identity registry interface                                                      | TASK-05 |
-| `interfaces/IRepresentationRegistry.sol` | Representation registry interface                                                      | TASK-05 |
-| `AssetIdentityRegistry.sol`              | Allowlist of asset identities (`REGISTRY_ADMIN_ROLE`)                                  | TASK-05 |
-| `RepresentationRegistry.sol`             | Allowlist of verified on-chain representations; provider registry; adapter-scoped auth | TASK-05 |
-| `*.t.sol`                                | Solidity tests (forge-std `Test`) — access control, validation, multi-provider         | TASK-05 |
-| `mocks/`                                 | Test doubles (`MockERC20`, `NoMetadata`)                                               | TASK-05 |
+| Path                                                                              | Contents                                                                                       | TASK              |
+| --------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- | ----------------- |
+| `interfaces/IAssetIdentityRegistry.sol`, `interfaces/IRepresentationRegistry.sol` | Registry interfaces                                                                            | TASK-05           |
+| `interfaces/IProviderAdapter.sol`                                                 | Shared provider-adapter interface (`SyncEntry`, events, 5 methods)                             | TASK-06/07        |
+| `AssetIdentityRegistry.sol`                                                       | Allowlist of asset identities (`REGISTRY_ADMIN_ROLE`)                                          | TASK-05           |
+| `RepresentationRegistry.sol`                                                      | Allowlist of verified representations; provider registry; adapter-scoped auth                  | TASK-05           |
+| `ProviderAdapterBase.sol`                                                         | Abstract — all provider-sync logic; subclass supplies `providerId`/`assetClass`/token standard | TASK-06/07        |
+| `RobinhoodAdapter.sol` / `CryptoAdapter.sol`                                      | Two peers on that base — Robinhood Stock Tokens, native crypto                                 | TASK-06 / TASK-07 |
+| `lib/CompositionSegmentLib.sol`                                                   | Derive `CRYPTO_ONLY` / `STOCK_ONLY` / `MIXED` from a composition — used by `NFFC.sol`          | TASK-08           |
+| `mocks/`                                                                          | Test doubles (`MockERC20`, `NoMetadata`)                                                       | —                 |
+| `*.t.sol`                                                                         | forge-std Solidity tests, colocated                                                            | —                 |
 
-Later: `Collection.sol` (TASK-10), `NFFC.sol` (TASK-09), `Marketplace.sol` (TASK-19),
-`FeeConfig.sol` (TASK-30), adapters (TASK-06/07). Deployment scripts (Ignition) land in TASK-31.
+Later: `NFFC.sol` (TASK-09), `Collection.sol` (TASK-10), `Marketplace.sol` (TASK-19),
+`FeeConfig.sol` (TASK-30). Deployment (Ignition) lands in TASK-31.
 
 ## Rules (`docs/spec/08-security-principles.md`)
 
 - OpenZeppelin `AccessControl`; `DEFAULT_ADMIN_ROLE` is the protocol multisig and grants all roles.
 - No arbitrary address becomes a supported asset — `registerRepresentation` is role/adapter gated
   and verifies the token (is a contract, `decimals()` matches).
+- Segments are **derived, never declared** — `NFFC.sol` computes the segment from the registry at
+  mint (`CompositionSegmentLib`).
 - Pinned pragma, custom errors, complete events, checks-effects-interactions.
-- The contracts make **no single-provider assumption** — a second provider is `registerProvider` +
-  an adapter, with no code change.
+- Adapters are **peers** — one base, one interface, no hierarchy. A third provider is a new
+  subclass + `registerProvider`, with no core change.
