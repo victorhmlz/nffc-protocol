@@ -182,7 +182,7 @@ comparisons) and ≤ 3 external `staticcall`s per component (`isActiveRepresenta
 Branch `task/TASK-09-nffc-contract`, based on **`chore/bump-node-22-12`** (which stacks on
 `task/TASK-08-composition-segmentation`; TASK-00…08 + the Node bump are not yet merged).
 
-**PR: <!-- filled in after push -->**
+**PR: https://github.com/victorhmlz/nffc-protocol/pull/11** — base `chore/bump-node-22-12`.
 
 **Do not merge** — Project Lead reviews and authorizes. Merge order: #1 → … → #9 → #10 (chore)
 → this PR.
