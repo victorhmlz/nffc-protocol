@@ -5,8 +5,8 @@
 COMPLETED
 
 `pnpm verify` (lint · typecheck · test · build) green locally — **23 files, 118 tests** (106 → +12).
-`pnpm contracts:build` / `pnpm contracts:test` green — **128 Solidity tests** (114 → +14). See PULL
-REQUEST for CI.
+`pnpm contracts:build` / `pnpm contracts:test` green — **128 Solidity tests** (114 → +14). Both CI
+jobs on PR #17 pass — run `34542704881`. See PULL REQUEST.
 
 ## OBJECTIVE
 
@@ -165,6 +165,7 @@ handful of `uint256` ops; a `view`, so no mint-time gas. `domain/rarity` is the 
 Branch `task/TASK-14-static-rarity`, based on **`main`** (TASK-00…13).
 
 **PR: https://github.com/victorhmlz/nffc-protocol/pull/17** — base `main`.
+**CI: https://github.com/victorhmlz/nffc-protocol/actions/runs/34542704881 — success** — both jobs.
 
 **Do not merge** — Project Lead reviews and authorizes.
 
