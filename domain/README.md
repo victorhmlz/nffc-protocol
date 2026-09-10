@@ -19,6 +19,7 @@ Framework-agnostic, provider-agnostic core. Plain TypeScript, no runtime depende
 | `pricing/types.ts`                 | `NormalizedPrice`, `PriceSource`                                                                          | TASK-22                                                          |
 | `valuation/types.ts`               | `ReferenceNav`, `NavPoint`, performance windows                                                           | TASK-23                                                          |
 | `rarity/types.ts`                  | `StaticRarity`, `StaticRarityInputs`                                                                      | TASK-14                                                          |
+| `rarity/rarity.ts`                 | `staticRarityScore` / `staticRarityWad` — bit-identical mirror of `StaticRarityLib.sol`                   | TASK-14                                                          |
 | `ports/`                           | `Clock`, `ChainReader`, `BlockchainEventSource`, `PriceOracle`, `ProviderAdapter`                         | implementations live in `adapters/` + `workers/` per their TASKS |
 | `index.ts`                         | Public barrel                                                                                             | —                                                                |
 

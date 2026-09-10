@@ -13,6 +13,7 @@ import {IRepresentationRegistry} from "./interfaces/IRepresentationRegistry.sol"
 import {INFFC} from "./interfaces/INFFC.sol";
 import {NFFC} from "./NFFC.sol";
 import {CompositionSegmentLib} from "./lib/CompositionSegmentLib.sol";
+import {StaticRarityLib} from "./lib/StaticRarityLib.sol";
 import {MockERC20} from "./mocks/MockERC20.sol";
 
 contract NFFCTest is Test {
@@ -166,7 +167,10 @@ contract NFFCTest is Test {
         assertEq(nffc.tokenURI(1), "ipfs://meta");
         assertEq(nffc.getCompositionHash(1), expHash);
         assertEq(nffc.getSegment(1), MIXED);
-        assertEq(nffc.getStaticRarity(1), 0);
+        uint16[] memory w = new uint16[](2);
+        (w[0], w[1]) = (6000, 4000);
+        assertEq(nffc.getStaticRarity(1), StaticRarityLib.score(w));
+        assertGt(nffc.getStaticRarity(1), 0);
         assertEq(nffc.getCollectionId(1), 42);
 
         INFFC.Component[] memory stored = nffc.getComposition(1);
@@ -276,6 +280,31 @@ contract NFFCTest is Test {
     function test_segment_mixed() public {
         uint256 id = _mint(alice, _arr(_c(nvda, nvdaRep, 5000), _c(eth, ethRep, 5000)));
         assertEq(nffc.getSegment(id), MIXED);
+    }
+
+    // ------------------------------------------------------------ static rarity ---
+
+    function test_getStaticRarity_matchesLibOverStoredWeights() public {
+        uint256 id = _mint(alice, _arr(_c(nvda, nvdaRep, 9000), _c(btc, btcRep, 1000)));
+        uint16[] memory w = new uint16[](2);
+        (w[0], w[1]) = (9000, 1000);
+        assertEq(nffc.getStaticRarity(id), StaticRarityLib.score(w));
+    }
+
+    function test_getStaticRarity_oneComponentIsMax() public {
+        uint256 id = _mint(alice, _arr(_c(nvda, nvdaRep, BPS_TOTAL)));
+        assertEq(nffc.getStaticRarity(id), 1e18);
+    }
+
+    function test_getStaticRarity_twentyEvenIsZero() public {
+        uint256 id = _mint(alice, _cryptoComps(20));
+        assertEq(nffc.getStaticRarity(id), 0);
+    }
+
+    function test_getStaticRarity_concentrationIsRarer() public {
+        uint256 flat = _mint(alice, _arr(_c(nvda, nvdaRep, 5000), _c(btc, btcRep, 5000)));
+        uint256 concentrated = _mint(bob, _arr(_c(aapl, aaplRep, 9500), _c(eth, ethRep, 500)));
+        assertGt(nffc.getStaticRarity(concentrated), nffc.getStaticRarity(flat));
     }
 
     // --------------------------------------------------------- composition hash ---

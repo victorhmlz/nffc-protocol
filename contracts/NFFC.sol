@@ -11,6 +11,7 @@ import {INFFC} from "./interfaces/INFFC.sol";
 import {IAssetIdentityRegistry} from "./interfaces/IAssetIdentityRegistry.sol";
 import {IRepresentationRegistry} from "./interfaces/IRepresentationRegistry.sol";
 import {CompositionSegmentLib} from "./lib/CompositionSegmentLib.sol";
+import {StaticRarityLib} from "./lib/StaticRarityLib.sol";
 
 /**
  * NFFC — Non-Fungible Financial Collectible (ERC-721 core), TASK-09.
@@ -152,11 +153,18 @@ contract NFFC is INFFC, ERC721URIStorage, AccessControl, Pausable, ReentrancyGua
     }
 
     /// @inheritdoc INFFC
-    /// @dev TASK-14 hook — static rarity from composition concentration. Returns 0
-    ///      until then; `virtual` so TASK-14 can override without a storage change.
-    function getStaticRarity(uint256 tokenId) external view virtual override returns (uint256) {
+    /// @dev Structural birth rarity (TASK-14) — a pure function of the immutable
+    ///      weights via {StaticRarityLib.score}, in `[0, 1e18]`. No storage, no
+    ///      oracle; stable for the life of the token because the composition is.
+    function getStaticRarity(uint256 tokenId) external view override returns (uint256) {
         _requireOwned(tokenId);
-        return 0;
+        Component[] storage comps = _composition[tokenId];
+        uint256 n = comps.length;
+        uint16[] memory weights = new uint16[](n);
+        for (uint256 i; i < n; ++i) {
+            weights[i] = comps[i].weightBps;
+        }
+        return StaticRarityLib.score(weights);
     }
 
     /// @notice The collection a token was minted into. Ownership/existence of the
