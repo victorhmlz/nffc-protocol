@@ -1,10 +1,15 @@
 # `config/`
 
-Typed, environment-keyed configuration: chain parameters (Robinhood Chain 4663), contract
-addresses/ABIs, RPC endpoints, database/cache connection settings, log level.
+Typed configuration. **Boundaries** (enforced by ESLint): may import `domain/`; may **not** import
+`src/`, `adapters/`, `workers/`, or `next`.
 
-- **No secrets in the repo.** Values come from the environment; `.env.example` documents every
-  variable (`docs/spec/03-architecture.md` §7).
-- Consumed by `src/`, `workers/`, and `adapters/`. Not imported by `domain/`.
+## Layout
 
-Populated from TASK-04 onward. Empty in TASK-01 by design.
+| Path | Contents | TASK |
+|---|---|---|
+| `chain.ts` | `ROBINHOOD_CHAIN` — fixed facts about Chain ID 4663 (name, `ETH` gas, L2 on Arbitrum) | TASK-02 |
+| `types.ts` | `AppConfig` shape — RPC endpoints, database, Redis, log level | TASK-02 (shape) |
+| `index.ts` | Barrel | TASK-02 |
+
+The **loader** — env parsing, validation, per-environment resolution, `.env.example` — is TASK-04.
+No secrets in the repo; `config/` only holds shapes and non-secret constants.

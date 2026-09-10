@@ -1,17 +1,30 @@
 import { fileURLToPath } from "node:url";
 import { defineConfig } from "vitest/config";
 
+const r = (p: string) => fileURLToPath(new URL(p, import.meta.url));
+
 export default defineConfig({
   resolve: {
     alias: {
-      "@": fileURLToPath(new URL("./src", import.meta.url)),
+      "@": r("./src"),
+      "@domain": r("./domain"),
+      "@adapters": r("./adapters"),
+      "@config": r("./config"),
+      "@workers": r("./workers"),
     },
   },
   test: {
     environment: "jsdom",
     globals: true,
     setupFiles: ["./vitest.setup.ts"],
-    include: ["src/**/*.{test,spec}.{ts,tsx}", "tests/**/*.{test,spec}.{ts,tsx}"],
+    include: [
+      "src/**/*.{test,spec}.{ts,tsx}",
+      "domain/**/*.{test,spec}.{ts,tsx}",
+      "adapters/**/*.{test,spec}.{ts,tsx}",
+      "config/**/*.{test,spec}.{ts,tsx}",
+      "workers/**/*.{test,spec}.{ts,tsx}",
+      "tests/**/*.{test,spec}.{ts,tsx}",
+    ],
     exclude: ["node_modules/**", ".next/**", "e2e/**"],
   },
 });

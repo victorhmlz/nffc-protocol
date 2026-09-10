@@ -19,7 +19,14 @@
     "incremental": true,
     "plugins": [{ "name": "next" }],
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "@domain": ["./domain/index.ts"],
+      "@domain/*": ["./domain/*"],
+      "@adapters": ["./adapters/index.ts"],
+      "@adapters/*": ["./adapters/*"],
+      "@config": ["./config/index.ts"],
+      "@config/*": ["./config/*"],
+      "@workers/*": ["./workers/*"]
     }
   },
   "include": [
