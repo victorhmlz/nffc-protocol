@@ -77,7 +77,7 @@ of the unmerged TASK-00…08 stack — `pnpm-workspace.yaml` does not exist on `
 change is only coherent on top of the stack). It sits as the next link after TASK-08 and
 **must merge before TASK-09 starts**.
 
-**PR: <!-- filled in after push -->**
+**PR: https://github.com/victorhmlz/nffc-protocol/pull/10** — base `task/TASK-08-composition-segmentation`.
 
 **Do not merge** — Project Lead reviews and authorizes. TASK-09 stays blocked until this is
 merged.
