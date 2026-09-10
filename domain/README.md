@@ -7,19 +7,20 @@ Framework-agnostic, provider-agnostic core. Plain TypeScript, no runtime depende
 
 ## Layout (TASK-02)
 
-| Path                   | Contents                                                                                                  | Fleshed out in                                                   |
-| ---------------------- | --------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------- |
-| `shared/branded.ts`    | Nominal id/time/address types                                                                             | —                                                                |
-| `registry/types.ts`    | `AssetIdentity`, `Provider`, `Network`, `Representation`, `OracleMetadata`                                | TASK-05                                                          |
-| `nffc/composition.ts`  | `Component`, `Composition`, `CompositionSegment`, invariant constants (`BPS_TOTAL`, `MIN/MAX_COMPONENTS`) | TASK-09                                                          |
-| `nffc/segment.ts`      | `deriveSegment`, `SEGMENT_META` — `CRYPTO_ONLY` / `STOCK_ONLY` / `MIXED` from the composition             | TASK-08                                                          |
-| `metadata/metadata.ts` | Static ERC-721 schema + `verifyStaticMetadataAgainstChain`; the dynamic market-data shape                 | TASK-11                                                          |
-| `art/art.ts`           | Deterministic generative art — composition + `compositionHash` → `ArtParams` → SVG                        | TASK-12                                                          |
-| `pricing/types.ts`     | `NormalizedPrice`, `PriceSource`                                                                          | TASK-22                                                          |
-| `valuation/types.ts`   | `ReferenceNav`, `NavPoint`, performance windows                                                           | TASK-23                                                          |
-| `rarity/types.ts`      | `StaticRarity`, `StaticRarityInputs`                                                                      | TASK-14                                                          |
-| `ports/`               | `Clock`, `ChainReader`, `BlockchainEventSource`, `PriceOracle`, `ProviderAdapter`                         | implementations live in `adapters/` + `workers/` per their TASKS |
-| `index.ts`             | Public barrel                                                                                             | —                                                                |
+| Path                               | Contents                                                                                                  | Fleshed out in                                                   |
+| ---------------------------------- | --------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------- |
+| `shared/branded.ts`                | Nominal id/time/address types                                                                             | —                                                                |
+| `registry/types.ts`                | `AssetIdentity`, `Provider`, `Network`, `Representation`, `OracleMetadata`                                | TASK-05                                                          |
+| `nffc/composition.ts`              | `Component`, `Composition`, `CompositionSegment`, invariant constants (`BPS_TOTAL`, `MIN/MAX_COMPONENTS`) | TASK-09                                                          |
+| `nffc/segment.ts`                  | `deriveSegment`, `SEGMENT_META` — `CRYPTO_ONLY` / `STOCK_ONLY` / `MIXED` from the composition             | TASK-08                                                          |
+| `metadata/metadata.ts`             | Static ERC-721 schema + `verifyStaticMetadataAgainstChain`; the dynamic market-data shape                 | TASK-11                                                          |
+| `art/art.ts`                       | Deterministic generative art — composition + `compositionHash` → `ArtParams` → SVG                        | TASK-12                                                          |
+| `mint-condition/mint-condition.ts` | Weighted market state frozen at mint — `computeMintCondition` / `verifyMintCondition`                     | TASK-13                                                          |
+| `pricing/types.ts`                 | `NormalizedPrice`, `PriceSource`                                                                          | TASK-22                                                          |
+| `valuation/types.ts`               | `ReferenceNav`, `NavPoint`, performance windows                                                           | TASK-23                                                          |
+| `rarity/types.ts`                  | `StaticRarity`, `StaticRarityInputs`                                                                      | TASK-14                                                          |
+| `ports/`                           | `Clock`, `ChainReader`, `BlockchainEventSource`, `PriceOracle`, `ProviderAdapter`                         | implementations live in `adapters/` + `workers/` per their TASKS |
+| `index.ts`                         | Public barrel                                                                                             | —                                                                |
 
 TASK-02 defines the **types and interfaces only**. Validators (I1–I8), NAV math, and the rarity
 formula are added by the TASKS above.

@@ -74,7 +74,11 @@ export interface StaticNffcFacts {
   readonly mintedAtBlock: number;
   /** Derived at mint from the composition (TASK-14); `null` until then. Never market-sourced. */
   readonly staticRarity: number | null;
-  /** Weighted market-state snapshot frozen at mint (TASK-13); `null` until then. */
+  /**
+   * Weighted market-state snapshot frozen at mint — `toMetadataTrait(...)` from
+   * `@domain/mint-condition` (TASK-13); `null` until the price engine (TASK-22)
+   * feeds it.
+   */
   readonly mintConditionTrait: Readonly<Record<string, string | number>> | null;
 }
 

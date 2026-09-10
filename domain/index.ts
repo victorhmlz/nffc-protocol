@@ -11,6 +11,7 @@ export * from "@domain/nffc/composition";
 export * from "@domain/nffc/segment";
 export * from "@domain/metadata/metadata";
 export * from "@domain/art/art";
+export * from "@domain/mint-condition/mint-condition";
 export * from "@domain/pricing/types";
 export * from "@domain/valuation/types";
 export * from "@domain/rarity/types";
