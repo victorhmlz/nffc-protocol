@@ -24,10 +24,13 @@ pnpm contracts:test    # hardhat test  (runs contracts/*.t.sol via forge-std)
 | `lib/CompositionSegmentLib.sol`                                                   | Derive `CRYPTO_ONLY` / `STOCK_ONLY` / `MIXED` from a composition — used by `NFFC.sol`          | TASK-08           |
 | `interfaces/INFFC.sol`                                                            | ERC-721 core interface (`Component`, `MintParams`, mint events, invariant errors I1–I7)        | TASK-09           |
 | `NFFC.sol`                                                                        | ERC-721 core — immutable weighted composition; enforces I1–I8 at mint; derived segment; pausable mint | TASK-09      |
-| `mocks/`                                                                          | Test doubles (`MockERC20`, `NoMetadata`)                                                       | —                 |
+| `interfaces/ICollection.sol`                                                      | Collection interface (`CreateParams`, creation-fee quote, creator ownership)                   | TASK-10           |
+| `interfaces/IFeeConfig.sol`                                                       | On-chain fee configuration — the single source of truth for every protocol fee                | TASK-10 (impl TASK-30) |
+| `Collection.sol`                                                                  | Creator-owned NFFC groupings; creation fee read from `IFeeConfig`, forwarded to the treasury  | TASK-10           |
+| `mocks/`                                                                          | Test doubles (`MockERC20`, `NoMetadata`, `MockFeeConfig`, `RejectEther` / `ReenterOnReceive`) | —                 |
 | `*.t.sol`                                                                         | forge-std Solidity tests, colocated                                                            | —                 |
 
-Later: `Collection.sol` (TASK-10), `Marketplace.sol` (TASK-19), `FeeConfig.sol` (TASK-30).
+Later: `Marketplace.sol` (TASK-19), `FeeConfig.sol` (TASK-30, implementing `IFeeConfig`).
 Deployment (Ignition) lands in TASK-31.
 
 ## Rules (`docs/spec/08-security-principles.md`)

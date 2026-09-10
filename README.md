@@ -12,11 +12,11 @@ supported providers from V1.
   `NFFC_Whitepaper.md` (v1.1), `NFFC_Roadmap.md` (v1.1)
 - Per-task reports: [`docs/reports/`](docs/reports/)
 
-> **Status: NFFC ERC-721 core (TASK-09).** Toolchain (TASK-01) → boundaries (TASK-02) → design
+> **Status: Collection contract (TASK-10).** Toolchain (TASK-01) → boundaries (TASK-02) → design
 > system (TASK-03) → infrastructure (TASK-04) → registries (TASK-05) → Robinhood + crypto adapters
-> (TASK-06/07) → composition segmentation (TASK-08), and now `NFFC.sol` — the ERC-721 core whose
-> immutable weighted composition (1–20 components, Σ = 10 000 BPS) is validated against the
-> registries at mint, with the segment derived on-chain. No product surfaces yet.
+> (TASK-06/07) → composition segmentation (TASK-08) → NFFC ERC-721 core (TASK-09), and now
+> `Collection.sol` — creator-owned NFFC groupings whose creation fee is read from `IFeeConfig`
+> on-chain (never hardcoded) and forwarded to the treasury. No product surfaces yet.
 
 ## Stack
 
