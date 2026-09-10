@@ -7,11 +7,3 @@ allowBuilds:
 # these are explicitly allowed through (reviewed at add time).
 minimumReleaseAgeExclude:
   - zod@4.6.0
-
-# Local dev runs Node 22.8.x, which predates stable `require(esm)`. Vite >= 7 and
-# jsdom >= 26 are ESM-only and break Node 22.8's CJS `require()` (Vitest's config
-# loader, jsdom's encoding sniffer). Pin those trees to the last versions that
-# work on this Node. Remove once the local Node baseline is >= 22.12 / 20.19.
-overrides:
-  vite: 6.4.3
-  jsdom: 25.0.1
