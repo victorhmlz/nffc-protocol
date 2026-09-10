@@ -10,29 +10,33 @@ Established in TASK-02.
 
 ```
 src/  (Next.js: Server + Client Components, Route Handlers)
-  │        │
-  │        ▼
-  │      adapters/  ──►  domain/
-  ▼        ▲               ▲
-workers/ ──┘               │
-config/  ──────────────────┘
+  │      │        │
+  │      │        ▼
+  │      │      adapters/ ──►  domain/
+  ▼      ▼        ▲               ▲
+workers/ infra/ ──┘               │
+         config/ ─────────────────┘
 ```
 
 One-way only:
 
 | Module | May import | May **not** import |
 |---|---|---|
-| `domain/` | `domain/` only | `next`, `react`, `adapters/`, `src/`, `workers/`, `config/` |
-| `adapters/` | `domain/` | `src/`, `workers/`, `next` |
-| `config/` | `domain/` | `src/`, `adapters/`, `workers/`, `next` |
-| `workers/` | `domain/`, `adapters/`, `config/` | `src/`, `next` |
-| `src/` | `domain/`, `adapters/`, `config/` | `workers/` internals |
+| `domain/` | `domain/` only | `next`, `react`, `adapters/`, `infra/`, `src/`, `workers/`, `config/` |
+| `config/` | `domain/` | `src/`, `adapters/`, `infra/`, `workers/`, `next` |
+| `adapters/` | `domain/`, `config/`, `infra/` | `src/`, `workers/`, `next` |
+| `infra/` | `domain/`, `config/` | `src/`, `adapters/`, `workers/`, `next` |
+| `workers/` | `domain/`, `config/`, `adapters/`, `infra/` | `src/`, `next` |
+| `src/` | `domain/`, `config/`, `adapters/`, `infra/` | `workers/` internals |
 
 - `domain/` is **framework-agnostic and provider-agnostic**. It knows only its own types and the
-  interfaces in `domain/ports/`. It never names Robinhood or crypto.
-- Adapters are wired to the domain at a **composition root** (a Route Handler, a Server Component
-  data function, or a worker entry) via `adapters/provider-adapter-registry.ts` — never from inside
-  `domain/`.
+  interfaces in `domain/ports/`. It never names Robinhood or crypto, and never touches a runtime
+  concern (DB, RPC, logging) directly — those are `infra/`, reached through a port.
+- `infra/` holds the runtime plumbing: the env loader, the structured logger, the multi-provider
+  RPC `ChainReader`, the PostgreSQL pool, the Redis client, the health check. It is `server-only`
+  and imports Node libraries (`pg`, `ioredis`, `pino`, `viem`).
+- Adapters and infra are wired to the domain at a **composition root** (a Route Handler, a Server
+  Component data function, or a worker entry) — never from inside `domain/`.
 - These rules are enforced by ESLint (`no-restricted-imports`, `eslint.config.mjs`). A violation
   fails `pnpm lint` and CI.
 
@@ -43,6 +47,7 @@ One-way only:
 | `@/*` | `src/*` |
 | `@domain`, `@domain/*` | `domain/*` |
 | `@adapters`, `@adapters/*` | `adapters/*` |
+| `@infra`, `@infra/*` | `infra/*` |
 | `@config`, `@config/*` | `config/*` |
 | `@workers/*` | `workers/*` |
 
@@ -85,14 +90,23 @@ settled (see `docs/reports/TASK-02-REPORT.md`). The harness and template are run
 |---|---|---|
 | Unit / component | Co-located with the code | `<name>.test.ts` / `<name>.test.tsx` |
 | Cross-module / integration | `tests/` at the repo root | `<area>.test.ts` |
+| Shared test helpers / fakes / contract suites | `tests/support/` | not `*.test.*` — imported, not run |
 | End-to-end (later, TASK-37) | `e2e/` | `<flow>.spec.ts` — **excluded** from the Vitest run |
 
-- Runner: **Vitest** (`pnpm test`). `jsdom` environment, globals on, setup in `vitest.setup.ts`.
+- Runner: **Vitest** (`pnpm test`). Default environment `jsdom`; a **Node**-only file opts in with a
+  `// @vitest-environment node` header comment (used by every `infra/` test).
 - One behaviour per `it`; `describe` names the unit under test.
-- Domain tests must not reach for a network, a database, or a wallet — inject a fake port
-  (`domain/ports/*`) instead.
-- A test file is picked up only under `src/`, `domain/`, `adapters/`, `config/`, `workers/`, or
-  `tests/` (see `vitest.config.ts` `include`).
+- Tests must not reach for a real network, database, Redis, or wallet. Inject a fake:
+  - domain / app code → a fake **port** (`tests/support/fakes.ts` — `createFakeChainReader`,
+    `FakeClock`, `createFakeLogger`).
+  - `infra/` unit tests → stub `fetch` (RPC), inject ping functions (`checkHealth`), or pass an
+    explicit env map (`loadConfigFrom`). No test connects to Postgres/Redis; that is integration
+    (TASK-31/37), gated behind real services.
+- **Contract suites** live in `tests/support/*-contract.ts` as exported `run<X>Contract(make)`
+  functions. Run them against the fake here; run the same suite against the real implementation from
+  an integration context when a later TASK needs that assurance.
+- A test file is picked up only under `src/`, `domain/`, `adapters/`, `config/`, `infra/`,
+  `workers/`, or `tests/` (see `vitest.config.ts` `include`).
 
 ## 5. TypeScript
 

@@ -1,7 +1,6 @@
 /**
- * Shape of the runtime configuration. The loader (env parsing, validation,
- * per-environment resolution) is TASK-04; this file only fixes the contract so
- * other modules can depend on it now.
+ * Shape of the runtime configuration. The loader — env parsing, validation,
+ * per-environment resolution — is `infra/env.ts` (TASK-04).
  */
 export type AppEnv = "development" | "test" | "staging" | "production";
 
@@ -24,7 +23,12 @@ export interface RedisConfig {
 export interface AppConfig {
   readonly env: AppEnv;
   readonly logLevel: LogLevel;
+  /** Per-chain RPC endpoints. May be empty in dev/test; a `ChainReader` for a
+      chain with no endpoints throws when created. */
   readonly rpcByChainId: Readonly<Record<number, RpcConfig>>;
-  readonly database: DatabaseConfig;
-  readonly redis: RedisConfig;
+  /** `null` when no `DATABASE_URL` is set (allowed in dev/test, not in
+      staging/production). */
+  readonly database: DatabaseConfig | null;
+  /** `null` when no `REDIS_URL` is set (same rule as `database`). */
+  readonly redis: RedisConfig | null;
 }

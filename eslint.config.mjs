@@ -5,13 +5,14 @@ import prettier from "eslint-config-prettier";
 
 /**
  * Import bans that keep the dependency direction one-way
- * (`docs/conventions.md` §1, TASK-02 acceptance):
+ * (`docs/conventions.md` §1):
  *
- *   src / workers  ──►  adapters  ──►  domain
+ *   src / workers  ──►  adapters ──►  domain
+ *   src / workers  ──►  infra    ──►  domain
  *   config         ──►  domain
  *
- * `domain/` depends on nothing but itself; `adapters/` never depends on the
- * web app or on workers.
+ * `domain/` depends on nothing but itself. `adapters/` and `infra/` never
+ * depend on the web app or on workers.
  */
 const bannedFromDomain = [
   {
@@ -26,6 +27,10 @@ const bannedFromDomain = [
     group: ["@adapters", "@adapters/*", "**/adapters/**"],
     message:
       "domain/ must not import an adapter — depend on domain/ports/* instead.",
+  },
+  {
+    group: ["@infra", "@infra/*", "**/infra/**"],
+    message: "domain/ must not import infrastructure — depend on a port.",
   },
   {
     group: ["@/*", "**/src/**"],
@@ -53,6 +58,22 @@ const bannedFromAdapters = [
   { group: ["next", "next/*"], message: "adapters/ must not import Next.js." },
 ];
 
+const bannedFromInfra = [
+  {
+    group: ["@/*", "**/src/**"],
+    message: "infra/ must not import from the web app (src/).",
+  },
+  {
+    group: ["@workers", "@workers/*", "**/workers/**"],
+    message: "infra/ must not import from workers/.",
+  },
+  {
+    group: ["@adapters", "@adapters/*", "**/adapters/**"],
+    message: "infra/ must not import an adapter.",
+  },
+  { group: ["next", "next/*"], message: "infra/ must not import Next.js." },
+];
+
 const eslintConfig = defineConfig([
   ...nextVitals,
   ...nextTs,
@@ -62,7 +83,7 @@ const eslintConfig = defineConfig([
       "@typescript-eslint/no-explicit-any": "error",
     },
   },
-  // TASK-02 acceptance: enforce the module boundaries.
+  // Module boundaries (TASK-02, extended in TASK-04).
   {
     files: ["domain/**/*.{ts,tsx}"],
     rules: {
@@ -75,6 +96,12 @@ const eslintConfig = defineConfig([
       "no-restricted-imports": ["error", { patterns: bannedFromAdapters }],
     },
   },
+  {
+    files: ["infra/**/*.{ts,tsx}"],
+    rules: {
+      "no-restricted-imports": ["error", { patterns: bannedFromInfra }],
+    },
+  },
   // Keep ESLint out of formatting decisions; Prettier owns formatting.
   prettier,
   globalIgnores([
@@ -83,6 +110,7 @@ const eslintConfig = defineConfig([
     "build/**",
     "coverage/**",
     "next-env.d.ts",
+    "db/migrate.mjs",
   ]),
 ]);
 

@@ -26,6 +26,8 @@
       "@adapters/*": ["./adapters/*"],
       "@config": ["./config/index.ts"],
       "@config/*": ["./config/*"],
+      "@infra": ["./infra/index.ts"],
+      "@infra/*": ["./infra/*"],
       "@workers/*": ["./workers/*"]
     }
   },

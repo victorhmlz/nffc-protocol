@@ -10,7 +10,10 @@ export default defineConfig({
       "@domain": r("./domain"),
       "@adapters": r("./adapters"),
       "@config": r("./config"),
+      "@infra": r("./infra"),
       "@workers": r("./workers"),
+      // `server-only` throws on import outside a React Server Component build.
+      "server-only": r("./tests/support/noop.ts"),
     },
   },
   test: {
@@ -22,6 +25,7 @@ export default defineConfig({
       "domain/**/*.{test,spec}.{ts,tsx}",
       "adapters/**/*.{test,spec}.{ts,tsx}",
       "config/**/*.{test,spec}.{ts,tsx}",
+      "infra/**/*.{test,spec}.{ts,tsx}",
       "workers/**/*.{test,spec}.{ts,tsx}",
       "tests/**/*.{test,spec}.{ts,tsx}",
     ],
