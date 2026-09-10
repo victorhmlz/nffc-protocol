@@ -22,11 +22,13 @@ pnpm contracts:test    # hardhat test  (runs contracts/*.t.sol via forge-std)
 | `ProviderAdapterBase.sol`                                                         | Abstract — all provider-sync logic; subclass supplies `providerId`/`assetClass`/token standard | TASK-06/07        |
 | `RobinhoodAdapter.sol` / `CryptoAdapter.sol`                                      | Two peers on that base — Robinhood Stock Tokens, native crypto                                 | TASK-06 / TASK-07 |
 | `lib/CompositionSegmentLib.sol`                                                   | Derive `CRYPTO_ONLY` / `STOCK_ONLY` / `MIXED` from a composition — used by `NFFC.sol`          | TASK-08           |
+| `interfaces/INFFC.sol`                                                            | ERC-721 core interface (`Component`, `MintParams`, mint events, invariant errors I1–I7)        | TASK-09           |
+| `NFFC.sol`                                                                        | ERC-721 core — immutable weighted composition; enforces I1–I8 at mint; derived segment; pausable mint | TASK-09      |
 | `mocks/`                                                                          | Test doubles (`MockERC20`, `NoMetadata`)                                                       | —                 |
 | `*.t.sol`                                                                         | forge-std Solidity tests, colocated                                                            | —                 |
 
-Later: `NFFC.sol` (TASK-09), `Collection.sol` (TASK-10), `Marketplace.sol` (TASK-19),
-`FeeConfig.sol` (TASK-30). Deployment (Ignition) lands in TASK-31.
+Later: `Collection.sol` (TASK-10), `Marketplace.sol` (TASK-19), `FeeConfig.sol` (TASK-30).
+Deployment (Ignition) lands in TASK-31.
 
 ## Rules (`docs/spec/08-security-principles.md`)
 
