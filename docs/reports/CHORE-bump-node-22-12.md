@@ -7,7 +7,8 @@ Hardhat" item carried in the reports since TASK-03.
 
 DONE — `pnpm verify` (lint · typecheck · test · build) **and** `pnpm contracts:build` +
 `pnpm contracts:test` all green **locally** on Node 22.13.0. Hardhat 3 runs locally for the
-first time in this repo.
+first time in this repo. Both CI jobs on PR #10 also pass —
+run `34515997803` (`lint · typecheck · test · build`; `solidity · compile · test` — 61 tests).
 
 ## NODE — BEFORE / AFTER
 
@@ -78,6 +79,7 @@ change is only coherent on top of the stack). It sits as the next link after TAS
 **must merge before TASK-09 starts**.
 
 **PR: https://github.com/victorhmlz/nffc-protocol/pull/10** — base `task/TASK-08-composition-segmentation`.
+**CI: https://github.com/victorhmlz/nffc-protocol/actions/runs/34515997803 — success** — both jobs.
 
 **Do not merge** — Project Lead reviews and authorizes. TASK-09 stays blocked until this is
 merged.
