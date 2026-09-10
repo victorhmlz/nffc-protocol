@@ -5,8 +5,9 @@
 COMPLETED
 
 `pnpm verify` (lint · typecheck · test · build) green locally. `pnpm contracts:build` +
-`pnpm contracts:test` green locally on Node 22.13.0 — **114 Solidity tests** (92 → +22). See
-PULL REQUEST for CI.
+`pnpm contracts:test` green locally on Node 22.13.0 — **114 Solidity tests** (92 → +22). Both CI
+jobs on PR #12 pass — run `34530139448` (`lint · typecheck · test · build`; `solidity · compile ·
+test`). See PULL REQUEST.
 
 ## OBJECTIVE
 
@@ -174,6 +175,7 @@ Branch `task/TASK-10-collection-contract`, based on **`task/TASK-09-nffc-contrac
 TASK-00…09 + `chore/bump-node-22-12` is not yet merged).
 
 **PR: https://github.com/victorhmlz/nffc-protocol/pull/12** — base `task/TASK-09-nffc-contract`.
+**CI: https://github.com/victorhmlz/nffc-protocol/actions/runs/34530139448 — success** — both jobs.
 
 **Do not merge** — Project Lead reviews and authorizes. Merge order: #1 → … → #9 → #10 (chore)
 → #11 (TASK-09) → this PR.
