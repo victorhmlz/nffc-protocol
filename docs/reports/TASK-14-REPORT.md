@@ -164,7 +164,7 @@ handful of `uint256` ops; a `view`, so no mint-time gas. `domain/rarity` is the 
 
 Branch `task/TASK-14-static-rarity`, based on **`main`** (TASK-00…13).
 
-**PR: <!-- filled in after push -->**
+**PR: https://github.com/victorhmlz/nffc-protocol/pull/17** — base `main`.
 
 **Do not merge** — Project Lead reviews and authorizes.
 
