@@ -180,6 +180,15 @@ TASK-00…09 + `chore/bump-node-22-12` is not yet merged).
 **Do not merge** — Project Lead reviews and authorizes. Merge order: #1 → … → #9 → #10 (chore)
 → #11 (TASK-09) → this PR.
 
+### Recovery note
+
+PR #12 was merged into its base branch `task/TASK-09-nffc-contract` instead of being retargeted to
+`main` (the whole stack collapsed onto `main` when #9–#11 merged, but #12's base pointer was not
+updated), so `Collection.sol` never reached `main`. These three commits (`dc6067f`, `da9ede7`,
+`7d63eb1`) are cherry-picked onto `main` on branch `fix/recover-task-10-collection` and re-opened as
+a fresh PR against `main`. No code change — identical content, verified: `hardhat compile` clean,
+**114 Solidity tests** pass, `pnpm verify` green.
+
 ## NEXT TASK
 
 **TASK-11 — Metadata Architecture** (`NFFC_Development_Plan.md` v3.2): separate immutable static
