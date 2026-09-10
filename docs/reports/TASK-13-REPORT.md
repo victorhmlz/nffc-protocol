@@ -155,7 +155,7 @@ division + round per component. No allocation beyond the output arrays.
 
 Branch `task/TASK-13-mint-condition-trait`, based on **`main`** (TASK-00…12).
 
-**PR: <!-- filled in after push -->**
+**PR: https://github.com/victorhmlz/nffc-protocol/pull/16** — base `main`.
 
 **Do not merge** — Project Lead reviews and authorizes.
 
