@@ -168,7 +168,7 @@ for the `/style-guide` samples with no measurable cost.
 
 Branch `task/TASK-12-generative-art`, based on **`main`** (TASK-00…11).
 
-**PR: <!-- filled in after push -->**
+**PR: https://github.com/victorhmlz/nffc-protocol/pull/15** — base `main`.
 
 **Do not merge** — Project Lead reviews and authorizes.
 
