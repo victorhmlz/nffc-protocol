@@ -1,16 +1,13 @@
 // @vitest-environment node
-import type { Address, Hex } from "viem";
+import { type Address, type Hex, stringToHex } from "viem";
 import { describe, expect, it, vi } from "vitest";
 import { createFakeLogger } from "../../tests/support/fakes";
-import { computeRobinhoodRepresentationId } from "./reconcile";
+import { computeRepresentationId } from "./reconcile";
 import { fixedTokenSource } from "./source";
-import { runRobinhoodSync } from "./sync";
-import type {
-  OnChainRepresentation,
-  OracleMeta,
-  RobinhoodToken,
-} from "./types";
+import { runProviderSync } from "./sync";
+import type { OnChainRepresentation, OracleMeta, ProviderToken } from "./types";
 
+const PID = stringToHex("CRYPTO_NATIVE", { size: 32 });
 const CHAIN = 4663n;
 const ORACLE: OracleMeta = {
   feed: "0x2222222222222222222222222222222222222222",
@@ -20,7 +17,7 @@ const ORACLE: OracleMeta = {
 const A = "0x1111111111111111111111111111111111111111" as Address;
 const B = "0x3333333333333333333333333333333333333333" as Address;
 
-function tk(addr: Address): RobinhoodToken {
+function tk(addr: Address): ProviderToken {
   return {
     symbol: "SYM",
     name: "Name",
@@ -32,15 +29,15 @@ function tk(addr: Address): RobinhoodToken {
 }
 function oc(addr: Address, active: boolean): OnChainRepresentation {
   return {
-    representationId: computeRobinhoodRepresentationId(CHAIN, addr),
+    representationId: computeRepresentationId(PID, CHAIN, addr),
     token: addr,
     active,
     oracle: ORACLE,
   };
 }
 
-function deps(overrides: Partial<Parameters<typeof runRobinhoodSync>[0]>) {
-  const upsert = vi.fn<(t: RobinhoodToken) => Promise<void>>(async () => {});
+function deps(overrides: Partial<Parameters<typeof runProviderSync>[0]>) {
+  const upsert = vi.fn<(t: ProviderToken) => Promise<void>>(async () => {});
   const deactivate = vi.fn<
     (e: { representationId: Hex; token: Address }) => Promise<void>
   >(async () => {});
@@ -48,8 +45,10 @@ function deps(overrides: Partial<Parameters<typeof runRobinhoodSync>[0]>) {
     upsert,
     deactivate,
     base: {
-      source: fixedTokenSource([]),
+      providerName: "crypto",
+      providerId: PID,
       chainId: CHAIN,
+      source: fixedTokenSource([]),
       readOnChain: async () => [] as OnChainRepresentation[],
       upsert,
       deactivate,
@@ -60,12 +59,12 @@ function deps(overrides: Partial<Parameters<typeof runRobinhoodSync>[0]>) {
   };
 }
 
-describe("runRobinhoodSync", () => {
+describe("runProviderSync", () => {
   it("registers every provider token on a fresh chain", async () => {
     const { base, upsert, deactivate } = deps({
       source: fixedTokenSource([tk(A), tk(B)]),
     });
-    const summary = await runRobinhoodSync(base);
+    const summary = await runProviderSync(base);
     expect(upsert).toHaveBeenCalledTimes(2);
     expect(deactivate).not.toHaveBeenCalled();
     expect(summary).toMatchObject({
@@ -76,12 +75,12 @@ describe("runRobinhoodSync", () => {
     });
   });
 
-  it("deactivates a representation Robinhood delisted", async () => {
+  it("deactivates a representation the provider delisted", async () => {
     const { base, upsert, deactivate } = deps({
       source: fixedTokenSource([tk(A)]),
       readOnChain: async () => [oc(A, true), oc(B, true)],
     });
-    const summary = await runRobinhoodSync(base);
+    const summary = await runProviderSync(base);
     expect(upsert).not.toHaveBeenCalled();
     expect(deactivate).toHaveBeenCalledTimes(1);
     expect(deactivate.mock.calls[0]?.[0]?.token).toBe(B);
@@ -97,7 +96,7 @@ describe("runRobinhoodSync", () => {
       source: fixedTokenSource([tk(A)]),
       readOnChain: async () => [oc(A, true)],
     });
-    const summary = await runRobinhoodSync(base);
+    const summary = await runProviderSync(base);
     expect(upsert).not.toHaveBeenCalled();
     expect(deactivate).not.toHaveBeenCalled();
     expect(summary.unchanged).toBe(1);
@@ -112,7 +111,7 @@ describe("runRobinhoodSync", () => {
     upsert.mockImplementation(async () => {
       controller.abort();
     });
-    const summary = await runRobinhoodSync(base);
+    const summary = await runProviderSync(base);
     expect(upsert).toHaveBeenCalledTimes(1);
     expect(summary.upserted).toBe(1);
   });

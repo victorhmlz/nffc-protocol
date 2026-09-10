@@ -4,11 +4,14 @@ pragma solidity 0.8.34;
 import {ProviderAdapterBase} from "./ProviderAdapterBase.sol";
 
 /**
- * Provider adapter for Robinhood Stock Tokens. Creates only `EQUITY`-class asset
- * identities and manages only `ROBINHOOD` representations. All sync logic is in
- * {ProviderAdapterBase}. Fed by `workers/robinhood-sync/`.
+ * Provider adapter for native cryptocurrencies (BTC, ETH, …), available from V1
+ * alongside Robinhood — a **peer**, same interface, same base implementation.
+ * Creates only `CRYPTO`-class asset identities and manages only `CRYPTO_NATIVE`
+ * representations. The token is a verified wrapped/homolog ERC-20 (WBTC/WETH per
+ * the network); Chainlink is the price source (validated in TASK-22). Fed by
+ * `workers/crypto-sync/`.
  */
-contract RobinhoodAdapter is ProviderAdapterBase {
+contract CryptoAdapter is ProviderAdapterBase {
     constructor(
         address admin,
         address syncSigner,
@@ -18,11 +21,11 @@ contract RobinhoodAdapter is ProviderAdapterBase {
     ) ProviderAdapterBase(admin, syncSigner, assetRegistry_, representationRegistry_, chainId_) {}
 
     function _providerId() internal pure override returns (bytes32) {
-        return bytes32("ROBINHOOD");
+        return bytes32("CRYPTO_NATIVE");
     }
 
     function _assetClass() internal pure override returns (bytes32) {
-        return bytes32("EQUITY");
+        return bytes32("CRYPTO");
     }
 
     function _tokenStandard() internal pure override returns (bytes32) {

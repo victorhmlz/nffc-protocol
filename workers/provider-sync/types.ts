@@ -1,15 +1,14 @@
 import type { Address, Hex } from "viem";
 
-/** Chainlink feed descriptor for one representation. Mirrors the on-chain
-    `IRepresentationRegistry.OracleMetadata`. */
+/** Chainlink feed descriptor. Mirrors on-chain `IRepresentationRegistry.OracleMetadata`. */
 export interface OracleMeta {
   readonly feed: Address;
   readonly heartbeat: number;
   readonly feedDecimals: number;
 }
 
-/** One Robinhood Stock Token as reported by the provider's authoritative list. */
-export interface RobinhoodToken {
+/** One asset as reported by a provider's authoritative list (Robinhood, crypto, …). */
+export interface ProviderToken {
   readonly symbol: string;
   readonly name: string;
   readonly token: Address;
@@ -28,15 +27,12 @@ export interface OnChainRepresentation {
 }
 
 export interface ReconcilePlan {
-  /** Provider tokens to (re)register or refresh on-chain. */
-  readonly toUpsert: readonly RobinhoodToken[];
-  /** On-chain representations no longer in the provider list — to deactivate. */
+  readonly toUpsert: readonly ProviderToken[];
   readonly toDeactivate: readonly { representationId: Hex; token: Address }[];
-  /** Count of on-chain representations already correct. */
   readonly unchanged: number;
 }
 
-export interface RobinhoodSyncSummary {
+export interface ProviderSyncSummary {
   readonly upserted: number;
   readonly deactivated: number;
   readonly unchanged: number;

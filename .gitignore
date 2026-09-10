@@ -48,8 +48,9 @@ next-env.d.ts
 /.gas-snapshot
 /snapshots
 
-# operational data (the committed file is *.example.json)
+# operational data (the committed files are *.example.json)
 /config/robinhood/stock-tokens.json
+/config/crypto/native-tokens.json
 
 # editors / OS
 .idea/

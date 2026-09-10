@@ -1,57 +1,19 @@
-import { runWorker, type Worker } from "@workers/runtime";
-import { getConfig } from "@infra/env";
-import { getLogger } from "@infra/logging/logger";
-import { ROBINHOOD_CHAIN } from "@config/chain";
-import { loadRobinhoodSyncConfig } from "./config";
-import { createOnchainClients } from "./onchain";
-import { jsonFileTokenSource } from "./source";
-import { runRobinhoodSync } from "./sync";
+import { runProviderSyncWorker } from "../provider-sync";
 
 /**
- * Robinhood Stock Token sync worker. One reconciliation pass per run:
- * pull Robinhood's official active list → diff against the on-chain
- * `ROBINHOOD` representations → register new / refresh changed / re-activate
- * relisted / **deactivate delisted** → done. Scheduled externally.
- *
- * Not operational until the registries + adapter are deployed and
- * `ROBINHOOD_SYNC_PRIVATE_KEY` is set (TASK-31); until then it logs and exits.
+ * Robinhood Stock Token sync. Reconciles Robinhood's official active list into
+ * the `ROBINHOOD` representations via `RobinhoodAdapter`. All logic is shared —
+ * see `workers/provider-sync/`.
  */
-const worker: Worker = {
+await runProviderSyncWorker({
   name: "robinhood-sync",
-  async run(signal) {
-    const log = getLogger();
-    const cfg = loadRobinhoodSyncConfig();
-    if (!cfg.configured) {
-      log.warn(
-        { component: "robinhood-sync", reason: cfg.reason },
-        "not configured — skipping (deploy contracts + set the sync key)",
-      );
-      return;
-    }
-
-    const rpc = getConfig().rpcByChainId[ROBINHOOD_CHAIN.chainId];
-    const rpcUrl = rpc?.endpoints[0];
-    if (!rpcUrl) {
-      log.error(
-        { component: "robinhood-sync" },
-        "no RPC endpoint for chain 4663",
-      );
-      return;
-    }
-
-    const clients = createOnchainClients(cfg, rpcUrl);
-    const summary = await runRobinhoodSync({
-      source: jsonFileTokenSource(cfg.tokensFile),
-      chainId: BigInt(ROBINHOOD_CHAIN.chainId),
-      readOnChain: clients.readOnChain,
-      upsert: clients.upsert,
-      deactivate: clients.deactivate,
-      now: () => Date.now(),
-      logger: log,
-      signal,
-    });
-    log.info({ component: "robinhood-sync", ...summary }, "run finished");
+  providerName: "robinhood",
+  providerId: "ROBINHOOD",
+  config: {
+    registryEnvVar: "CONTRACT_REPRESENTATION_REGISTRY",
+    adapterEnvVar: "CONTRACT_ROBINHOOD_ADAPTER",
+    keyEnvVar: "ROBINHOOD_SYNC_PRIVATE_KEY",
+    tokensFileEnvVar: "ROBINHOOD_TOKENS_FILE",
+    tokensFileDefault: "config/robinhood/stock-tokens.json",
   },
-};
-
-await runWorker(worker);
+});

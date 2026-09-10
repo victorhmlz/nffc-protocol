@@ -78,13 +78,14 @@ reverse.
 
 Worker shape: implement `Worker` from `@workers/runtime` (`name` + `run(signal)`), start it with
 `runWorker(...)`. `run` must return promptly once `signal.aborted` is true, after persisting its
-cursor. See `workers/_template/index.ts` and `workers/robinhood-sync/`.
+cursor. See `workers/_template/index.ts` and `workers/provider-sync/`.
 
 **Runner:** `pnpm worker workers/<name>/index.ts` (= `tsx`, which resolves the `@…` path aliases).
 Needs Node ≥ 22.13. All I/O (chain reads, tx submission, DB, the provider feed) is **injected** into
-the tested orchestrator (e.g. `runRobinhoodSync(deps)`); `index.ts` is thin glue that builds the
-real deps and is not unit-tested. A worker that is not yet configured (contracts undeployed) logs
-and exits cleanly.
+a tested orchestrator (e.g. `runProviderSync(deps)`); `index.ts` is thin glue that builds the real
+deps and is not unit-tested. Two providers that share a pattern share the code — `robinhood-sync`
+and `crypto-sync` are each one call to `runProviderSyncWorker(spec)`. A worker that is not yet
+configured (contracts undeployed) logs and exits cleanly.
 
 ## 4. Test organization & naming
 

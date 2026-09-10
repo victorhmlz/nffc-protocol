@@ -8,9 +8,8 @@ import {
 } from "viem";
 import { privateKeyToAccount } from "viem/accounts";
 import { ROBINHOOD_CHAIN } from "@config/chain";
-import { ROBINHOOD_PROVIDER_ID } from "./reconcile";
-import type { OnChainRepresentation, RobinhoodToken } from "./types";
-import type { RobinhoodSyncConfig } from "./config";
+import type { OnChainRepresentation, ProviderToken } from "./types";
+import type { ProviderSyncConfig } from "./config";
 
 const REGISTRY_ABI = parseAbi([
   "struct OracleMetadata { address feed; uint32 heartbeat; uint8 feedDecimals; }",
@@ -19,10 +18,11 @@ const REGISTRY_ABI = parseAbi([
   "function getRepresentation(bytes32 representationId) view returns (Representation)",
 ]);
 
+// Every provider adapter shares IProviderAdapter, so one ABI covers them all.
 const ADAPTER_ABI = parseAbi([
   "struct OracleMetadata { address feed; uint32 heartbeat; uint8 feedDecimals; }",
   "struct SyncEntry { string symbol; string name; address token; uint8 decimals; uint256 multiplier; OracleMetadata oracle; }",
-  "function syncUpsert(SyncEntry e) returns (bytes32)",
+  "function syncUpsert(SyncEntry entry) returns (bytes32)",
   "function syncDeactivateByToken(address token)",
 ]);
 
@@ -41,19 +41,19 @@ const chain = {
 
 export interface OnchainClients {
   readOnChain(): Promise<readonly OnChainRepresentation[]>;
-  upsert(token: RobinhoodToken): Promise<void>;
+  upsert(token: ProviderToken): Promise<void>;
   deactivate(entry: { representationId: Hex; token: Address }): Promise<void>;
 }
 
 /**
  * Live viem read/write against the deployed `RepresentationRegistry` (reads) and
- * `RobinhoodAdapter` (writes). Only reachable once the contracts are deployed
- * and the sync key is set; behaviour against a real chain is exercised in
- * TASK-31 (testnet).
+ * a provider adapter (writes). Reachable once the contracts are deployed and the
+ * sync key is set; behaviour against a real chain is exercised in TASK-31.
  */
 export function createOnchainClients(
-  cfg: Extract<RobinhoodSyncConfig, { configured: true }>,
+  cfg: Extract<ProviderSyncConfig, { configured: true }>,
   rpcUrl: string,
+  providerId: Hex,
 ): OnchainClients {
   const publicClient = createPublicClient({ chain, transport: http(rpcUrl) });
   const account = privateKeyToAccount(cfg.syncPrivateKey);
@@ -69,7 +69,7 @@ export function createOnchainClients(
         address: cfg.representationRegistry,
         abi: REGISTRY_ABI,
         functionName: "getRepresentationsByProvider",
-        args: [ROBINHOOD_PROVIDER_ID],
+        args: [providerId],
       });
       const reps = await Promise.all(
         ids.map((id) =>
@@ -95,7 +95,7 @@ export function createOnchainClients(
 
     async upsert(token) {
       const hash = await walletClient.writeContract({
-        address: cfg.robinhoodAdapter,
+        address: cfg.adapter,
         abi: ADAPTER_ABI,
         functionName: "syncUpsert",
         args: [
@@ -118,7 +118,7 @@ export function createOnchainClients(
 
     async deactivate(entry) {
       const hash = await walletClient.writeContract({
-        address: cfg.robinhoodAdapter,
+        address: cfg.adapter,
         abi: ADAPTER_ABI,
         functionName: "syncDeactivateByToken",
         args: [entry.token],

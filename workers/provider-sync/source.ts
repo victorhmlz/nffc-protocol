@@ -1,18 +1,18 @@
 import { readFile } from "node:fs/promises";
 import { type Address, isAddress } from "viem";
 import { z } from "zod";
-import type { RobinhoodToken } from "./types";
+import type { ProviderToken } from "./types";
 
 /**
- * Where the worker gets Robinhood's official active Stock Token list.
+ * Where a sync worker gets a provider's official active asset list.
  *
  * V1 ships a config-file source (seed / testnet). The production source — a
- * Robinhood API or an on-chain Robinhood registry — plugs in behind this same
- * interface once its shape is known; the reconciler and worker do not change.
+ * provider API or an on-chain registry — plugs in behind this same interface;
+ * the reconciler and worker do not change.
  */
-export interface RobinhoodTokenSource {
+export interface ProviderTokenSource {
   readonly name: string;
-  list(): Promise<readonly RobinhoodToken[]>;
+  list(): Promise<readonly ProviderToken[]>;
 }
 
 const addressSchema = z.custom<Address>(
@@ -36,7 +36,7 @@ const entrySchema = z.object({
 
 const listSchema = z.array(entrySchema);
 
-function toToken(e: z.infer<typeof entrySchema>): RobinhoodToken {
+function toToken(e: z.infer<typeof entrySchema>): ProviderToken {
   return {
     symbol: e.symbol,
     name: e.name,
@@ -49,14 +49,14 @@ function toToken(e: z.infer<typeof entrySchema>): RobinhoodToken {
 
 /** Source from an already-parsed array (tests, or an in-memory config). */
 export function fixedTokenSource(
-  entries: readonly RobinhoodToken[],
+  entries: readonly ProviderToken[],
   name = "fixed",
-): RobinhoodTokenSource {
+): ProviderTokenSource {
   return { name, list: async () => entries };
 }
 
-/** Source from a JSON file matching `config/robinhood/stock-tokens.example.json`. */
-export function jsonFileTokenSource(path: string): RobinhoodTokenSource {
+/** Source from a JSON file matching `config/<provider>/*.example.json`. */
+export function jsonFileTokenSource(path: string): ProviderTokenSource {
   return {
     name: `json:${path}`,
     async list() {

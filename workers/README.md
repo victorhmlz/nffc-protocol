@@ -14,16 +14,18 @@ Long-running / scheduled processes that run **outside** the Next.js request cycl
 |---|---|---|
 | `runtime.ts` | `Worker` interface + `runWorker()` harness (SIGINT/SIGTERM → `AbortSignal`) | TASK-02 |
 | `_template/index.ts` | Copyable example worker | TASK-02 |
-| `robinhood-sync/` | Reconcile Robinhood's official Stock Token list into the registry via `RobinhoodAdapter` | TASK-06 |
-| Crypto sync | Same, for native crypto | TASK-07 |
+| `provider-sync/` | **Shared** provider-sync engine: token source, pure reconciler, injected orchestrator, viem glue, `runProviderSyncWorker(spec)` | TASK-06 / TASK-07 |
+| `robinhood-sync/index.ts` | Thin wrapper — `ROBINHOOD` provider, `RobinhoodAdapter` | TASK-06 |
+| `crypto-sync/index.ts` | Thin wrapper — `CRYPTO_NATIVE` provider, `CryptoAdapter` (a peer, same engine) | TASK-07 |
 | Blockchain indexer | Idempotent event indexing into PostgreSQL | TASK-24 |
 | NAV materialization | Normalize oracle prices, compute Reference NAV history | TASK-22 / TASK-23 |
 | Art rendering | Generative art from composition | TASK-12 |
 
 ## Convention
 
-The **logic** lives in a pure/injected orchestrator (`robinhood-sync/sync.ts` →
-`runRobinhoodSync(deps)`), fully unit-tested with fakes. `index.ts` is thin glue that builds the
-real deps (chain client, tx signer, config source, DB cursor) and calls it — not unit-tested. A
-worker whose dependencies aren't configured yet (e.g. contracts undeployed) logs and exits cleanly.
-A worker implements `Worker` (`name` + `run(signal)`) and stops promptly once `signal.aborted`.
+The **logic** lives in `provider-sync/` — a pure reconciler (`reconcile.ts`) and an injected
+orchestrator (`sync.ts` → `runProviderSync(deps)`), fully unit-tested with fakes. A provider's
+`index.ts` is one call to `runProviderSyncWorker(spec)` (provider id + env-var names) — not
+unit-tested. A worker whose dependencies aren't configured yet (contracts undeployed) logs and exits
+cleanly. A worker implements `Worker` (`name` + `run(signal)`) and stops promptly once
+`signal.aborted`.

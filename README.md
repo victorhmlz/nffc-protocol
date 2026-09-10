@@ -12,11 +12,11 @@ supported providers from V1.
   `NFFC_Whitepaper.md` (v1.1), `NFFC_Roadmap.md` (v1.1)
 - Per-task reports: [`docs/reports/`](docs/reports/)
 
-> **Status: Robinhood adapter (TASK-06).** Toolchain (TASK-01), module skeleton + boundaries
-> (TASK-02), design system (TASK-03), infrastructure (TASK-04), asset + representation registries
-> (TASK-05), and now `RobinhoodAdapter` + the first real off-chain sync worker
-> (`workers/robinhood-sync/`). No product surfaces yet; the worker is not operational until the
-> contracts are deployed (TASK-31).
+> **Status: provider adapters (TASK-07).** Toolchain (TASK-01), module skeleton + boundaries
+> (TASK-02), design system (TASK-03), infrastructure (TASK-04), registries (TASK-05),
+> `RobinhoodAdapter` + sync worker (TASK-06), and now `CryptoAdapter` — a peer sharing one base
+> contract and one sync engine (`workers/provider-sync/`). No product surfaces yet; the sync workers
+> are not operational until the contracts are deployed (TASK-31).
 
 ## Stack
 
@@ -85,8 +85,8 @@ adapters/           per-provider adapters (one shared interface) + provider-adap
 infra/              server-only runtime plumbing: env, logger, RPC, PostgreSQL, Redis, health (TASK-04)
 config/             typed configuration; fixed chain facts
 workers/            long-running / scheduled processes, outside the Next request cycle
-                    (robinhood-sync — TASK-06)
-contracts/          Solidity — Hardhat 3; registries (TASK-05) + RobinhoodAdapter (TASK-06)
+                    (provider-sync engine + robinhood-sync / crypto-sync — TASK-06/07)
+contracts/          Solidity — Hardhat 3; registries (TASK-05) + Robinhood/Crypto adapters (TASK-06/07)
 db/                 PostgreSQL migrations + runner (TASK-04)
 docs/spec/          product & architecture specification (TASK-00)
 docs/conventions.md module boundaries, Server/Client rules, test layout (TASK-02)
