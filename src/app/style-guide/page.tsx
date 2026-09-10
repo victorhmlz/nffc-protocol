@@ -35,10 +35,59 @@ import {
   TableHeader,
   TableRow,
   GeoEligibilityNotice,
+  NffcArt,
   SegmentBadge,
   TransactionStatus,
 } from "@/components/ui";
 import type { TransactionState } from "@/lib/wallet/transaction-state";
+
+const ART_SEED =
+  "0x9f8e7d6c5b4a39281706f5e4d3c2b1a0ffeeddccbbaa99887766554433221100";
+const ART_SAMPLES: {
+  label: string;
+  input: Parameters<typeof NffcArt>[0]["input"];
+}[] = [
+  {
+    label: "1 component",
+    input: {
+      seed: ART_SEED,
+      components: [{ assetId: "0xA", weightBps: 10000 }],
+    },
+  },
+  {
+    label: "2 components · 60 / 40",
+    input: {
+      seed: ART_SEED,
+      components: [
+        { assetId: "0xNVDA", weightBps: 6000 },
+        { assetId: "0xBTC", weightBps: 4000 },
+      ],
+    },
+  },
+  {
+    label: "5 components",
+    input: {
+      seed: ART_SEED,
+      components: [
+        { assetId: "0xA", weightBps: 3500 },
+        { assetId: "0xB", weightBps: 2500 },
+        { assetId: "0xC", weightBps: 2000 },
+        { assetId: "0xD", weightBps: 1500 },
+        { assetId: "0xE", weightBps: 500 },
+      ],
+    },
+  },
+  {
+    label: "10 components · even",
+    input: {
+      seed: ART_SEED,
+      components: Array.from({ length: 10 }, (_, i) => ({
+        assetId: `0x${i.toString(16)}`,
+        weightBps: 1000,
+      })),
+    },
+  },
+];
 
 export const metadata: Metadata = { title: "Style Guide" };
 
@@ -317,6 +366,29 @@ export default function StyleGuidePage() {
               <SegmentBadge segment={seg} />
               <GeoEligibilityNotice segment={seg} />
             </div>
+          ))}
+        </div>
+      </Section>
+
+      <Section title="Generative art (deterministic — composition → visual)">
+        <p className="max-w-prose text-sm text-subtle-foreground">
+          Arc angle is the basis-point weight; radial reach and node size scale
+          with it; colour and jitter derive from the asset id; rotation and
+          inner radius from the composition hash. Same composition →
+          byte-identical SVG. See <code>docs/art-algorithm.md</code>.
+        </p>
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {ART_SAMPLES.map((s) => (
+            <figure key={s.label} className="flex flex-col gap-2">
+              <NffcArt
+                input={s.input}
+                className="aspect-square"
+                label={`Sample: ${s.label}`}
+              />
+              <figcaption className="text-xs text-subtle-foreground">
+                {s.label}
+              </figcaption>
+            </figure>
           ))}
         </div>
       </Section>

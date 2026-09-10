@@ -8,17 +8,18 @@ supported providers from V1.
 - Product & architecture spec: [`docs/spec/`](docs/spec/00-README.md)
 - Engineering conventions: [`docs/conventions.md`](docs/conventions.md)
 - Metadata architecture: [`docs/metadata-architecture.md`](docs/metadata-architecture.md)
+- Generative art algorithm: [`docs/art-algorithm.md`](docs/art-algorithm.md)
 - Design system: [`docs/design-system.md`](docs/design-system.md) · live at `/style-guide`
 - Governance: `NFFC_Claude_Master_Prompt.md` (v2.1), `NFFC_Development_Plan.md` (v3.2),
   `NFFC_Whitepaper.md` (v1.1), `NFFC_Roadmap.md` (v1.1)
 - Per-task reports: [`docs/reports/`](docs/reports/)
 
-> **Status: metadata architecture (TASK-11).** Toolchain (TASK-01) → boundaries (TASK-02) → design
+> **Status: generative art engine (TASK-12).** Toolchain (TASK-01) → boundaries (TASK-02) → design
 > system (TASK-03) → infrastructure (TASK-04) → registries (TASK-05) → Robinhood + crypto adapters
 > (TASK-06/07) → composition segmentation (TASK-08) → NFFC ERC-721 core (TASK-09) → Collection
-> contract (TASK-10), and now the metadata split — immutable, chain-verifiable **static** metadata
-> (`domain/metadata`) vs a **dynamic** market-data layer served only by the API and never treated as
-> permanent truth (`docs/metadata-architecture.md`). No product surfaces yet.
+> contract (TASK-10) → metadata split (TASK-11), and now `domain/art` — an NFFC's artwork as a
+> deterministic pure function of its basis-point weights + `compositionHash`, reproducible by anyone
+> from on-chain data (`docs/art-algorithm.md`; samples on `/style-guide`). No product surfaces yet.
 
 ## Stack
 
