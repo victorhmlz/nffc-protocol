@@ -173,7 +173,7 @@ transfer. No loops.
 Branch `task/TASK-10-collection-contract`, based on **`task/TASK-09-nffc-contract`** (the stack
 TASK-00…09 + `chore/bump-node-22-12` is not yet merged).
 
-**PR: <!-- filled in after push -->**
+**PR: https://github.com/victorhmlz/nffc-protocol/pull/12** — base `task/TASK-09-nffc-contract`.
 
 **Do not merge** — Project Lead reviews and authorizes. Merge order: #1 → … → #9 → #10 (chore)
 → #11 (TASK-09) → this PR.
