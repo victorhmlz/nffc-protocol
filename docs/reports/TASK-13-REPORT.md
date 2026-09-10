@@ -6,7 +6,7 @@ COMPLETED
 
 `pnpm verify` (lint · typecheck · test · build) green locally — **22 files, 106 tests** (88 → +18).
 `pnpm contracts:build` / `pnpm contracts:test` green (114 Solidity tests, unchanged — no `.sol`
-touched). See PULL REQUEST for CI.
+touched). Both CI jobs on PR #16 pass — run `34541477427`. See PULL REQUEST.
 
 ## OBJECTIVE
 
@@ -156,6 +156,7 @@ division + round per component. No allocation beyond the output arrays.
 Branch `task/TASK-13-mint-condition-trait`, based on **`main`** (TASK-00…12).
 
 **PR: https://github.com/victorhmlz/nffc-protocol/pull/16** — base `main`.
+**CI: https://github.com/victorhmlz/nffc-protocol/actions/runs/34541477427 — success** — both jobs.
 
 **Do not merge** — Project Lead reviews and authorizes.
 
