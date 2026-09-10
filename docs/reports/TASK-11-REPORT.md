@@ -6,7 +6,7 @@ COMPLETED
 
 `pnpm verify` (lint · typecheck · test · build) green locally — **20 files, 75 tests** (56 → +19).
 `pnpm contracts:build` / `pnpm contracts:test` green (92 Solidity tests, unchanged — no `.sol`
-touched). See PULL REQUEST for CI.
+touched). Both CI jobs on PR #13 pass — run `34536031144`. See PULL REQUEST.
 
 ## OBJECTIVE
 
@@ -174,6 +174,7 @@ O(componentCount ≤ 20). The routes do no I/O yet. Static responses are designe
 Branch `task/TASK-11-metadata-architecture`, based on **`main`** (TASK-00…09 + the Node chore).
 
 **PR: https://github.com/victorhmlz/nffc-protocol/pull/13** — base `main`.
+**CI: https://github.com/victorhmlz/nffc-protocol/actions/runs/34536031144 — success** — both jobs.
 
 **Do not merge** — Project Lead reviews and authorizes. Note: land the TASK-10 recovery PR before
 or alongside this so `main` regains the Collection contract (KNOWN ISSUES #4).
