@@ -30,6 +30,7 @@ contract RepresentationRegistry is IRepresentationRegistry, AccessControl {
     mapping(bytes32 representationId => Representation) private _reps;
     mapping(bytes32 representationId => bool) private _repPresent;
     mapping(bytes32 assetId => bytes32[] representationIds) private _repsByAsset;
+    mapping(bytes32 providerId => bytes32[] representationIds) private _repsByProvider;
 
     constructor(address admin, address assetRegistry_) {
         if (admin == address(0) || assetRegistry_ == address(0)) revert ZeroAddress();
@@ -124,6 +125,7 @@ contract RepresentationRegistry is IRepresentationRegistry, AccessControl {
             updatedAt: nowTs
         });
         _repsByAsset[p.assetId].push(representationId);
+        _repsByProvider[p.providerId].push(representationId);
 
         emit RepresentationRegistered(representationId, p.assetId, p.providerId, p.token, p.chainId);
     }
@@ -179,6 +181,10 @@ contract RepresentationRegistry is IRepresentationRegistry, AccessControl {
 
     function getRepresentationsByAsset(bytes32 assetId) external view override returns (bytes32[] memory) {
         return _repsByAsset[assetId];
+    }
+
+    function getRepresentationsByProvider(bytes32 providerId) external view override returns (bytes32[] memory) {
+        return _repsByProvider[providerId];
     }
 
     // ----------------------------------------------------------------- internal

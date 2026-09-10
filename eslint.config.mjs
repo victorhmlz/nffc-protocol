@@ -74,6 +74,18 @@ const bannedFromInfra = [
   { group: ["next", "next/*"], message: "infra/ must not import Next.js." },
 ];
 
+const bannedFromWorkers = [
+  {
+    group: ["@/*", "**/src/**"],
+    message: "workers/ must not import from the web app (src/).",
+  },
+  { group: ["next", "next/*"], message: "workers/ must not import Next.js." },
+  {
+    group: ["react", "react/*", "react-dom", "react-dom/*"],
+    message: "workers/ must not import React.",
+  },
+];
+
 const eslintConfig = defineConfig([
   ...nextVitals,
   ...nextTs,
@@ -100,6 +112,12 @@ const eslintConfig = defineConfig([
     files: ["infra/**/*.{ts,tsx}"],
     rules: {
       "no-restricted-imports": ["error", { patterns: bannedFromInfra }],
+    },
+  },
+  {
+    files: ["workers/**/*.{ts,tsx}"],
+    rules: {
+      "no-restricted-imports": ["error", { patterns: bannedFromWorkers }],
     },
   },
   // Keep ESLint out of formatting decisions; Prettier owns formatting.

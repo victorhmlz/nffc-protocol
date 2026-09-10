@@ -78,11 +78,13 @@ reverse.
 
 Worker shape: implement `Worker` from `@workers/runtime` (`name` + `run(signal)`), start it with
 `runWorker(...)`. `run` must return promptly once `signal.aborted` is true, after persisting its
-cursor. See `workers/_template/index.ts`.
+cursor. See `workers/_template/index.ts` and `workers/robinhood-sync/`.
 
-The TS runner for workers (`tsx`, Node native type-stripping, or a `tsc` build) and its `pnpm`
-script are decided in TASK-06, when the first real worker exists and the local Node baseline is
-settled (see `docs/reports/TASK-02-REPORT.md`). The harness and template are runner-agnostic.
+**Runner:** `pnpm worker workers/<name>/index.ts` (= `tsx`, which resolves the `@…` path aliases).
+Needs Node ≥ 22.13. All I/O (chain reads, tx submission, DB, the provider feed) is **injected** into
+the tested orchestrator (e.g. `runRobinhoodSync(deps)`); `index.ts` is thin glue that builds the
+real deps and is not unit-tested. A worker that is not yet configured (contracts undeployed) logs
+and exits cleanly.
 
 ## 4. Test organization & naming
 

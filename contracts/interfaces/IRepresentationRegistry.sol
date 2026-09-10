@@ -113,4 +113,5 @@ interface IRepresentationRegistry {
     function representationExists(bytes32 representationId) external view returns (bool);
     function resolvesTo(bytes32 representationId, bytes32 assetId) external view returns (bool);
     function getRepresentationsByAsset(bytes32 assetId) external view returns (bytes32[] memory);
+    function getRepresentationsByProvider(bytes32 providerId) external view returns (bytes32[] memory);
 }
