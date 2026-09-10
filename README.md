@@ -9,17 +9,19 @@ supported providers from V1.
 - Engineering conventions: [`docs/conventions.md`](docs/conventions.md)
 - Metadata architecture: [`docs/metadata-architecture.md`](docs/metadata-architecture.md)
 - Generative art algorithm: [`docs/art-algorithm.md`](docs/art-algorithm.md)
+- Mint-condition trait: [`docs/mint-condition-trait.md`](docs/mint-condition-trait.md)
 - Design system: [`docs/design-system.md`](docs/design-system.md) · live at `/style-guide`
 - Governance: `NFFC_Claude_Master_Prompt.md` (v2.1), `NFFC_Development_Plan.md` (v3.2),
   `NFFC_Whitepaper.md` (v1.1), `NFFC_Roadmap.md` (v1.1)
 - Per-task reports: [`docs/reports/`](docs/reports/)
 
-> **Status: generative art engine (TASK-12).** Toolchain (TASK-01) → boundaries (TASK-02) → design
-> system (TASK-03) → infrastructure (TASK-04) → registries (TASK-05) → Robinhood + crypto adapters
-> (TASK-06/07) → composition segmentation (TASK-08) → NFFC ERC-721 core (TASK-09) → Collection
-> contract (TASK-10) → metadata split (TASK-11), and now `domain/art` — an NFFC's artwork as a
-> deterministic pure function of its basis-point weights + `compositionHash`, reproducible by anyone
-> from on-chain data (`docs/art-algorithm.md`; samples on `/style-guide`). No product surfaces yet.
+> **Status: mint-condition trait engine (TASK-13).** Toolchain (TASK-01) → boundaries (TASK-02) →
+> design system (TASK-03) → infrastructure (TASK-04) → registries (TASK-05) → Robinhood + crypto
+> adapters (TASK-06/07) → composition segmentation (TASK-08) → NFFC ERC-721 core (TASK-09) →
+> Collection contract (TASK-10) → metadata split (TASK-11) → generative art (TASK-12), and now
+> `domain/mint-condition` — the weighted distance-from-all-time-highs frozen at mint, deterministic
+> and reproducible from historical oracle data (`docs/mint-condition-trait.md`). No product surfaces
+> yet.
 
 ## Stack
 
