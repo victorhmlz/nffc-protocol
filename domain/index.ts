@@ -9,6 +9,7 @@ export * from "@domain/shared/branded";
 export * from "@domain/registry/types";
 export * from "@domain/nffc/composition";
 export * from "@domain/nffc/segment";
+export * from "@domain/metadata/metadata";
 export * from "@domain/pricing/types";
 export * from "@domain/valuation/types";
 export * from "@domain/rarity/types";

@@ -7,16 +7,18 @@ supported providers from V1.
 
 - Product & architecture spec: [`docs/spec/`](docs/spec/00-README.md)
 - Engineering conventions: [`docs/conventions.md`](docs/conventions.md)
+- Metadata architecture: [`docs/metadata-architecture.md`](docs/metadata-architecture.md)
 - Design system: [`docs/design-system.md`](docs/design-system.md) · live at `/style-guide`
 - Governance: `NFFC_Claude_Master_Prompt.md` (v2.1), `NFFC_Development_Plan.md` (v3.2),
   `NFFC_Whitepaper.md` (v1.1), `NFFC_Roadmap.md` (v1.1)
 - Per-task reports: [`docs/reports/`](docs/reports/)
 
-> **Status: Collection contract (TASK-10).** Toolchain (TASK-01) → boundaries (TASK-02) → design
+> **Status: metadata architecture (TASK-11).** Toolchain (TASK-01) → boundaries (TASK-02) → design
 > system (TASK-03) → infrastructure (TASK-04) → registries (TASK-05) → Robinhood + crypto adapters
-> (TASK-06/07) → composition segmentation (TASK-08) → NFFC ERC-721 core (TASK-09), and now
-> `Collection.sol` — creator-owned NFFC groupings whose creation fee is read from `IFeeConfig`
-> on-chain (never hardcoded) and forwarded to the treasury. No product surfaces yet.
+> (TASK-06/07) → composition segmentation (TASK-08) → NFFC ERC-721 core (TASK-09) → Collection
+> contract (TASK-10), and now the metadata split — immutable, chain-verifiable **static** metadata
+> (`domain/metadata`) vs a **dynamic** market-data layer served only by the API and never treated as
+> permanent truth (`docs/metadata-architecture.md`). No product surfaces yet.
 
 ## Stack
 
