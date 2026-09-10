@@ -111,6 +111,11 @@ const eslintConfig = defineConfig([
     "coverage/**",
     "next-env.d.ts",
     "db/migrate.mjs",
+    // Solidity project — its own toolchain (Hardhat, solc); not ESLint's.
+    "artifacts/**",
+    "cache/**",
+    "contracts/**",
+    "hardhat.config.ts",
   ]),
 ]);
 

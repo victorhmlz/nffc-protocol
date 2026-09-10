@@ -12,10 +12,10 @@ supported providers from V1.
   `NFFC_Whitepaper.md` (v1.1), `NFFC_Roadmap.md` (v1.1)
 - Per-task reports: [`docs/reports/`](docs/reports/)
 
-> **Status: infrastructure (TASK-04).** Toolchain (TASK-01), module skeleton + boundaries (TASK-02),
-> design system (TASK-03), and now the runtime plumbing: typed env loader, structured logging,
-> multi-provider RPC abstraction, PostgreSQL + Redis connections, migration runner, Next error
-> boundaries, health/readiness probes. No product surfaces or domain behaviour yet.
+> **Status: asset registry (TASK-05).** Toolchain (TASK-01), module skeleton + boundaries (TASK-02),
+> design system (TASK-03), infrastructure (TASK-04), and now the first on-chain contracts:
+> `AssetIdentityRegistry` + `RepresentationRegistry` (Hardhat 3 / Solidity 0.8.34). No product
+> surfaces or off-chain domain behaviour yet.
 
 ## Stack
 
@@ -30,7 +30,7 @@ supported providers from V1.
 
 ## Prerequisites
 
-- **Node.js ≥ 20.9** (this repo targets Node 22 — see `.nvmrc`; `nvm use` if you use nvm)
+- **Node.js ≥ 22.13** (required by Hardhat 3; see `.nvmrc`; `nvm use` if you use nvm)
 - **Corepack** (bundled with Node). Enable pnpm once:
 
   ```bash
@@ -67,7 +67,9 @@ infrastructure configured; `staging`/`production` require `DATABASE_URL`, `REDIS
 | `pnpm test` | Vitest (run once) |
 | `pnpm test:watch` | Vitest (watch) |
 | `pnpm db:migrate` | Apply `db/migrations/*.sql` (`--dry-run` to preview). Needs `DATABASE_URL`. |
-| `pnpm verify` | lint → typecheck → test → build (same gate as CI) |
+| `pnpm contracts:build` | Compile `contracts/` (Hardhat 3). Needs Node ≥ 22.13. |
+| `pnpm contracts:test` | Run the Solidity tests (`contracts/*.t.sol`). |
+| `pnpm verify` | lint → typecheck → test → build (JS/TS gate; contracts are a separate CI job) |
 
 ## Layout
 
@@ -81,6 +83,7 @@ adapters/           per-provider adapters (one shared interface) + provider-adap
 infra/              server-only runtime plumbing: env, logger, RPC, PostgreSQL, Redis, health (TASK-04)
 config/             typed configuration; fixed chain facts
 workers/            long-running / scheduled processes, outside the Next request cycle
+contracts/          Solidity — Hardhat 3; AssetIdentityRegistry + RepresentationRegistry (TASK-05)
 db/                 PostgreSQL migrations + runner (TASK-04)
 docs/spec/          product & architecture specification (TASK-00)
 docs/conventions.md module boundaries, Server/Client rules, test layout (TASK-02)

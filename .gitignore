@@ -41,6 +41,13 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
+# hardhat / solidity
+/artifacts
+/cache
+/types
+/.gas-snapshot
+/snapshots
+
 # editors / OS
 .idea/
 .vscode/*

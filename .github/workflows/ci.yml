@@ -41,3 +41,26 @@ jobs:
 
       - name: Build
         run: pnpm run build
+
+  contracts:
+    name: solidity · compile · test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Enable Corepack (pnpm from package.json "packageManager")
+        run: corepack enable
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Compile contracts
+        run: pnpm run contracts:build
+
+      - name: Test contracts
+        run: pnpm run contracts:test
