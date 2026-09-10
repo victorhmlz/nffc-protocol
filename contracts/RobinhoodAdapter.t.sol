@@ -7,6 +7,7 @@ import {AssetIdentityRegistry} from "./AssetIdentityRegistry.sol";
 import {RepresentationRegistry} from "./RepresentationRegistry.sol";
 import {RobinhoodAdapter} from "./RobinhoodAdapter.sol";
 import {IAssetIdentityRegistry} from "./interfaces/IAssetIdentityRegistry.sol";
+import {IProviderAdapter} from "./interfaces/IProviderAdapter.sol";
 import {IRepresentationRegistry} from "./interfaces/IRepresentationRegistry.sol";
 import {MockERC20} from "./mocks/MockERC20.sol";
 
@@ -51,9 +52,9 @@ contract RobinhoodAdapterTest is Test {
     function _entry(string memory symbol, string memory name, address token)
         internal
         pure
-        returns (RobinhoodAdapter.SyncEntry memory)
+        returns (IProviderAdapter.SyncEntry memory)
     {
-        return RobinhoodAdapter.SyncEntry({
+        return IProviderAdapter.SyncEntry({
             symbol: symbol,
             name: name,
             token: token,
@@ -68,17 +69,17 @@ contract RobinhoodAdapterTest is Test {
     }
 
     function test_constructor_rejectsZeroAdmin() public {
-        vm.expectRevert(RobinhoodAdapter.ZeroAddress.selector);
+        vm.expectRevert(IProviderAdapter.ZeroAddress.selector);
         new RobinhoodAdapter(address(0), syncSigner, address(assets), address(reps), CHAIN);
     }
 
     function test_constructor_rejectsZeroAssetRegistry() public {
-        vm.expectRevert(RobinhoodAdapter.ZeroAddress.selector);
+        vm.expectRevert(IProviderAdapter.ZeroAddress.selector);
         new RobinhoodAdapter(admin, syncSigner, address(0), address(reps), CHAIN);
     }
 
     function test_constructor_rejectsZeroRepresentationRegistry() public {
-        vm.expectRevert(RobinhoodAdapter.ZeroAddress.selector);
+        vm.expectRevert(IProviderAdapter.ZeroAddress.selector);
         new RobinhoodAdapter(admin, syncSigner, address(assets), address(0), CHAIN);
     }
 
@@ -134,7 +135,7 @@ contract RobinhoodAdapterTest is Test {
         assertFalse(reps.isActiveRepresentation(repId));
 
         // Robinhood re-lists with fresh oracle metadata → worker upserts again
-        RobinhoodAdapter.SyncEntry memory e = _entry("NVDA", "NVIDIA", address(nvdaToken));
+        IProviderAdapter.SyncEntry memory e = _entry("NVDA", "NVIDIA", address(nvdaToken));
         e.oracle = IRepresentationRegistry.OracleMetadata({feed: address(0xBEEF), heartbeat: 120, feedDecimals: 18});
         vm.prank(syncSigner);
         bytes32 repId2 = adapter.syncUpsert(e);

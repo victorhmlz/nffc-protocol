@@ -1,13 +1,10 @@
 // @vitest-environment node
-import type { Address } from "viem";
+import { type Address, stringToHex } from "viem";
 import { describe, expect, it } from "vitest";
-import { computeRobinhoodRepresentationId, reconcile } from "./reconcile";
-import type {
-  OnChainRepresentation,
-  OracleMeta,
-  RobinhoodToken,
-} from "./types";
+import { computeRepresentationId, reconcile } from "./reconcile";
+import type { OnChainRepresentation, OracleMeta, ProviderToken } from "./types";
 
+const PID = stringToHex("ROBINHOOD", { size: 32 });
 const CHAIN = 4663n;
 const ORACLE_A: OracleMeta = {
   feed: "0x2222222222222222222222222222222222222222",
@@ -19,7 +16,10 @@ const ORACLE_B: OracleMeta = {
   feed: "0x9999999999999999999999999999999999999999",
 };
 
-function token(addr: string, oracle: OracleMeta = ORACLE_A): RobinhoodToken {
+const A = "0x1111111111111111111111111111111111111111";
+const B = "0x3333333333333333333333333333333333333333";
+
+function token(addr: string, oracle: OracleMeta = ORACLE_A): ProviderToken {
   return {
     symbol: "SYM",
     name: "Name",
@@ -36,29 +36,28 @@ function onChain(
   oracle: OracleMeta = ORACLE_A,
 ): OnChainRepresentation {
   return {
-    representationId: computeRobinhoodRepresentationId(CHAIN, addr as Address),
+    representationId: computeRepresentationId(PID, CHAIN, addr as Address),
     token: addr as Address,
     active,
     oracle,
   };
 }
 
-const A = "0x1111111111111111111111111111111111111111";
-const B = "0x3333333333333333333333333333333333333333";
-
-describe("computeRobinhoodRepresentationId", () => {
-  it("is a deterministic 32-byte hash", () => {
-    const id = computeRobinhoodRepresentationId(CHAIN, A as Address);
+describe("computeRepresentationId", () => {
+  it("is a deterministic 32-byte hash keyed by provider, chain, token", () => {
+    const id = computeRepresentationId(PID, CHAIN, A as Address);
     expect(id).toMatch(/^0x[0-9a-f]{64}$/);
-    expect(computeRobinhoodRepresentationId(CHAIN, A as Address)).toBe(id);
-    expect(computeRobinhoodRepresentationId(CHAIN, B as Address)).not.toBe(id);
-    expect(computeRobinhoodRepresentationId(1n, A as Address)).not.toBe(id);
+    expect(computeRepresentationId(PID, CHAIN, A as Address)).toBe(id);
+    expect(computeRepresentationId(PID, CHAIN, B as Address)).not.toBe(id);
+    expect(computeRepresentationId(PID, 1n, A as Address)).not.toBe(id);
+    const otherPid = stringToHex("CRYPTO_NATIVE", { size: 32 });
+    expect(computeRepresentationId(otherPid, CHAIN, A as Address)).not.toBe(id);
   });
 });
 
 describe("reconcile", () => {
   it("registers every provider token when nothing is on-chain", () => {
-    const plan = reconcile([], [token(A), token(B)], CHAIN);
+    const plan = reconcile([], [token(A), token(B)], PID, CHAIN);
     expect(plan.toUpsert).toHaveLength(2);
     expect(plan.toDeactivate).toHaveLength(0);
     expect(plan.unchanged).toBe(0);
@@ -68,6 +67,7 @@ describe("reconcile", () => {
     const plan = reconcile(
       [onChain(A, true), onChain(B, true)],
       [token(A), token(B)],
+      PID,
       CHAIN,
     );
     expect(plan.toUpsert).toHaveLength(0);
@@ -79,6 +79,7 @@ describe("reconcile", () => {
     const plan = reconcile(
       [onChain(A, true, ORACLE_A)],
       [token(A, ORACLE_B)],
+      PID,
       CHAIN,
     );
     expect(plan.toUpsert.map((t) => t.token)).toEqual([A]);
@@ -86,15 +87,16 @@ describe("reconcile", () => {
   });
 
   it("re-activates a token that was inactive but is back in the list", () => {
-    const plan = reconcile([onChain(A, false)], [token(A)], CHAIN);
+    const plan = reconcile([onChain(A, false)], [token(A)], PID, CHAIN);
     expect(plan.toUpsert.map((t) => t.token)).toEqual([A]);
     expect(plan.toDeactivate).toHaveLength(0);
   });
 
-  it("deactivates an active on-chain representation Robinhood delisted", () => {
+  it("deactivates an active on-chain representation the provider delisted", () => {
     const plan = reconcile(
       [onChain(A, true), onChain(B, true)],
       [token(A)],
+      PID,
       CHAIN,
     );
     expect(plan.toDeactivate.map((d) => d.token)).toEqual([B]);
@@ -103,7 +105,7 @@ describe("reconcile", () => {
   });
 
   it("leaves an already-inactive delisted representation alone", () => {
-    const plan = reconcile([onChain(B, false)], [], CHAIN);
+    const plan = reconcile([onChain(B, false)], [], PID, CHAIN);
     expect(plan.toDeactivate).toHaveLength(0);
     expect(plan.toUpsert).toHaveLength(0);
   });

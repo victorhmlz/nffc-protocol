@@ -3,36 +3,41 @@ import type { Logger } from "@infra/logging/logger";
 import { reconcile } from "./reconcile";
 import type {
   OnChainRepresentation,
-  RobinhoodSyncSummary,
-  RobinhoodToken,
+  ProviderSyncSummary,
+  ProviderToken,
 } from "./types";
-import type { RobinhoodTokenSource } from "./source";
+import type { ProviderTokenSource } from "./source";
 
-export interface RobinhoodSyncDeps {
-  readonly source: RobinhoodTokenSource;
+export interface ProviderSyncDeps {
+  /** For logs; also the sync's identity. */
+  readonly providerName: string;
+  /** `bytes32(providerId)` — matches the on-chain adapter's `providerId()`. */
+  readonly providerId: Hex;
   readonly chainId: bigint;
-  /** Current `ROBINHOOD` representations on-chain. */
+  readonly source: ProviderTokenSource;
+  /** Current representations for this provider on-chain. */
   readOnChain(): Promise<readonly OnChainRepresentation[]>;
   /** Register / refresh / re-activate one representation via the adapter. */
-  upsert(token: RobinhoodToken): Promise<void>;
+  upsert(token: ProviderToken): Promise<void>;
   /** Deactivate one representation via the adapter. */
   deactivate(entry: { representationId: Hex; token: Address }): Promise<void>;
   now(): number;
   readonly logger: Logger;
-  /** Abort promptly once true (worker shutdown). */
   readonly signal?: AbortSignal;
 }
 
 /**
  * One reconciliation pass: pull the provider list, read on-chain state, diff,
- * apply. Idempotent — running it twice with the same inputs is a no-op the
- * second time. All I/O is injected so the logic is tested without a chain.
+ * apply. Idempotent — a second run with the same inputs is a no-op. All I/O is
+ * injected so the logic is tested without a chain. Shared by every provider
+ * (`robinhood-sync`, `crypto-sync`, …).
  */
-export async function runRobinhoodSync(
-  deps: RobinhoodSyncDeps,
-): Promise<RobinhoodSyncSummary> {
+export async function runProviderSync(
+  deps: ProviderSyncDeps,
+): Promise<ProviderSyncSummary> {
   const log = deps.logger.child({
-    component: "robinhood-sync",
+    component: "provider-sync",
+    provider: deps.providerName,
     source: deps.source.name,
   });
 
@@ -41,7 +46,12 @@ export async function runRobinhoodSync(
     deps.readOnChain(),
   ]);
 
-  const plan = reconcile(onChain, providerTokens, deps.chainId);
+  const plan = reconcile(
+    onChain,
+    providerTokens,
+    deps.providerId,
+    deps.chainId,
+  );
   log.info(
     {
       providerTokens: providerTokens.length,
@@ -67,7 +77,7 @@ export async function runRobinhoodSync(
     deactivated += 1;
   }
 
-  const summary: RobinhoodSyncSummary = {
+  const summary: ProviderSyncSummary = {
     upserted,
     deactivated,
     unchanged: plan.unchanged,
