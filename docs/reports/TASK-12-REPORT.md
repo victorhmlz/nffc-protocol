@@ -6,7 +6,7 @@ COMPLETED
 
 `pnpm verify` (lint · typecheck · test · build) green locally — **21 files, 88 tests** (75 → +13).
 `pnpm contracts:build` / `pnpm contracts:test` green (114 Solidity tests, unchanged — no `.sol`
-touched). See PULL REQUEST for CI.
+touched). Both CI jobs on PR #15 pass — run `34539477725`. See PULL REQUEST.
 
 ## OBJECTIVE
 
@@ -169,6 +169,7 @@ for the `/style-guide` samples with no measurable cost.
 Branch `task/TASK-12-generative-art`, based on **`main`** (TASK-00…11).
 
 **PR: https://github.com/victorhmlz/nffc-protocol/pull/15** — base `main`.
+**CI: https://github.com/victorhmlz/nffc-protocol/actions/runs/34539477725 — success** — both jobs.
 
 **Do not merge** — Project Lead reviews and authorizes.
 
