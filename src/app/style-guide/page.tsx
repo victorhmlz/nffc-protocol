@@ -34,6 +34,8 @@ import {
   TableHead,
   TableHeader,
   TableRow,
+  GeoEligibilityNotice,
+  SegmentBadge,
   TransactionStatus,
 } from "@/components/ui";
 import type { TransactionState } from "@/lib/wallet/transaction-state";
@@ -304,6 +306,17 @@ export default function StyleGuidePage() {
         <div className="grid gap-3 sm:grid-cols-2">
           {TX_STATES.map((state) => (
             <TransactionStatus key={state} state={state} />
+          ))}
+        </div>
+      </Section>
+
+      <Section title="Composition segment (derived, never declared)">
+        <div className="flex flex-col gap-3">
+          {(["CRYPTO_ONLY", "STOCK_ONLY", "MIXED"] as const).map((seg) => (
+            <div key={seg} className="flex flex-col gap-2">
+              <SegmentBadge segment={seg} />
+              <GeoEligibilityNotice segment={seg} />
+            </div>
           ))}
         </div>
       </Section>

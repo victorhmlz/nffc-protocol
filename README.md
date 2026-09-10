@@ -12,22 +12,22 @@ supported providers from V1.
   `NFFC_Whitepaper.md` (v1.1), `NFFC_Roadmap.md` (v1.1)
 - Per-task reports: [`docs/reports/`](docs/reports/)
 
-> **Status: provider adapters (TASK-07).** Toolchain (TASK-01), module skeleton + boundaries
-> (TASK-02), design system (TASK-03), infrastructure (TASK-04), registries (TASK-05),
-> `RobinhoodAdapter` + sync worker (TASK-06), and now `CryptoAdapter` — a peer sharing one base
-> contract and one sync engine (`workers/provider-sync/`). No product surfaces yet; the sync workers
-> are not operational until the contracts are deployed (TASK-31).
+> **Status: composition segmentation (TASK-08).** Toolchain (TASK-01) → boundaries (TASK-02) →
+> design system (TASK-03) → infrastructure (TASK-04) → registries (TASK-05) → Robinhood + crypto
+> adapters (TASK-06/07), and now composition segmentation — `CRYPTO_ONLY` / `STOCK_ONLY` / `MIXED`
+> derived from the composition (never declared), on-chain (`CompositionSegmentLib`) and off
+> (`@domain/nffc/segment`), plus the geographic-eligibility UI. No product surfaces yet.
 
 ## Stack
 
-| | |
-|---|---|
-| Framework | Next.js 16 (App Router), React 19, TypeScript `strict` |
-| Styling | Tailwind CSS v4 (tokens/components defined in TASK-03) |
-| Package manager | pnpm (via Corepack) — version pinned in `package.json` `packageManager` |
-| Lint / format | ESLint 9 (flat config, `eslint-config-next`, explicit `any` = error) + Prettier |
-| Tests | Vitest + Testing Library + jsdom |
-| CI | GitHub Actions — lint · typecheck · test · build |
+|                 |                                                                                 |
+| --------------- | ------------------------------------------------------------------------------- |
+| Framework       | Next.js 16 (App Router), React 19, TypeScript `strict`                          |
+| Styling         | Tailwind CSS v4 (tokens/components defined in TASK-03)                          |
+| Package manager | pnpm (via Corepack) — version pinned in `package.json` `packageManager`         |
+| Lint / format   | ESLint 9 (flat config, `eslint-config-next`, explicit `any` = error) + Prettier |
+| Tests           | Vitest + Testing Library + jsdom                                                |
+| CI              | GitHub Actions — lint · typecheck · test · build                                |
 
 ## Prerequisites
 
@@ -55,23 +55,23 @@ infrastructure configured; `staging`/`production` require `DATABASE_URL`, `REDIS
 
 ## Scripts
 
-| Command | Does |
-|---|---|
-| `pnpm dev` | Start the dev server at http://localhost:3000 |
-| `pnpm build` | Production build |
-| `pnpm start` | Serve the production build |
-| `pnpm lint` | ESLint |
-| `pnpm lint:fix` | ESLint with `--fix` |
-| `pnpm format` | Prettier write |
-| `pnpm format:check` | Prettier check (CI) |
-| `pnpm typecheck` | `next typegen` then `tsc --noEmit` |
-| `pnpm test` | Vitest (run once) |
-| `pnpm test:watch` | Vitest (watch) |
-| `pnpm db:migrate` | Apply `db/migrations/*.sql` (`--dry-run` to preview). Needs `DATABASE_URL`. |
-| `pnpm worker <path>` | Run a worker, e.g. `pnpm worker workers/robinhood-sync/index.ts` (via `tsx`; Node ≥ 22.13). |
-| `pnpm contracts:build` | Compile `contracts/` (Hardhat 3). Needs Node ≥ 22.13. |
-| `pnpm contracts:test` | Run the Solidity tests (`contracts/*.t.sol`). |
-| `pnpm verify` | lint → typecheck → test → build (JS/TS gate; contracts are a separate CI job) |
+| Command                | Does                                                                                        |
+| ---------------------- | ------------------------------------------------------------------------------------------- |
+| `pnpm dev`             | Start the dev server at http://localhost:3000                                               |
+| `pnpm build`           | Production build                                                                            |
+| `pnpm start`           | Serve the production build                                                                  |
+| `pnpm lint`            | ESLint                                                                                      |
+| `pnpm lint:fix`        | ESLint with `--fix`                                                                         |
+| `pnpm format`          | Prettier write                                                                              |
+| `pnpm format:check`    | Prettier check (CI)                                                                         |
+| `pnpm typecheck`       | `next typegen` then `tsc --noEmit`                                                          |
+| `pnpm test`            | Vitest (run once)                                                                           |
+| `pnpm test:watch`      | Vitest (watch)                                                                              |
+| `pnpm db:migrate`      | Apply `db/migrations/*.sql` (`--dry-run` to preview). Needs `DATABASE_URL`.                 |
+| `pnpm worker <path>`   | Run a worker, e.g. `pnpm worker workers/robinhood-sync/index.ts` (via `tsx`; Node ≥ 22.13). |
+| `pnpm contracts:build` | Compile `contracts/` (Hardhat 3). Needs Node ≥ 22.13.                                       |
+| `pnpm contracts:test`  | Run the Solidity tests (`contracts/*.t.sol`).                                               |
+| `pnpm verify`          | lint → typecheck → test → build (JS/TS gate; contracts are a separate CI job)               |
 
 ## Layout
 

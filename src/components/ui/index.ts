@@ -33,6 +33,10 @@ export {
 } from "@/components/ui/field";
 export { Input } from "@/components/ui/input";
 export { Label } from "@/components/ui/label";
+export {
+  GeoEligibilityNotice,
+  SegmentBadge,
+} from "@/components/ui/segment-badge";
 export { Skeleton } from "@/components/ui/skeleton";
 export { Sparkline } from "@/components/ui/sparkline";
 export { Stat } from "@/components/ui/stat";
