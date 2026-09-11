@@ -6,7 +6,7 @@ COMPLETED
 
 `pnpm verify` (lint · typecheck · test · build) green locally — **34 files, 168 tests** (139 → +29).
 `pnpm contracts:build` / `pnpm contracts:test` green — **128 Solidity tests**, unchanged (no `.sol`
-touched). See PULL REQUEST for CI.
+touched). Both CI jobs on PR #19 pass — run `34581027877`. See PULL REQUEST.
 
 ## OBJECTIVE
 
@@ -203,6 +203,7 @@ STEP 5 AUDIT (`docs/spec/08-security-principles.md`):
 Branch `task/TASK-16-wallet`, based on **`main`** (TASK-00…15).
 
 **PR: https://github.com/victorhmlz/nffc-protocol/pull/19** — base `main`.
+**CI: https://github.com/victorhmlz/nffc-protocol/actions/runs/34581027877 — success** — both jobs.
 
 **Do not merge** — Project Lead reviews and authorizes.
 
