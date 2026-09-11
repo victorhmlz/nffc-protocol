@@ -24,13 +24,14 @@ supported providers from V1.
 - Activity: [`docs/activity.md`](docs/activity.md) · live at `/activity` (TASK-26)
 - Profiles: [`docs/profile.md`](docs/profile.md) · live at `/profile/[address]` (TASK-27)
 - Search: [`docs/search.md`](docs/search.md) · live at `/search` (TASK-28)
+- Offers: [`docs/offers.md`](docs/offers.md) — create/accept/cancel, on `/nffc/[tokenId]` (TASK-29)
 - Design system: [`docs/design-system.md`](docs/design-system.md) · live at `/style-guide`
 - Governance: `NFFC_Claude_Master_Prompt.md` (v2.5), `NFFC_Development_Plan.md` (v3.4),
   `NFFC_Whitepaper.md` (v1.4), `NFFC_Roadmap.md` (v1.3)
 - Per-task reports: [`docs/reports/`](docs/reports/)
 - Open issues log: [`docs/OPEN_ISSUES.md`](docs/OPEN_ISSUES.md) — live record of unresolved findings between TASKS
 
-> **Status: Search (TASK-28).** Toolchain (TASK-01) → boundaries (TASK-02) → design
+> **Status: Offers (TASK-29).** Toolchain (TASK-01) → boundaries (TASK-02) → design
 > system (TASK-03) → infrastructure (TASK-04) → registries (TASK-05) → Robinhood + crypto adapters
 > (TASK-06/07) → composition segmentation (TASK-08) → NFFC ERC-721 core (TASK-09) → Collection
 > contract (TASK-10) → metadata split (TASK-11) → generative art (TASK-12) → mint-condition trait
@@ -38,16 +39,16 @@ supported providers from V1.
 > create wizard (TASK-17) → the mint flow wired end-to-end (TASK-18) → `Marketplace.sol` (TASK-19)
 > → `/market` explore/filter/sort/buy (TASK-20) → the NFFC detail page (TASK-21) → the price engine
 > (TASK-22) → the Reference NAV engine (TASK-23) → the blockchain indexer (TASK-24) →
-> `/portfolio` (TASK-25) → `/activity` (TASK-26) → `/profile/[address]` (TASK-27), and now
-> **`/search`**: one query string across NFFCs, assets, collections, and wallets, including the
-> partial-composition match the Development Plan names explicitly ("contiene NVDA") — reusing
-> `IndexedNffcSummary` (TASK-20) and `CreatedCollectionSummary` (TASK-27) rather than inventing
-> parallel shapes (`docs/search.md`). The search box itself is a plain HTML `GET` form — no client
-> JavaScript needed for a feature that has never required any. `Marketplace.sol`'s deployment
-> (TASK-31) is still the only thing standing between every one of these read paths and live data —
-> every layer (`provider-sync/`, `nav-materializer/`, `indexer/`, `portfolio`, `activity`,
-> `profile`, now `search`) is complete and fully tested against fakes/fixtures, and reports "not
-> available yet" honestly until then.
+> `/portfolio` (TASK-25) → `/activity` (TASK-26) → `/profile/[address]` (TASK-27) → `/search`
+> (TASK-28), and now **offers**: `/nffc/[tokenId]` grows a real create/accept/cancel flow around
+> `Marketplace.sol`'s already-strict on-chain expiry enforcement (TASK-19) — this TASK verifies and
+> exposes that guarantee, it doesn't re-implement it. `useBuyFlow` (TASK-20) is now the generalized
+> `useMarketplaceActionFlow`, reused for all four marketplace writes rather than copied a fourth
+> time (`docs/offers.md`). `Marketplace.sol`'s deployment (TASK-31) is still the only thing standing
+> between every one of these read/write paths and live data — every layer (`provider-sync/`,
+> `nav-materializer/`, `indexer/`, `portfolio`, `activity`, `profile`, `search`, now the offer
+> flows) is complete and fully tested against fakes/fixtures, and reports "not available yet" (or,
+> for writes, never actually opens a wallet) honestly until then.
 
 ## Stack
 

@@ -6,7 +6,7 @@
  * against — wallet identity only exists client-side in this self-custody
  * DApp — so unlike `/nffc/[tokenId]`'s SSR fetch, this is a client effect keyed
  * on the connected address, the same "Client Component, explicit
- * loading/error state" shape `useBuyFlow`/`useMintFlow` (TASK-18/20) already
+ * loading/error state" shape `useMarketplaceActionFlow`/`useMintFlow` (TASK-18/20) already
  * establish for wallet-driven data.
  *
  * Uses `useReducer`, not a handful of `useState` calls — `transaction-flow.ts`
