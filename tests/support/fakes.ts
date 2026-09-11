@@ -3,9 +3,10 @@
  * Import these in tests instead of touching a network, database, or wallet
  * (`docs/conventions.md` §4).
  */
-import type { ChainReader, ContractCall } from "@domain/ports";
-import type { ChainId } from "@domain/registry/types";
+import type { ChainReader, ContractCall, PriceOracle } from "@domain/ports";
+import type { ChainId, RepresentationId } from "@domain/registry/types";
 import type { UnixMillis } from "@domain/shared/branded";
+import type { NormalizedPrice } from "@domain/pricing/types";
 import type { Logger } from "@infra/logging/logger";
 
 export class FakeClock {
@@ -43,6 +44,32 @@ export function createFakeChainReader(
       if (!(key in reads))
         throw new Error(`FakeChainReader: no canned read for ${key}`);
       return reads[key] as T;
+    },
+  };
+}
+
+/**
+ * A trivial, wholly independent `PriceOracle` implementation — no Chainlink,
+ * no `ChainReader`, just an in-memory map. Used to prove `PriceOracle` is a
+ * real, swappable port (TASK-22 acceptance: "a second oracle provider can be
+ * added without breaking the data contract") by running the same
+ * `runPriceOracleContract` suite (`tests/support/price-oracle-contract.ts`)
+ * against this and against `ChainlinkPriceOracle`.
+ */
+export function createStaticPriceOracle(
+  prices: ReadonlyMap<RepresentationId, NormalizedPrice>,
+): PriceOracle {
+  return {
+    async getPrice(representationId) {
+      const price = prices.get(representationId);
+      if (!price) throw new Error(`No static price for ${representationId}`);
+      return price;
+    },
+    async getPrices(representationIds) {
+      const entries = await Promise.all(
+        representationIds.map(async (id) => [id, await this.getPrice(id)] as const),
+      );
+      return new Map(entries);
     },
   };
 }
