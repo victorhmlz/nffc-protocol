@@ -8,8 +8,8 @@ COMPLETED
 net of retiring TASK-20's `use-buy-flow.test.tsx` in favor of its generalized replacement — see
 CHANGES). `pnpm contracts:build` / `pnpm contracts:test` unchanged — **172 Solidity tests**
 (TASK-29 touches no `.sol` — the contract-level behavior already existed, TASK-19). Offer flows
-smoke-tested live via `pnpm dev` on `/nffc/1` — see BUILD. PR not yet opened at time of writing
-this section — see PULL REQUEST for the final link.
+smoke-tested live via `pnpm dev` on `/nffc/1` — see BUILD. Both CI jobs on PR #36 pass — run
+`34658658310`. See PULL REQUEST.
 
 ## OBJECTIVE
 
@@ -200,8 +200,8 @@ built and tested: `MakeOfferForm` (create), `OfferRowActions` (accept/cancel).
 
 Branch `task/TASK-29-offers`, based on **`main`** (TASK-00…28).
 
-**PR: (to be filled in once opened)**
-**CI: (to be filled in once green)**
+**PR: https://github.com/victorhmlz/nffc-protocol/pull/36** — base `main`.
+**CI: https://github.com/victorhmlz/nffc-protocol/actions/runs/34658658310 — success** — both jobs.
 
 **Do not merge** — Project Lead reviews and authorizes.
 
