@@ -1,6 +1,16 @@
 import Link from "next/link";
 import type { IndexedNffcSummary } from "@domain/marketplace/listings";
-import { Badge, Card, CardContent, CardFooter, CardHeader, NffcArt, SegmentBadge, StaticRarityStat } from "@/components/ui";
+import {
+  Badge,
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  GeoEligibilityNotice,
+  NffcArt,
+  SegmentBadge,
+  StaticRarityStat,
+} from "@/components/ui";
 import { BuyButton } from "@/components/market/buy-button";
 
 const REGIME_LABEL: Record<IndexedNffcSummary["mintConditionRegime"], string> = {
@@ -50,6 +60,13 @@ export function NffcCard({ nffc }: { nffc: IndexedNffcSummary }) {
           <Badge variant="outline">{REGIME_LABEL[nffc.mintConditionRegime]}</Badge>
         </div>
         <span className="text-xs text-subtle-foreground">{nffc.componentCount} components</span>
+        {/* TASK-08 acceptance: the UI must clearly communicate the
+            geographic-eligibility difference wherever a segment is shown.
+            /market is the first public, SEO-indexed, mass-grid surface that
+            displays a segment — wired here (and in StepPreview) as of the
+            TASK-20 review; see docs/reports/TASK-08-REPORT.md's correction
+            note. */}
+        <GeoEligibilityNotice segment={nffc.segment} className="p-2 text-[11px]" />
       </CardContent>
       <CardFooter className="flex items-center justify-between gap-3">
         {nffc.listing?.active ? (

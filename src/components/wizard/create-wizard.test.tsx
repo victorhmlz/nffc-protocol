@@ -183,6 +183,14 @@ describe("CreateWizard — the art preview matches the exact post-mint compositi
     expect(screen.getByRole("table")).toHaveTextContent("NVDA");
     expect(screen.getByRole("table")).toHaveTextContent("BTC");
   });
+
+  // TASK-08 acceptance, wired here as of the TASK-20 review (see
+  // docs/reports/TASK-08-REPORT.md's correction note): the geographic-
+  // eligibility disclosure must be shown wherever a segment is displayed.
+  it("shows the geographic-eligibility disclosure alongside the segment (TASK-08 acceptance)", async () => {
+    await reachPreview();
+    expect(screen.getByRole("note")).toHaveTextContent(/geographic restriction/i);
+  });
 });
 
 describe("CreateWizard — the fee total is shown before Mint is reachable (acceptance)", () => {

@@ -147,6 +147,29 @@ TASK-01 → … → 08 not yet merged).
 
 **Do not merge** — Project Lead reviews and authorizes. Merge order: #1 → … → #8 → this PR.
 
+## CORRECTION — 2026-09-11 (found during TASK-20 review, fixed in PR #25)
+
+The SECURITY row above ("Geographic-eligibility disclosure present... shown wherever a segment is
+displayed") and the ACCEPTANCE CRITERIA row for the Whitepaper §14 criterion were accurate at the
+time they were written — TASK-08 predates any real product surface — but became **stale** the
+moment a real surface started displaying a segment without also rendering
+`GeoEligibilityNotice`:
+
+- TASK-17 (`StepPreview`, the create-wizard's post-mint preview) rendered `SegmentBadge` alone.
+- TASK-20 (`NffcCard`, the `/market` grid) did the same.
+
+Until the TASK-20 review caught this, `GeoEligibilityNotice` was reachable **only** on
+`/style-guide` (the design-system showcase) — never in a real user-facing flow, despite being
+built and tested since TASK-08. This was not re-examined by either TASK-17 or TASK-20 at the time,
+since neither TASK's own acceptance criteria named the geo-disclosure explicitly (that language
+lives only in TASK-08's).
+
+**Fixed in PR #25**: `GeoEligibilityNotice` is now wired into both `StepPreview` and `NffcCard`,
+each with a test asserting it renders. The original ACCEPTANCE CRITERIA table above is left
+unchanged (it was correct as of TASK-08 in isolation); this note is the record of where the claim
+stopped holding and when it was corrected. See `docs/reports/TASK-20-REPORT.md` CHANGES for the
+implementation detail.
+
 ## NEXT TASK
 
 **TASK-09 — NFFC Contract (ERC-721 Core)** (`NFFC_Development_Plan.md` v3.2): `NFFC.sol` with the

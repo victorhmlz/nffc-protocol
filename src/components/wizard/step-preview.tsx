@@ -4,7 +4,7 @@ import type { StaticComponentFact } from "@domain/metadata/metadata";
 import { Button } from "@/components/ui/button";
 import { CompositionTable } from "@/components/ui/composition-table";
 import { NffcArt } from "@/components/ui/nffc-art";
-import { SegmentBadge } from "@/components/ui/segment-badge";
+import { GeoEligibilityNotice, SegmentBadge } from "@/components/ui/segment-badge";
 import { StaticRarityStat } from "@/components/ui/static-rarity-stat";
 import { computeCompositionHash } from "@/lib/wizard/composition-hash";
 import type { WizardComponentDraft } from "@/lib/wizard/wizard-state";
@@ -53,6 +53,11 @@ export function StepPreview({ components, onNext }: StepPreviewProps) {
         />
         <div className="flex flex-col gap-4">
           <SegmentBadge segment={segment} />
+          {/* TASK-08 acceptance: the UI must clearly communicate the
+              geographic-eligibility difference wherever a segment is shown —
+              wired here (and in NffcCard) as of the TASK-20 review; see
+              docs/reports/TASK-08-REPORT.md's correction note. */}
+          <GeoEligibilityNotice segment={segment} />
           <StaticRarityStat score={score} />
           <CompositionTable components={facts} />
         </div>

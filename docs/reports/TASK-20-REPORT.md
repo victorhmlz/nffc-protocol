@@ -4,9 +4,10 @@
 
 COMPLETED
 
-`pnpm verify` (lint · typecheck · test · build) green locally — **44 files, 241 tests** (213 → +28).
-`pnpm contracts:build` / `pnpm contracts:test` unchanged — **172 Solidity tests** (TASK-20 touches
-no `.sol`). Both CI jobs on PR #25 pass — run `34599027083`. See PULL REQUEST.
+`pnpm verify` (lint · typecheck · test · build) green locally — **49 files, 262 tests** (213 → +49;
++21 added during the pre-TASK-21 audit response, see CHANGES "Review fixes"). `pnpm contracts:build`
+/ `pnpm contracts:test` unchanged — **172 Solidity tests** (TASK-20 touches no `.sol`). CI on PR #25
+re-verified green after the review fixes — see PULL REQUEST for the current run link.
 
 ## OBJECTIVE
 
@@ -76,6 +77,31 @@ itself.
 buy-flow reuse, and a full explanation of the ISR/dynamic-rendering tension. `docs/design-system.md`
 — `Select` + market-component rows. `README.md` — status line, doc link.
 
+### Review fixes (audit response, before merge)
+
+The Project Lead's pre-TASK-21 audit of this PR raised two points, both addressed here rather than
+in a separate PR since PR #25 hadn't merged yet:
+
+1. **Missing component tests.** `NffcCard`, `NffcGrid`, `MarketFilters`, `Pagination`, and `Select`
+   shipped without dedicated tests, breaking TASK-15's precedent (every new component gets a
+   `.test.tsx`) — not a deliberate decision, a real gap. Added: `nffc-card.test.tsx` (representative
+   render, listed vs. not-listed), `nffc-grid.test.tsx` (the one real branch of logic here — empty
+   state vs. a populated grid), `market-filters.test.tsx` (URL query-param string-building for every
+   control, order-independent), `pagination.test.tsx` (href-building via `buildHref`, and that a
+   disabled edge renders a real disabled `<button>`, not a still-clickable link), `select.test.tsx`
+   (representative render).
+2. **`GeoEligibilityNotice` (TASK-08) never reached a real product surface.** Verified: `NffcCard`
+   (this TASK) and `StepPreview` (TASK-17) both rendered `SegmentBadge` alone — the geographic-
+   eligibility disclosure the Whitepaper §14 / TASK-08 acceptance requires "wherever a segment is
+   displayed" was reachable only on `/style-guide`, never in an actual flow, since TASK-08 shipped
+   it. `/market`'s grid — public, SEO-indexed, potentially many NFFCs at once — made this the most
+   visible instance of the gap. Fixed: `GeoEligibilityNotice` is now rendered in both `NffcCard` and
+   `StepPreview`, each covered by a test. `docs/reports/TASK-08-REPORT.md` gets a dated correction
+   note (the original ACCEPTANCE CRITERIA table is left as-is — it was accurate for TASK-08 in
+   isolation) and `docs/spec/08-security-principles.md`'s F2 finding is updated to record that its
+   UX-surfacing half is now closed, while the substantive legal review stays **open**, unaffected,
+   gated on TASK-40.
+
 ## FILES CREATED
 
 ```
@@ -90,10 +116,15 @@ src/lib/marketplace/use-buy-flow.test.tsx
 src/components/market/buy-button.tsx
 src/components/market/buy-button.test.tsx
 src/components/market/nffc-card.tsx
+src/components/market/nffc-card.test.tsx
 src/components/market/nffc-grid.tsx
+src/components/market/nffc-grid.test.tsx
 src/components/market/market-filters.tsx
+src/components/market/market-filters.test.tsx
 src/components/market/pagination.tsx
+src/components/market/pagination.test.tsx
 src/components/ui/select.tsx
+src/components/ui/select.test.tsx
 src/app/market/page.tsx
 docs/marketplace-ui.md
 docs/reports/TASK-20-REPORT.md
@@ -102,18 +133,22 @@ docs/reports/TASK-20-REPORT.md
 ## FILES MODIFIED
 
 ```
-domain/index.ts             export marketplace/listings
-src/components/ui/index.ts  export Select
-docs/design-system.md       Select + market-component rows
-docs/OPEN_ISSUES.md         + Issue #5, + Issue #6; next ID -> 7
-README.md                   status line + doc link
+domain/index.ts                              export marketplace/listings
+src/components/ui/index.ts                   export Select
+src/components/wizard/step-preview.tsx        + GeoEligibilityNotice (review fix)
+src/components/wizard/create-wizard.test.tsx  + geo-disclosure test (review fix)
+docs/design-system.md                        Select + market-component rows
+docs/OPEN_ISSUES.md                           + Issue #5, + Issue #6; next ID -> 7
+docs/reports/TASK-08-REPORT.md                correction note (review fix)
+docs/spec/08-security-principles.md           F2 updated (review fix)
+README.md                                     status line + doc link
 ```
 
 Branch is based on `main` (TASK-00…19) — see PULL REQUEST.
 
 ## TESTS
 
-`pnpm test` → Vitest, **44 files, 241 tests** (28 new):
+`pnpm test` → Vitest, **49 files, 262 tests** (49 new over the TASK-19 baseline):
 
 ```
 listings.test.ts (13)       filter by segment / min rarity / mint regime / listed-only, combined
@@ -128,6 +163,28 @@ use-buy-flow.test.tsx (3)   never calls the wallet write when simulateBuy reject
                              leaves idle only after a successful simulation
 buy-button.test.tsx (1)     the honest "Marketplace is not deployed yet (TASK-31)" fixture, live —
                              error shown, button never left non-clickable (no wallet flow entered)
+```
+
+Added during the review fix (component coverage + the geo-disclosure wiring):
+
+```
+nffc-card.test.tsx (4)      representative render — identity/segment/rarity/mint-condition/price and
+                             a Buy button when listed; "Not listed" + no Buy button when not; the
+                             geo-eligibility disclosure for a restricted and a not-restricted segment
+                             (TASK-08 acceptance)
+nffc-grid.test.tsx (2)      the one real branch of logic here — empty-state message with no <ul> vs.
+                             one <li>/<NffcCard> per item
+market-filters.test.tsx (9) every control renders; URL query-param string-building (order-
+                             independent) for segment/minRarity/sort — set and clear; regime
+                             checkboxes append/remove their own param, preserving the others;
+                             listed-only sets/clears `listed=1`; any change resets `page`
+pagination.test.tsx (4)     href-building via `buildHref` for Previous/Next, preserving other params;
+                             renders nothing when everything fits on one page; a disabled edge is a
+                             real disabled <button>, not a still-clickable <a> (the bug that pattern
+                             would otherwise hide)
+select.test.tsx (1)         representative render — options + the given value selected
+create-wizard.test.tsx (+1) StepPreview now also shows the geo-eligibility disclosure alongside the
+                             segment badge (TASK-08 acceptance, added to the existing 6 tests)
 ```
 
 `pnpm contracts:test` → **172 Solidity tests**, unchanged (TASK-20 adds no `.sol`).
@@ -152,6 +209,7 @@ STEP 5 AUDIT (`docs/spec/08-security-principles.md`):
 | Simulation failures surface before a signature is requested (TASK-18 acceptance, reused here) | `useBuyFlow` composes `simulateBuy` outside `transactionFlowReducer`, unmodified; `flow.request(...)` — the only thing that opens the wallet — is reached only after `simulateBuy` resolves without throwing |
 | A5 — reads that inform a decision carry provenance | `NffcCard` shows static rarity (structural, no timestamp needed — same rationale as `StaticRarityStat`, TASK-14) and the mint-condition regime frozen at mint; no live/dynamic market data is shown on the card (that's TASK-21's job, over TASK-15's already-provenanced components) |
 | No arbitrary address becomes buyable, no premature wallet interaction | `BuyButton`'s fixture always rejects — nothing calls a contract yet; the Buy button is disabled while simulating or mid-flow, so a double-click can't fire a second `request` |
+| **Geographic-eligibility disclosure shown wherever a segment is displayed** (TASK-08 acceptance) | Added during review: `NffcCard` renders `GeoEligibilityNotice` alongside `SegmentBadge` — `/market` had been the first public, SEO-indexed, mass-grid surface to show a segment without it; `StepPreview` (TASK-17) got the same fix in the same PR. See CHANGES "Review fixes" and `docs/reports/TASK-08-REPORT.md`'s correction note |
 
 ## PERFORMANCE
 
