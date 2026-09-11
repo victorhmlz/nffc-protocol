@@ -15,22 +15,23 @@ supported providers from V1.
 - Create wizard: [`docs/create-wizard.md`](docs/create-wizard.md) · live at `/create`
 - Mint flow: [`docs/mint-flow.md`](docs/mint-flow.md) — Step 7 of the wizard
 - Marketplace: [`docs/marketplace.md`](docs/marketplace.md) — `Marketplace.sol` (TASK-19)
+- Marketplace UI: [`docs/marketplace-ui.md`](docs/marketplace-ui.md) · live at `/market`
 - Design system: [`docs/design-system.md`](docs/design-system.md) · live at `/style-guide`
 - Governance: `NFFC_Claude_Master_Prompt.md` (v2.3), `NFFC_Development_Plan.md` (v3.2),
   `NFFC_Whitepaper.md` (v1.1), `NFFC_Roadmap.md` (v1.1)
 - Per-task reports: [`docs/reports/`](docs/reports/)
 - Open issues log: [`docs/OPEN_ISSUES.md`](docs/OPEN_ISSUES.md) — live record of unresolved findings between TASKS
 
-> **Status: marketplace contract (TASK-19).** Toolchain (TASK-01) → boundaries (TASK-02) → design
-> system (TASK-03) → infrastructure (TASK-04) → registries (TASK-05) → Robinhood + crypto adapters
+> **Status: marketplace UI (TASK-20).** Toolchain (TASK-01) → boundaries (TASK-02) → design system
+> (TASK-03) → infrastructure (TASK-04) → registries (TASK-05) → Robinhood + crypto adapters
 > (TASK-06/07) → composition segmentation (TASK-08) → NFFC ERC-721 core (TASK-09) → Collection
 > contract (TASK-10) → metadata split (TASK-11) → generative art (TASK-12) → mint-condition trait
 > (TASK-13) → static rarity (TASK-14) → dynamic NFFC UI (TASK-15) → wallet (TASK-16) → the 7-step
-> create wizard (TASK-17) → the mint flow wired end-to-end (TASK-18), and now
-> **`Marketplace.sol`**: list, cancel, buy, and offer, with reentrancy protection proven by dedicated
-> tests on every value-moving path and non-owner listing cancellation impossible under any tested
-> condition (`docs/marketplace.md`). No deployed address yet (TASK-31); `FeeConfig.sol` itself is
-> TASK-30.
+> create wizard (TASK-17) → the mint flow wired end-to-end (TASK-18) → `Marketplace.sol` (TASK-19),
+> and now **`/market`**: explore, filter (segment, static rarity, mint condition), sort, and buy —
+> filters operate on indexed data, never a per-item on-chain read, structurally (no chain-reader
+> import anywhere in the filter path) (`docs/marketplace-ui.md`). The indexer (TASK-24) and
+> `Marketplace.sol`'s deployment (TASK-31) are both still fixtures.
 
 ## Stack
 

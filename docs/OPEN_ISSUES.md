@@ -4,7 +4,7 @@ Registro vivo de issues abiertos entre TASKS — ver `NFFC_Claude_Master_Prompt.
 
 Reglas: cada entrada tiene un ID único, secuencial, en números naturales — el ID nunca se reutiliza. Al resolverse un issue, su entrada se borra (no se marca como resuelta).
 
-**Próximo ID a usar: 5**
+**Próximo ID a usar: 7**
 
 ---
 
@@ -55,3 +55,29 @@ Ni un cambio de precio de listing ni una compra tienen protección alguna contra
 No bloqueante para TASK-19. El Project Lead debería decidir si amerita una TASK de mitigación explícita antes de mainnet (TASK-40 gate) o si se acepta como riesgo conocido del diseño V1.
 
 **Posible resolución en:** sin asignar todavía — candidato para revisión en TASK-32 (threat model) o TASK-40 (mainnet gate).
+
+---
+
+## Issue #5 — `/market` no logra ISR clásico: `searchParams` fuerza render dinámico por request
+
+**Origen:** TASK-20 (Marketplace UI).
+
+El entregable de TASK-20 pide "Server Components + ISR" para SEO/previews sociales. Pero el filtrado server-side (el propio criterio de aceptación) requiere leer `searchParams`, y bajo el modelo de caché de este proyecto (`cacheComponents` no está habilitado en `next.config.ts`), eso convierte cada combinación de query string en render dinámico por request — no en una página estáticamente pre-generada (ISR clásico). Las dos palabras del entregable ("Server Components" e "ISR") tiran en direcciones distintas en cuanto el filtrado es un requisito duro.
+
+Lo entregado: `/market` sigue siendo 100% server-rendered (SSR) en cada request — sin fetch waterfall en cliente, crawleable, correcto para cualquier URL específica incluyendo previews sociales de una vista filtrada — pero cada query distinta se renderiza dinámicamente en vez de servirse desde una página estática pre-construida. El fetch de datos subyacente (`get-listings.ts`) sí está cacheado vía `unstable_cache` (`revalidate: 300`), el equivalente de ISR a nivel de datos, no del HTML.
+
+No bloqueante — la página funciona, es SSR, es crawleable. Pero es una brecha real entre lo que el entregable pide literalmente y lo que el modelo de caché de Next.js permite sin más cambios.
+
+**Posible resolución en:** evaluar habilitar `cacheComponents` (el sucesor de Partial Prerendering de esta versión de Next) a nivel de proyecto — dejaría prerenderizar el "App Shell" sin filtros mientras los resultados filtrados streamean detrás de un `<Suspense>`. Es un cambio de alcance mayor al de esta TASK; requiere decisión explícita del Project Lead, no algo para resolver unilateralmente dentro de TASK-20.
+
+---
+
+## Issue #6 — `/` y `/market`: el ux-map los lista como la misma superficie, TASK-20 solo construyó `/market`
+
+**Origen:** TASK-20 (Marketplace UI).
+
+`docs/spec/07-ux-map.md` §1 lista "Marketplace / explore" con dos rutas: `/` y `/market`. TASK-20 construyó únicamente `/market`; `/` sigue mostrando la landing page de bootstrap de TASK-01. No hay redirect ni contenido compartido entre ambas.
+
+Decisión de producto pendiente: ¿`/` debería redirigir a `/market`, mostrar el mismo contenido, o quedar como landing separada permanentemente? No bloqueante — ambas rutas funcionan, no hay contenido roto — pero amerita una decisión explícita del Project Lead en vez de asumirse.
+
+**Posible resolución en:** sin asignar todavía — podría resolverse en cualquier TASK posterior de UI, o explícitamente antes de TASK-40 (mainnet gate) como parte de la revisión de superficie pública.

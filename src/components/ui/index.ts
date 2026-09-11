@@ -39,6 +39,7 @@ export { NffcArt } from "@/components/ui/nffc-art";
 export type { NffcArtProps } from "@/components/ui/nffc-art";
 export { NffcMarketPanel } from "@/components/ui/nffc-market-panel";
 export type { NffcMarketPanelProps } from "@/components/ui/nffc-market-panel";
+export { Select } from "@/components/ui/select";
 export { PerformanceWindows } from "@/components/ui/performance-windows";
 export type { PerformanceWindowsProps } from "@/components/ui/performance-windows";
 export { ReferenceNavStat } from "@/components/ui/reference-nav-stat";
