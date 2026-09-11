@@ -89,9 +89,14 @@ deviating from the documented split.
 - **`ExposureBreakdown`** — one generic labelled bar list, reused for asset/segment/collection.
   Every row prints its exact value and percentage — a bar's width is never the only signal
   (data-viz rule: identity isn't color/geometry-alone).
-- **`HoldingsGrid`** — reuses `NffcCard` (TASK-20) directly rather than a near-duplicate card: a
-  held NFFC that's actively listed shows the same Buy-button affordance a marketplace card does
-  (relisting is a normal state, `docs/spec/01-product-spec.md` §6.4).
+- **`NffcSummaryGrid`** (`src/components/nffc/`, generalized in TASK-27 from this TASK's original
+  `HoldingsGrid`) — reuses `NffcCard` (TASK-20) directly rather than a near-duplicate card: a held
+  NFFC that's actively listed shows the same Buy-button affordance a marketplace card does
+  (relisting is a normal state, `docs/spec/01-product-spec.md` §6.4). `/profile/[address]`
+  (TASK-27) needed the exact same "grid of `IndexedNffcSummary`" rendering for its own
+  created/owned/listed tabs, so the component moved out of `components/portfolio/` and dropped its
+  `Portfolio`-specific prop in favor of a plain `items` array — this page's own call site was
+  updated to match, with no visible change.
 
 ## Known, documented gap (not this TASK's to fix)
 

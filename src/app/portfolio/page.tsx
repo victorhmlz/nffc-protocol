@@ -22,7 +22,7 @@ import { useAccount } from "wagmi";
 import { Container } from "@/components/ui/container";
 import { ConnectWalletButton } from "@/components/wallet/connect-wallet-button";
 import { NetworkBanner } from "@/components/wallet/network-banner";
-import { HoldingsGrid } from "@/components/portfolio/holdings-grid";
+import { NffcSummaryGrid } from "@/components/nffc/nffc-summary-grid";
 import { PortfolioSummary } from "@/components/portfolio/portfolio-summary";
 import { ExposureBreakdown, type ExposureRow } from "@/components/portfolio/exposure-breakdown";
 import { usePortfolio } from "@/lib/portfolio/use-portfolio";
@@ -107,7 +107,10 @@ export default function PortfolioPage() {
                   emptyLabel="No priced holdings yet."
                 />
               </div>
-              <HoldingsGrid portfolio={portfolio} />
+              <NffcSummaryGrid
+                items={portfolio.holdings.map((h) => h.nffc)}
+                emptyLabel="This wallet doesn't hold any NFFCs yet."
+              />
             </>
           )}
         </>

@@ -4,7 +4,7 @@ Registro vivo de issues abiertos entre TASKS — ver `NFFC_Claude_Master_Prompt.
 
 Reglas: cada entrada tiene un ID único, secuencial, en números naturales — el ID nunca se reutiliza. Al resolverse un issue, su entrada se borra (no se marca como resuelta).
 
-**Próximo ID a usar: 11**
+**Próximo ID a usar: 12**
 
 ---
 
@@ -124,14 +124,14 @@ No bloqueante para TASK-24 tal como está definida en el Development Plan. No ha
 
 ---
 
-## Issue #10 — `/portfolio` no puede cumplir la clasificación "Server for data" de `07-ux-map.md`
+## Issue #11 — `docs/spec/07-ux-map.md` nombra `/collection/[collectionId]` y TASK-50 ya asume que existe, pero ninguna TASK del Development Plan lo construye
 
-**Origen:** TASK-25 (Portfolio).
+**Origen:** TASK-27 (Profiles), descubierto al enlazar `CollectionsList` a esa ruta.
 
-`docs/spec/07-ux-map.md` §1 clasifica `/portfolio` como "Server for data + Client for actions" — el mismo split que `/nffc/[tokenId]` (TASK-21), donde el Server Component lee `params.tokenId` de la URL y hace SSR real. `/portfolio` no tiene un segmento `[address]` en su URL (a diferencia de `/nffc/[tokenId]` o `/profile/[address]`, TASK-27): en este DApp de self-custody, la identidad de la wallet conectada solo existe del lado cliente (`useAccount()`, TASK-16, vía wagmi) — no hay sesión ni cookie que un Server Component pueda leer para saber de qué wallet renderizar el portfolio.
+`docs/spec/07-ux-map.md` §1 lista "Collection page" como superficie de primera clase (`/collection/[collectionId]`, Server-first). `NFFC_Development_Plan.md` v3.4's TASK-50 (Comentarios, M1.5, nueva) ya da por sentado que "la página de una colección" existe ("Comentarios en la página de detalle de un NFFC (TASK-21) y en la página de una colección"). Pero ninguna TASK del 00 al 52 tiene como entregable construir esa página — `Collection.sol` (TASK-10) es solo el contrato; ninguna TASK de UI la reclama.
 
-Lo entregado en su lugar: el cómputo real (`getPortfolio`/`aggregatePortfolio`) corre server-side, detrás de `GET /api/portfolio/[address]` (never cached, mismo patrón que `/api/nffc/[tokenId]/market`) — pero `/portfolio` en sí es un Client Component (`usePortfolio`, TASK-25) cuyo único trabajo es saber a qué dirección preguntarle. Es el mismo tipo de tensión que Issue #5/#6 (TASK-20) ya documentaron entre lo que `07-ux-map.md` pide literalmente y lo que la arquitectura de este proyecto permite sin más cambios — aquí el límite no es el modelo de caché de Next.js sino la ausencia total de identidad de wallet server-side.
+Efecto concreto hoy: `CollectionsList` (TASK-27) enlaza cada colección a `/collection/[collectionId]`, que 404 hasta que alguna TASK futura la construya — el mismo precedente de referencia-adelantada que `NffcCard` (TASK-20) ya sentó enlazando a `/nffc/[tokenId]` antes de que TASK-21 existiera.
 
-No bloqueante — la página funciona, el cómputo pesado es server-side, y el patrón es honesto y ya documentado en el código (`src/app/portfolio/page.tsx`'s header comment). Pero es una brecha real entre la tabla de `07-ux-map.md` y lo construido.
+No bloqueante para TASK-27. Si nadie construye esta página antes de TASK-50, esa TASK (M1.5) queda con una dependencia implícita sin dueño, la misma clase de problema que Issue #3 ya describió para `Marketplace.sol`/`Collection.sol`.
 
-**Posible resolución en:** sin asignar todavía — evaluar junto con TASK-27 (Profiles, que sí tiene `[address]` en la URL) si un patrón de sesión/wallet-binding server-side tiene sentido para este proyecto, o si `07-ux-map.md` §1 debería corregirse para reflejar que "Server for data" solo aplica a superficies con una dirección en la URL.
+**Posible resolución en:** sin asignar todavía — requiere que el Project Lead asigne una TASK explícita para `/collection/[collectionId]` antes de TASK-50, o confirme que queda fuera de alcance de V1/V1.5 y TASK-50 se ajusta en consecuencia.
