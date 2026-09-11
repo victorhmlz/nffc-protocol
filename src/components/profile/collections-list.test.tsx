@@ -27,4 +27,9 @@ describe("CollectionsList", () => {
     );
     expect(screen.getByText("1 NFFC")).toBeInTheDocument();
   });
+
+  it("accepts a custom empty-state label (TASK-28's /search reuse)", () => {
+    render(<CollectionsList collections={[]} emptyLabel="No matching collections." />);
+    expect(screen.getByText("No matching collections.")).toBeInTheDocument();
+  });
 });
