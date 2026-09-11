@@ -12,6 +12,7 @@ import `domain/`, `config/`; may **not** import `src/`, `adapters/`, `workers/`,
 | `db/pool.ts` | Lazy `pg.Pool`; `query()`, `withTransaction()`, `pingDb()`, `closePool()`. | TASK-04 |
 | `redis/client.ts` | Lazy `ioredis` client (`lazyConnect`); `pingRedis()`, `closeRedis()`. | TASK-04 |
 | `health.ts` | `checkHealth()` — per-dependency readiness snapshot; probes never throw. | TASK-04 |
+| `pricing/chainlink-price-oracle.ts` | `ChainlinkPriceOracle implements PriceOracle` (`@domain/ports`) — reads each representation's oracle metadata from `RepresentationRegistry` + the standard Chainlink `AggregatorV3Interface.latestRoundData()`; no asset-class branch (`docs/price-engine.md`). | TASK-22 |
 
 Consumed by Route Handlers (`src/app/api/*`), Server Component data functions, and workers — always
 at a composition root, never from `domain/`.

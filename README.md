@@ -17,24 +17,28 @@ supported providers from V1.
 - Marketplace: [`docs/marketplace.md`](docs/marketplace.md) — `Marketplace.sol` (TASK-19)
 - Marketplace UI: [`docs/marketplace-ui.md`](docs/marketplace-ui.md) · live at `/market`
 - NFFC detail: [`docs/nffc-detail.md`](docs/nffc-detail.md) · live at `/nffc/[tokenId]`
+- Price engine: [`docs/price-engine.md`](docs/price-engine.md) — `ChainlinkPriceOracle` (TASK-22)
 - Design system: [`docs/design-system.md`](docs/design-system.md) · live at `/style-guide`
 - Governance: `NFFC_Claude_Master_Prompt.md` (v2.3), `NFFC_Development_Plan.md` (v3.2),
   `NFFC_Whitepaper.md` (v1.1), `NFFC_Roadmap.md` (v1.1)
 - Per-task reports: [`docs/reports/`](docs/reports/)
 - Open issues log: [`docs/OPEN_ISSUES.md`](docs/OPEN_ISSUES.md) — live record of unresolved findings between TASKS
 
-> **Status: NFFC detail (TASK-21).** Toolchain (TASK-01) → boundaries (TASK-02) → design system
+> **Status: price engine (TASK-22).** Toolchain (TASK-01) → boundaries (TASK-02) → design system
 > (TASK-03) → infrastructure (TASK-04) → registries (TASK-05) → Robinhood + crypto adapters
 > (TASK-06/07) → composition segmentation (TASK-08) → NFFC ERC-721 core (TASK-09) → Collection
 > contract (TASK-10) → metadata split (TASK-11) → generative art (TASK-12) → mint-condition trait
 > (TASK-13) → static rarity (TASK-14) → dynamic NFFC UI (TASK-15) → wallet (TASK-16) → the 7-step
 > create wizard (TASK-17) → the mint flow wired end-to-end (TASK-18) → `Marketplace.sol` (TASK-19)
-> → `/market` explore/filter/sort/buy (TASK-20), and now **`/nffc/[tokenId]`**: the premium detail
-> page — art, reference value, performance, composition, mint condition, ownership, listing,
-> offers, and a traceable activity timeline, every datum sourced to an identified on-chain or
-> oracle origin, fully shareable without a connected wallet, with a real per-token social-preview
-> PNG generated at request time (`docs/nffc-detail.md`). The indexer (TASK-24), the price/NAV
-> engines (TASK-22/23), and `Marketplace.sol`'s deployment (TASK-31) are all still fixtures.
+> → `/market` explore/filter/sort/buy (TASK-20) → the NFFC detail page (TASK-21), and now
+> **`ChainlinkPriceOracle`**: a provider-agnostic price abstraction — the same engine, the same
+> code path, serves Stock Token and native-crypto prices with no per-asset-class branch (the
+> on-chain data it reads doesn't even carry that field), no price without a named oracle source and
+> a timestamp, and a second oracle provider is a second implementation of an already-fixed data
+> contract, proven by running one shared test suite against two independent implementations
+> (`docs/price-engine.md`). Not wired into any UI yet — Reference NAV composition over it is
+> TASK-23. The indexer (TASK-24), the NAV engine (TASK-23), and `Marketplace.sol`'s deployment
+> (TASK-31) are all still fixtures.
 
 ## Stack
 

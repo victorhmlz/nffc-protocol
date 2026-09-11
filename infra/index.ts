@@ -9,6 +9,11 @@ export {
 export { getLogger, type Logger } from "@infra/logging/logger";
 export { createChainReader, RpcConfigError } from "@infra/rpc/chain-reader";
 export {
+  ChainlinkPriceOracle,
+  NoOracleConfiguredError,
+  RepresentationInactiveError,
+} from "@infra/pricing/chainlink-price-oracle";
+export {
   DatabaseNotConfiguredError,
   closePool,
   getPool,
