@@ -6,7 +6,7 @@ COMPLETED
 
 `pnpm verify` (lint · typecheck · test · build) green locally — **29 files, 139 tests** (118 → +21).
 `pnpm contracts:build` / `pnpm contracts:test` green — **128 Solidity tests**, unchanged (no `.sol`
-touched). See PULL REQUEST for CI.
+touched). Both CI jobs on PR #18 pass — run `34575115457`. See PULL REQUEST.
 
 ## OBJECTIVE
 
@@ -177,6 +177,7 @@ no re-fetch loops. `formatAge` is O(1).
 Branch `task/TASK-15-dynamic-nffc-ui`, based on **`main`** (TASK-00…14).
 
 **PR: https://github.com/victorhmlz/nffc-protocol/pull/18** — base `main`.
+**CI: https://github.com/victorhmlz/nffc-protocol/actions/runs/34575115457 — success** — both jobs.
 
 **Do not merge** — Project Lead reviews and authorizes.
 
