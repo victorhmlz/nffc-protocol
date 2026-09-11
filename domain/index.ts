@@ -18,4 +18,5 @@ export * from "@domain/valuation/types";
 export * from "@domain/rarity/types";
 export * from "@domain/rarity/rarity";
 export * from "@domain/marketplace/listings";
+export * from "@domain/nffc-detail/detail";
 export * from "@domain/ports";

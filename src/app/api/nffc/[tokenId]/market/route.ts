@@ -1,9 +1,7 @@
 import type { NextRequest } from "next/server";
-import {
-  MARKET_DATA_CACHE_CONTROL,
-  MARKET_DATA_NOTICE,
-  emptyMarketSnapshot,
-} from "@domain/metadata/metadata";
+import { MARKET_DATA_CACHE_CONTROL, MARKET_DATA_NOTICE } from "@domain/metadata/metadata";
+import { getNffcMarketSnapshot } from "@/lib/nffc-detail/get-nffc-market-snapshot";
+import { isValidTokenId } from "@/lib/token-id";
 
 /**
  * **Dynamic** market data for an NFFC — Reference NAV and per-component prices
@@ -18,27 +16,20 @@ import {
  */
 export const dynamic = "force-dynamic";
 
-const TOKEN_ID = /^[1-9]\d{0,77}$/;
-
 export async function GET(
   _req: NextRequest,
   ctx: RouteContext<"/api/nffc/[tokenId]/market">,
 ): Promise<Response> {
   const { tokenId } = await ctx.params;
 
-  if (!TOKEN_ID.test(tokenId)) {
+  if (!isValidTokenId(tokenId)) {
     return Response.json(
       { error: "invalid_token_id", tokenId },
       { status: 400, headers: { "Cache-Control": MARKET_DATA_CACHE_CONTROL } },
     );
   }
 
-  const asOf = Math.floor(Date.now() / 1000);
-  const snapshot = emptyMarketSnapshot(
-    tokenId,
-    asOf,
-    "Reference NAV and prices are available once the price and NAV engines are deployed (TASK-22/23).",
-  );
+  const snapshot = await getNffcMarketSnapshot(tokenId);
 
   return Response.json(
     { ...snapshot, notice: MARKET_DATA_NOTICE },
