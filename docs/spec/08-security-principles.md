@@ -68,7 +68,13 @@ readiness:
   in Canada, the UK, Switzerland, and other jurisdictions. Any NFFC containing ≥1 Stock Token
   inherits that restriction; 100%-crypto compositions do not inherit this specific restriction
   (`NFFC_Whitepaper.md` §14). Status: **open**; must be surfaced in UX (`07-ux-map.md` §6) and
-  covered by TASK-40 legal review.
+  covered by TASK-40 legal review. UX-surfacing update (2026-09-11, PR #25): `GeoEligibilityNotice`
+  (TASK-08) is now actually wired into the two real surfaces that display a segment — the create
+  wizard's preview step (TASK-17) and the `/market` grid (TASK-20) — closing a gap where it had only
+  ever rendered on `/style-guide` (see `docs/reports/TASK-08-REPORT.md`'s correction note). This
+  closes the *engineering* half of F2 (the disclosure is surfaced wherever a segment appears); the
+  *substantive* legal review of the copy and the classification risk itself remain **open**,
+  unaffected by this, and still gated on TASK-40.
 - **F3 — "Reference NAV" / Market-State framing.** Valuation and any market-state view must not read
   as backing or as investment-return promotion. Mitigations: labeling rules (`07-ux-map.md` §6);
   Market-State copy is legal-reviewed before publishing (V1.5, `NFFC_Development_Plan.md` TASK-42).
