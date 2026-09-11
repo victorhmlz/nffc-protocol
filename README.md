@@ -14,23 +14,23 @@ supported providers from V1.
 - Wallet integration: [`docs/wallet-integration.md`](docs/wallet-integration.md)
 - Create wizard: [`docs/create-wizard.md`](docs/create-wizard.md) · live at `/create`
 - Mint flow: [`docs/mint-flow.md`](docs/mint-flow.md) — Step 7 of the wizard
+- Marketplace: [`docs/marketplace.md`](docs/marketplace.md) — `Marketplace.sol` (TASK-19)
 - Design system: [`docs/design-system.md`](docs/design-system.md) · live at `/style-guide`
 - Governance: `NFFC_Claude_Master_Prompt.md` (v2.3), `NFFC_Development_Plan.md` (v3.2),
   `NFFC_Whitepaper.md` (v1.1), `NFFC_Roadmap.md` (v1.1)
 - Per-task reports: [`docs/reports/`](docs/reports/)
 - Open issues log: [`docs/OPEN_ISSUES.md`](docs/OPEN_ISSUES.md) — live record of unresolved findings between TASKS
 
-> **Status: mint flow (TASK-18).** Toolchain (TASK-01) → boundaries (TASK-02) → design system
-> (TASK-03) → infrastructure (TASK-04) → registries (TASK-05) → Robinhood + crypto adapters
+> **Status: marketplace contract (TASK-19).** Toolchain (TASK-01) → boundaries (TASK-02) → design
+> system (TASK-03) → infrastructure (TASK-04) → registries (TASK-05) → Robinhood + crypto adapters
 > (TASK-06/07) → composition segmentation (TASK-08) → NFFC ERC-721 core (TASK-09) → Collection
 > contract (TASK-10) → metadata split (TASK-11) → generative art (TASK-12) → mint-condition trait
 > (TASK-13) → static rarity (TASK-14) → dynamic NFFC UI (TASK-15) → wallet (TASK-16) → the 7-step
-> create wizard (TASK-17), and now its final step wired end-to-end: **prepare → simulate → sign →
-> submit → confirm**, generating the art (TASK-12) and mint-condition trait (TASK-13) at the
-> correct point in the flow, never showing SUCCESS before on-chain confirmation, and always
-> communicating a simulation failure before a signature is requested (`docs/mint-flow.md`).
-> Fixtures stand in for the price oracle, pinning infra, and the deployed `NFFC` contract until
-> TASK-22/30/31.
+> create wizard (TASK-17) → the mint flow wired end-to-end (TASK-18), and now
+> **`Marketplace.sol`**: list, cancel, buy, and offer, with reentrancy protection proven by dedicated
+> tests on every value-moving path and non-owner listing cancellation impossible under any tested
+> condition (`docs/marketplace.md`). No deployed address yet (TASK-31); `FeeConfig.sol` itself is
+> TASK-30.
 
 ## Stack
 

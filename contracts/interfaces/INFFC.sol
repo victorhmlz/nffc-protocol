@@ -57,6 +57,10 @@ interface INFFC {
     function getCompositionHash(uint256 tokenId) external view returns (bytes32);
     function getSegment(uint256 tokenId) external view returns (uint8); // 0 CRYPTO_ONLY, 1 STOCK_ONLY, 2 MIXED
     function getStaticRarity(uint256 tokenId) external view returns (uint256);
+    /// The collection a token was minted into (TASK-09). Ownership/existence of
+    /// that collection is enforced by `Collection.sol` (TASK-10), not here;
+    /// `Marketplace.sol` (TASK-19) reads this to resolve the royalty recipient.
+    function getCollectionId(uint256 tokenId) external view returns (uint256);
     // NOTE: there is intentionally NO setComposition / addComponent / reweight of
     // any kind, under any role. I7 is enforced structurally, not by a guard.
 }
