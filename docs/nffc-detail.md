@@ -48,7 +48,7 @@ can independently verify are, by construction, the same object.
 |---|---|
 | Generative art | Deterministic pure function of the composition + `compositionHash` (TASK-12) |
 | Composition table | On-chain (`NFFC.getComposition`), via `CompositionTable` (TASK-15) |
-| Segment + geo notice | On-chain, derived (TASK-08); `GeoEligibilityNotice` now wired here as of the TASK-20 review's correction, not freshly added by this TASK |
+| Segment + geo notice | On-chain, derived (TASK-08) — `SegmentBadge` + `GeoEligibilityNotice`, rendered directly in `page.tsx`'s header (not a `src/components/nffc/` panel), present since this branch's first commit |
 | Static rarity | On-chain (`NFFC.getStaticRarity`), structural — `StaticRarityStat` (TASK-14) |
 | Mint condition | Oracle-sourced, frozen at mint — `MintConditionCard`, part of the pinned static metadata (TASK-13) |
 | Reference NAV + performance | `NffcMarketPanel` (TASK-15) — always carries `source` + `observedAt`, or an explicit `unavailableReason` (honest: no price engine yet, TASK-22/23) |
@@ -56,6 +56,15 @@ can independently verify are, by construction, the same object.
 | Listing | Indexed mirror of `ListingCreated` — `ListingCard`, reusing TASK-20's `BuyButton` unchanged |
 | Offers | Indexed mirror of `OfferCreated` — `OffersList`, read-only (see below) |
 | Activity | Indexed mirror of the `activity` table — `ActivityTimeline`; every entry carries its block number and transaction hash |
+
+**On the geo-eligibility row specifically:** this page is the most shareable, link-direct surface in
+the project — the one most likely to be opened without ever passing through `/market` — so the
+Project Lead's pre-merge audit checked it explicitly, given `StepPreview` (TASK-17) and `NffcCard`
+(TASK-20) both shipped without this disclosure before being caught and fixed (see
+`docs/reports/TASK-08-REPORT.md`'s correction note). This page rendered it correctly from the start;
+verified live during that audit — not only in source — via `GET /nffc/1`'s response body, which
+contains the segment label and the notice copy in a single `role="note"` element. See
+`docs/reports/TASK-21-REPORT.md`'s note under `page.tsx` in CHANGES for the exact evidence.
 
 No datum on this page is asserted without a named on-chain or oracle origin, including the fixture
 placeholders — each is documented as standing in for TASK-24/22/23/31, not presented as real.

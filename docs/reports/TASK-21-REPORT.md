@@ -67,6 +67,17 @@ tension between server rendering and ISR here. `export const revalidate = 300`, 
 title/description; the Open Graph image comes from the colocated file convention below, not manual
 `openGraph.images` wiring.
 
+**Note added in review (Project Lead audit, before merge):** the page's header block renders
+`SegmentBadge` **and** `GeoEligibilityNotice` (`facts.segment`) directly, immediately below the
+title — this was present from this branch's first commit, not a follow-up fix. It's called out here
+explicitly because it lives in `page.tsx`'s own layout rather than in one of the five new
+`src/components/nffc/` panels, so it wasn't named in this report's original CHANGES pass and could
+otherwise read as a gap the way it genuinely was one in `StepPreview` (TASK-17) and `NffcCard`
+(TASK-20) before their fixes. `/nffc/[tokenId]` is the most shareable, link-direct surface in the
+project — the one most likely to be opened without ever passing through `/market` — so this is not
+a minor detail: verified live, not just read in source (`GET /nffc/1` → response body contains the
+segment label "Mixed" and the `GeoEligibilityNotice` copy, in one `role="note"` element).
+
 ### `src/app/nffc/[tokenId]/opengraph-image.tsx` (new) — the real social-preview image
 
 Uses `next/og`'s `ImageResponse` to rasterize the token's exact SVG art (passed as an `<img src>`
@@ -177,6 +188,11 @@ GET /nffc/1/opengraph-image  200 image/png  (real rasterized PNG, confirming the
 GET /market                200  (unaffected by this TASK's shared-util refactors)
 ```
 
+Re-verified live during the Project Lead's pre-merge audit (TASK-08 acceptance — see SECURITY):
+`GET /nffc/1`'s response body contains the segment label "Mixed" (`SegmentBadge`), the
+`GeoEligibilityNotice` copy ("...geographic restriction..."), and exactly one `role="note"` element
+— confirming both render together on this page too, not just in source.
+
 ## LINT / TYPECHECK
 
 Clean, with one fix along the way: `Date.now()` called directly in `NffcDetailPage`'s render body
@@ -196,6 +212,7 @@ STEP 5 AUDIT (`docs/spec/08-security-principles.md`):
 | Public, read-only, SEO/shareable → Server Components (ux-map §2) | The whole page tree is Server Components except `BuyButton`; classic ISR (see CHANGES) makes the URL stable and cacheable, unlike `/market` |
 | No premature wallet interaction | `ListingCard` reuses `BuyButton` as-is — same fixture, same `nonReentrant`-adjacent guard against a double request, unchanged from TASK-20 |
 | A5 — reads that inform a decision carry provenance | `NffcMarketPanel` (unchanged from TASK-15) carries `source`+`observedAt` or an explicit `unavailableReason`; `MintConditionCard` labels itself "frozen at mint, oracle-sourced, not live market data" so it's never confused with the live panel beside it |
+| **Geographic-eligibility disclosure shown wherever a segment is displayed** (TASK-08 acceptance, `docs/reports/TASK-08-REPORT.md`'s correction note) | `page.tsx` renders `SegmentBadge` + `GeoEligibilityNotice` together in the header, since this branch's first commit — not a follow-up fix, but confirmed and made explicit during the Project Lead's pre-merge audit (this page is the most shareable, link-direct surface in the project, the one most likely to be opened without passing through `/market`); verified live, not just read in source |
 
 ## PERFORMANCE
 
