@@ -6,7 +6,7 @@ COMPLETED
 
 `pnpm verify` (lint · typecheck · test · build) green locally — **40 files, 213 tests** (203 → +10).
 `pnpm contracts:build` / `pnpm contracts:test` green — **128 Solidity tests**, unchanged (no `.sol`
-touched). See PULL REQUEST for CI links once opened.
+touched). Both CI jobs on PR #21 pass — run `34588425799`. See PULL REQUEST.
 
 ## OBJECTIVE
 
@@ -179,7 +179,8 @@ per mint attempt.
 
 Branch `task/TASK-18-mint-flow`, based on **`main`** (TASK-00…17).
 
-**PR:** to be opened against `main` — link recorded here once created.
+**PR: https://github.com/victorhmlz/nffc-protocol/pull/21** — base `main`.
+**CI: https://github.com/victorhmlz/nffc-protocol/actions/runs/34588425799 — success** — both jobs.
 
 **Do not merge** — Project Lead reviews and authorizes.
 
