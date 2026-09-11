@@ -7,7 +7,7 @@ COMPLETED
 `pnpm verify` (lint · typecheck · test · build) green locally — **84 files, 454 tests** (432 → +22).
 `pnpm contracts:build` / `pnpm contracts:test` unchanged — **172 Solidity tests** (TASK-28 touches
 no `.sol`). `/search` smoke-tested live via `pnpm dev`, both with no query and with `?q=NVDA` —
-see BUILD. PR not yet opened at time of writing this section — see PULL REQUEST for the final link.
+see BUILD. Both CI jobs on PR #35 pass — run `34656722132`. See PULL REQUEST.
 
 ## OBJECTIVE
 
@@ -180,8 +180,8 @@ all three built and tested: `results.assets`, `results.collections`, `results.wa
 
 Branch `task/TASK-28-search`, based on **`main`** (TASK-00…27).
 
-**PR: (to be filled in once opened)**
-**CI: (to be filled in once green)**
+**PR: https://github.com/victorhmlz/nffc-protocol/pull/35** — base `main`.
+**CI: https://github.com/victorhmlz/nffc-protocol/actions/runs/34656722132 — success** — both jobs.
 
 **Do not merge** — Project Lead reviews and authorizes.
 
