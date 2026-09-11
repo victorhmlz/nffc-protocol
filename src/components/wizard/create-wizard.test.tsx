@@ -11,6 +11,7 @@ import type { RepresentationLookup } from "@domain/nffc/validate-composition";
 import { CreateWizard } from "@/components/wizard/create-wizard";
 import { computeCompositionHash } from "@/lib/wizard/composition-hash";
 import type { AvailableAsset, FeeQuote } from "@/lib/wizard/types";
+import { createTestWagmiConfig, WagmiTestProviders } from "../../../tests/support/wagmi-test-config";
 
 function asset(
   symbol: string,
@@ -49,12 +50,20 @@ const QUOTE: FeeQuote = {
 
 function renderWizard() {
   return render(
-    <CreateWizard
-      availableAssets={ASSETS}
-      lookup={LOOKUP}
-      quoteFees={() => QUOTE}
-      mint={{ state: "idle", error: null, onMint: () => {} }}
-    />,
+    <WagmiTestProviders config={createTestWagmiConfig()}>
+      <CreateWizard
+        availableAssets={ASSETS}
+        lookup={LOOKUP}
+        quoteFees={() => QUOTE}
+        prepareMintMetadata={() => Promise.resolve("ipfs://meta")}
+        simulateMint={() => Promise.resolve()}
+        buildMintCall={() => ({
+          address: "0x0000000000000000000000000000000000000001",
+          abi: [],
+          functionName: "mint",
+        })}
+      />
+    </WagmiTestProviders>,
   );
 }
 
