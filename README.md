@@ -21,28 +21,29 @@ supported providers from V1.
 - Reference NAV engine: [`docs/valuation.md`](docs/valuation.md) — NAV + performance windows (TASK-23)
 - Indexer: [`docs/indexer.md`](docs/indexer.md) — idempotent event indexing into Postgres (TASK-24)
 - Portfolio: [`docs/portfolio.md`](docs/portfolio.md) · live at `/portfolio` (TASK-25)
+- Activity: [`docs/activity.md`](docs/activity.md) · live at `/activity` (TASK-26)
 - Design system: [`docs/design-system.md`](docs/design-system.md) · live at `/style-guide`
 - Governance: `NFFC_Claude_Master_Prompt.md` (v2.4), `NFFC_Development_Plan.md` (v3.2),
   `NFFC_Whitepaper.md` (v1.1), `NFFC_Roadmap.md` (v1.1)
 - Per-task reports: [`docs/reports/`](docs/reports/)
 - Open issues log: [`docs/OPEN_ISSUES.md`](docs/OPEN_ISSUES.md) — live record of unresolved findings between TASKS
 
-> **Status: Portfolio (TASK-25).** Toolchain (TASK-01) → boundaries (TASK-02) → design
+> **Status: Activity (TASK-26).** Toolchain (TASK-01) → boundaries (TASK-02) → design
 > system (TASK-03) → infrastructure (TASK-04) → registries (TASK-05) → Robinhood + crypto adapters
 > (TASK-06/07) → composition segmentation (TASK-08) → NFFC ERC-721 core (TASK-09) → Collection
 > contract (TASK-10) → metadata split (TASK-11) → generative art (TASK-12) → mint-condition trait
 > (TASK-13) → static rarity (TASK-14) → dynamic NFFC UI (TASK-15) → wallet (TASK-16) → the 7-step
 > create wizard (TASK-17) → the mint flow wired end-to-end (TASK-18) → `Marketplace.sol` (TASK-19)
 > → `/market` explore/filter/sort/buy (TASK-20) → the NFFC detail page (TASK-21) → the price engine
-> (TASK-22) → the Reference NAV engine (TASK-23) → the blockchain indexer (TASK-24), and now
-> **`/portfolio`**: owned NFFCs, total Reference Value, value-weighted performance, and exposure by
-> asset/segment/collection, all computed at read time — never its own stored table
-> (`docs/spec/02-domain-model.md` §6) — over the same indexed `nffc`/`listing` data `/market`
-> already reads plus each token's `NffcMarketSnapshot` (`docs/portfolio.md`). `Marketplace.sol`'s
-> deployment (TASK-31) is still the only thing standing between every one of these read paths and
-> live data — every layer (`provider-sync/`, `nav-materializer/`, `indexer/`, now `portfolio`) is
-> complete and fully tested against fakes/fixtures, and reports "not available yet" honestly until
-> then.
+> (TASK-22) → the Reference NAV engine (TASK-23) → the blockchain indexer (TASK-24) →
+> `/portfolio` (TASK-25), and now **`/activity`**: the global, indexed timeline of every mint,
+> sale, transfer, listing, and offer, filterable by NFFC, wallet, and kind — one query
+> (`queryActivity`) over the exact same `ActivityEntry` shape the per-NFFC timeline
+> (`/nffc/[tokenId]`, TASK-21) already renders, not a parallel type (`docs/activity.md`).
+> `Marketplace.sol`'s deployment (TASK-31) is still the only thing standing between every one of
+> these read paths and live data — every layer (`provider-sync/`, `nav-materializer/`, `indexer/`,
+> `portfolio`, now `activity`) is complete and fully tested against fakes/fixtures, and reports
+> "not available yet" honestly until then.
 
 ## Stack
 

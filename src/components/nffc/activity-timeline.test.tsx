@@ -46,4 +46,19 @@ describe("ActivityTimeline", () => {
     render(<ActivityTimeline activity={[MINT]} />);
     expect(screen.queryByText(/eth$/i)).not.toBeInTheDocument();
   });
+
+  it("does not show a per-token link by default (the per-NFFC page already implies the token)", () => {
+    render(<ActivityTimeline activity={[MINT]} />);
+    expect(screen.queryByRole("link")).not.toBeInTheDocument();
+  });
+
+  it("links each entry to its NFFC when showTokenLinks is set (TASK-26's global feed)", () => {
+    render(<ActivityTimeline activity={[MINT]} showTokenLinks />);
+    expect(screen.getByRole("link", { name: /nffc #1/i })).toHaveAttribute("href", "/nffc/1");
+  });
+
+  it("accepts a custom title", () => {
+    render(<ActivityTimeline activity={[]} title="Recent activity" />);
+    expect(screen.getByText("Recent activity")).toBeInTheDocument();
+  });
 });
