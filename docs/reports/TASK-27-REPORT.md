@@ -8,8 +8,8 @@ COMPLETED
 net of removing TASK-25's `HoldingsGrid` test in favor of its generalized replacement — see CHANGES).
 `pnpm contracts:build` / `pnpm contracts:test` unchanged — **172 Solidity tests** (TASK-27 touches
 no `.sol`). `/profile/[address]` smoke-tested live via `pnpm dev`, both a properly-shaped address
-(200, empty-state renders) and a malformed one (404) — see BUILD. PR not yet opened at time of
-writing this section — see PULL REQUEST for the final link.
+(200, empty-state renders) and a malformed one (404) — see BUILD. Both CI jobs on PR #34 pass —
+run `34652772811`. See PULL REQUEST.
 
 ## OBJECTIVE
 
@@ -234,8 +234,8 @@ per-item network/DB calls.
 
 Branch `task/TASK-27-profiles`, based on **`main`** (TASK-00…26).
 
-**PR: (to be filled in once opened)**
-**CI: (to be filled in once green)**
+**PR: https://github.com/victorhmlz/nffc-protocol/pull/34** — base `main`.
+**CI: https://github.com/victorhmlz/nffc-protocol/actions/runs/34652772811 — success** — both jobs.
 
 **Do not merge** — Project Lead reviews and authorizes.
 
