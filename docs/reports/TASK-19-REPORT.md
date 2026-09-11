@@ -6,8 +6,8 @@ COMPLETED
 
 `pnpm verify` (lint · typecheck · test · build) green locally — TypeScript surface unchanged
 (TASK-19 is Solidity-only): **40 files, 213 tests**, same as TASK-18. `pnpm contracts:build` /
-`pnpm contracts:test` green — **172 Solidity tests** (128 → +44). See PULL REQUEST for CI links
-once opened.
+`pnpm contracts:test` green — **172 Solidity tests** (128 → +44). Both CI jobs on PR #23 pass —
+run `34592973460`. See PULL REQUEST.
 
 ## OBJECTIVE
 
@@ -216,7 +216,8 @@ dependency.
 Branch `task/TASK-19-marketplace-contract`, based on **`main`** (TASK-00…18, plus the Master
 Prompt v2.3 / Open Issues log PR).
 
-**PR:** to be opened against `main` — link recorded here once created.
+**PR: https://github.com/victorhmlz/nffc-protocol/pull/23** — base `main`.
+**CI: https://github.com/victorhmlz/nffc-protocol/actions/runs/34592973460 — success** — both jobs.
 
 **Do not merge** — Project Lead reviews and authorizes.
 
