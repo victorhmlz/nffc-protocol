@@ -28,11 +28,12 @@ pnpm contracts:test    # hardhat test  (runs contracts/*.t.sol via forge-std)
 | `interfaces/ICollection.sol`                                                      | Collection interface (`CreateParams`, creation-fee quote, creator ownership)                          | TASK-10                |
 | `interfaces/IFeeConfig.sol`                                                       | On-chain fee configuration — the single source of truth for every protocol fee                        | TASK-10 (impl TASK-30) |
 | `Collection.sol`                                                                  | Creator-owned NFFC groupings; creation fee read from `IFeeConfig`, forwarded to the treasury          | TASK-10                |
-| `mocks/`                                                                          | Test doubles (`MockERC20`, `NoMetadata`, `MockFeeConfig`, `RejectEther` / `ReenterOnReceive`)         | —                      |
+| `interfaces/IMarketplace.sol`                                                     | Marketplace interface (`Listing`, `Offer`, list/cancel/buy/offer surface)                             | TASK-19                |
+| `Marketplace.sol`                                                                 | List/cancel/buy/offer; escrow-free listings, escrowed offers; fee+royalty split via `IFeeConfig`      | TASK-19                |
+| `mocks/`                                                                          | Test doubles (`MockERC20`, `NoMetadata`, `MockFeeConfig`, `RejectEther` / `ReenterOnReceive*`)        | —                      |
 | `*.t.sol`                                                                         | forge-std Solidity tests, colocated                                                                   | —                      |
 
-Later: `Marketplace.sol` (TASK-19), `FeeConfig.sol` (TASK-30, implementing `IFeeConfig`).
-Deployment (Ignition) lands in TASK-31.
+Later: `FeeConfig.sol` (TASK-30, implementing `IFeeConfig`). Deployment (Ignition) lands in TASK-31.
 
 ## Rules (`docs/spec/08-security-principles.md`)
 

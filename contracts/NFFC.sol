@@ -167,9 +167,11 @@ contract NFFC is INFFC, ERC721URIStorage, AccessControl, Pausable, ReentrancyGua
         return StaticRarityLib.score(weights);
     }
 
-    /// @notice The collection a token was minted into. Ownership/existence of the
-    ///         collection is enforced in TASK-10; here the value is only recorded.
-    function getCollectionId(uint256 tokenId) external view returns (uint256) {
+    /// @inheritdoc INFFC
+    /// @dev Ownership/existence of the collection is enforced in TASK-10; here the
+    ///      value is only recorded. Read by `Marketplace.sol` (TASK-19) to resolve
+    ///      the royalty recipient.
+    function getCollectionId(uint256 tokenId) external view override returns (uint256) {
         _requireOwned(tokenId);
         return _collectionId[tokenId];
     }
