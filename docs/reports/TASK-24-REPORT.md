@@ -7,7 +7,7 @@ COMPLETED
 `pnpm verify` (lint · typecheck · test · build) green locally — **65 files, 352 tests** (324 → +28).
 `pnpm contracts:build` / `pnpm contracts:test` unchanged — **172 Solidity tests** (TASK-24 touches
 no `.sol`). Worker entry point smoke-tested live (`pnpm worker workers/indexer/index.ts`) — see
-BUILD. PR not yet opened at time of writing this section — see PULL REQUEST for the final link.
+BUILD. Both CI jobs on PR #30 pass — run `34631280833`. See PULL REQUEST.
 
 ## OBJECTIVE
 
@@ -270,8 +270,8 @@ contradiction.
 
 Branch `task/TASK-24-indexer`, based on **`main`** (TASK-00…23).
 
-**PR: (to be filled in once opened)**
-**CI: (to be filled in once green)**
+**PR: https://github.com/victorhmlz/nffc-protocol/pull/30** — base `main`.
+**CI: https://github.com/victorhmlz/nffc-protocol/actions/runs/34631280833 — success** — both jobs.
 
 **Do not merge** — Project Lead reviews and authorizes.
 
