@@ -3,12 +3,24 @@
  * Import these in tests instead of touching a network, database, or wallet
  * (`docs/conventions.md` §4).
  */
-import type { ChainReader, ContractCall, NavStore, PriceOracle, PriceStore } from "@domain/ports";
+import type {
+  BlockchainEventSource,
+  ChainReader,
+  ContractCall,
+  EventRange,
+  IndexerStore,
+  LogEvent,
+  NavStore,
+  PriceOracle,
+  PriceStore,
+} from "@domain/ports";
 import type { ChainId, RepresentationId } from "@domain/registry/types";
 import type { TokenId } from "@domain/nffc/composition";
-import type { UnixMillis } from "@domain/shared/branded";
+import type { Address, UnixMillis } from "@domain/shared/branded";
 import type { NormalizedPrice } from "@domain/pricing/types";
 import type { NavPoint, ReferenceNav } from "@domain/valuation/types";
+import type { ActivityEntry } from "@domain/nffc-detail/detail";
+import type { MirrorWrite } from "@domain/indexer/plan";
 import type { Logger } from "@infra/logging/logger";
 
 export class FakeClock {
@@ -116,6 +128,71 @@ export function createInMemoryNavStore(): NavStore & { records: ReferenceNav[] }
         .filter((n) => n.tokenId === tokenId && n.computedAt >= sinceUnixSeconds)
         .sort((a, b) => a.computedAt - b.computedAt)
         .map((n) => ({ tokenId: n.tokenId, value: n.value, at: n.computedAt, degraded: n.degraded }));
+    },
+  };
+}
+
+/** In-memory `BlockchainEventSource` — a canned, fixed log list, filtered by
+ *  range and address like the real thing (`domain/ports/event-source.ts`,
+ *  TASK-24). `safeHead` is settable per test to simulate the chain advancing
+ *  (or not) between indexer passes. */
+export function createFakeEventSource(opts: {
+  safeHead: bigint;
+  events: readonly LogEvent[];
+}): BlockchainEventSource & { safeHead: bigint } {
+  return {
+    safeHead: opts.safeHead,
+    async getSafeHead() {
+      return this.safeHead;
+    },
+    async getEvents(range: EventRange, addresses: readonly Address[]) {
+      const addressSet = new Set(addresses.map((a) => a.toLowerCase()));
+      return opts.events
+        .filter(
+          (e) =>
+            e.blockNumber >= range.fromBlock &&
+            e.blockNumber <= range.toBlock &&
+            addressSet.has(e.address.toLowerCase()),
+        )
+        .sort((a, b) => (a.blockNumber === b.blockNumber ? a.logIndex - b.logIndex : Number(a.blockNumber - b.blockNumber)));
+    },
+  };
+}
+
+/**
+ * In-memory `IndexerStore` (`domain/ports/indexer-store.ts`, TASK-24).
+ * `recordActivity` is the real idempotency gate a fake needs to get right:
+ * a repeated `entry.id` returns `false` on the second call, exactly like
+ * the real `(tx_hash, log_index)` unique constraint would.
+ */
+export function createInMemoryIndexerStore(): IndexerStore & {
+  cursors: Map<string, number>;
+  activity: ActivityEntry[];
+  mirrorWrites: MirrorWrite[];
+} {
+  const cursors = new Map<string, number>();
+  const seenActivityIds = new Set<string>();
+  const activity: ActivityEntry[] = [];
+  const mirrorWrites: MirrorWrite[] = [];
+
+  return {
+    cursors,
+    activity,
+    mirrorWrites,
+    async getCursor(stream) {
+      return cursors.has(stream) ? cursors.get(stream)! : null;
+    },
+    async advanceCursor(stream, lastBlock) {
+      cursors.set(stream, lastBlock);
+    },
+    async recordActivity(entry) {
+      if (seenActivityIds.has(entry.id)) return false;
+      seenActivityIds.add(entry.id);
+      activity.push(entry);
+      return true;
+    },
+    async applyMirrorWrite(write) {
+      mirrorWrites.push(write);
     },
   };
 }

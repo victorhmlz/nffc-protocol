@@ -8,6 +8,7 @@ export type {
 export type { PriceOracle } from "@domain/ports/price-oracle";
 export type { PriceStore } from "@domain/ports/price-store";
 export type { NavStore } from "@domain/ports/nav-store";
+export type { IndexerStore } from "@domain/ports/indexer-store";
 export type {
   ProviderAdapter,
   ProviderRepresentationRecord,

@@ -6,6 +6,7 @@ import { ActivityTimeline } from "@/components/nffc/activity-timeline";
 const MINT: ActivityEntry = {
   id: "1",
   kind: "MINT",
+  tokenId: "1",
   actorAddress: "0x1111111111111111111111111111111111aaaa",
   counterpartyAddress: null,
   amountWei: null,
@@ -17,6 +18,7 @@ const MINT: ActivityEntry = {
 const SALE: ActivityEntry = {
   id: "2",
   kind: "SALE",
+  tokenId: "1",
   actorAddress: "0x1111111111111111111111111111111111aaaa",
   counterpartyAddress: "0x2222222222222222222222222222222222bbbb",
   amountWei: "2000000000000000000",
