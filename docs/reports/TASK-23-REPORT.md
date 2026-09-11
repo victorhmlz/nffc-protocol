@@ -7,7 +7,7 @@ COMPLETED
 `pnpm verify` (lint · typecheck · test · build) green locally — **62 files, 324 tests** (305 → +19).
 `pnpm contracts:build` / `pnpm contracts:test` unchanged — **172 Solidity tests** (TASK-23 touches
 no `.sol`). Worker entry point smoke-tested live (`pnpm worker workers/nav-materializer/index.ts`)
-— see BUILD. See PULL REQUEST for CI links once opened.
+— see BUILD. Both CI jobs on PR #29 pass — run `34625127529`. See PULL REQUEST.
 
 ## OBJECTIVE
 
@@ -214,7 +214,8 @@ resolved price plus one NAV-point write — linear in component count (≤20).
 
 Branch `task/TASK-23-reference-nav-engine`, based on **`main`** (TASK-00…22).
 
-**PR:** to be opened against `main` — link recorded here once created.
+**PR: https://github.com/victorhmlz/nffc-protocol/pull/29** — base `main`.
+**CI: https://github.com/victorhmlz/nffc-protocol/actions/runs/34625127529 — success** — both jobs.
 
 **Do not merge** — Project Lead reviews and authorizes.
 
