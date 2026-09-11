@@ -13,22 +13,23 @@ pnpm contracts:test    # hardhat test  (runs contracts/*.t.sol via forge-std)
 
 ## Layout
 
-| Path                                                                              | Contents                                                                                       | TASK              |
-| --------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- | ----------------- |
-| `interfaces/IAssetIdentityRegistry.sol`, `interfaces/IRepresentationRegistry.sol` | Registry interfaces                                                                            | TASK-05           |
-| `interfaces/IProviderAdapter.sol`                                                 | Shared provider-adapter interface (`SyncEntry`, events, 5 methods)                             | TASK-06/07        |
-| `AssetIdentityRegistry.sol`                                                       | Allowlist of asset identities (`REGISTRY_ADMIN_ROLE`)                                          | TASK-05           |
-| `RepresentationRegistry.sol`                                                      | Allowlist of verified representations; provider registry; adapter-scoped auth                  | TASK-05           |
-| `ProviderAdapterBase.sol`                                                         | Abstract — all provider-sync logic; subclass supplies `providerId`/`assetClass`/token standard | TASK-06/07        |
-| `RobinhoodAdapter.sol` / `CryptoAdapter.sol`                                      | Two peers on that base — Robinhood Stock Tokens, native crypto                                 | TASK-06 / TASK-07 |
-| `lib/CompositionSegmentLib.sol`                                                   | Derive `CRYPTO_ONLY` / `STOCK_ONLY` / `MIXED` from a composition — used by `NFFC.sol`          | TASK-08           |
-| `interfaces/INFFC.sol`                                                            | ERC-721 core interface (`Component`, `MintParams`, mint events, invariant errors I1–I7)        | TASK-09           |
-| `NFFC.sol`                                                                        | ERC-721 core — immutable weighted composition; enforces I1–I8 at mint; derived segment; pausable mint | TASK-09      |
-| `interfaces/ICollection.sol`                                                      | Collection interface (`CreateParams`, creation-fee quote, creator ownership)                   | TASK-10           |
-| `interfaces/IFeeConfig.sol`                                                       | On-chain fee configuration — the single source of truth for every protocol fee                | TASK-10 (impl TASK-30) |
-| `Collection.sol`                                                                  | Creator-owned NFFC groupings; creation fee read from `IFeeConfig`, forwarded to the treasury  | TASK-10           |
-| `mocks/`                                                                          | Test doubles (`MockERC20`, `NoMetadata`, `MockFeeConfig`, `RejectEther` / `ReenterOnReceive`) | —                 |
-| `*.t.sol`                                                                         | forge-std Solidity tests, colocated                                                            | —                 |
+| Path                                                                              | Contents                                                                                              | TASK                   |
+| --------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------- | ---------------------- |
+| `interfaces/IAssetIdentityRegistry.sol`, `interfaces/IRepresentationRegistry.sol` | Registry interfaces                                                                                   | TASK-05                |
+| `interfaces/IProviderAdapter.sol`                                                 | Shared provider-adapter interface (`SyncEntry`, events, 5 methods)                                    | TASK-06/07             |
+| `AssetIdentityRegistry.sol`                                                       | Allowlist of asset identities (`REGISTRY_ADMIN_ROLE`)                                                 | TASK-05                |
+| `RepresentationRegistry.sol`                                                      | Allowlist of verified representations; provider registry; adapter-scoped auth                         | TASK-05                |
+| `ProviderAdapterBase.sol`                                                         | Abstract — all provider-sync logic; subclass supplies `providerId`/`assetClass`/token standard        | TASK-06/07             |
+| `RobinhoodAdapter.sol` / `CryptoAdapter.sol`                                      | Two peers on that base — Robinhood Stock Tokens, native crypto                                        | TASK-06 / TASK-07      |
+| `lib/CompositionSegmentLib.sol`                                                   | Derive `CRYPTO_ONLY` / `STOCK_ONLY` / `MIXED` from a composition — used by `NFFC.sol`                 | TASK-08                |
+| `lib/StaticRarityLib.sol`                                                         | Birth rarity from weight concentration + component count — `NFFC.getStaticRarity` (no oracle)         | TASK-14                |
+| `interfaces/INFFC.sol`                                                            | ERC-721 core interface (`Component`, `MintParams`, mint events, invariant errors I1–I7)               | TASK-09                |
+| `NFFC.sol`                                                                        | ERC-721 core — immutable weighted composition; enforces I1–I8 at mint; derived segment; pausable mint | TASK-09                |
+| `interfaces/ICollection.sol`                                                      | Collection interface (`CreateParams`, creation-fee quote, creator ownership)                          | TASK-10                |
+| `interfaces/IFeeConfig.sol`                                                       | On-chain fee configuration — the single source of truth for every protocol fee                        | TASK-10 (impl TASK-30) |
+| `Collection.sol`                                                                  | Creator-owned NFFC groupings; creation fee read from `IFeeConfig`, forwarded to the treasury          | TASK-10                |
+| `mocks/`                                                                          | Test doubles (`MockERC20`, `NoMetadata`, `MockFeeConfig`, `RejectEther` / `ReenterOnReceive`)         | —                      |
+| `*.t.sol`                                                                         | forge-std Solidity tests, colocated                                                                   | —                      |
 
 Later: `Marketplace.sol` (TASK-19), `FeeConfig.sol` (TASK-30, implementing `IFeeConfig`).
 Deployment (Ignition) lands in TASK-31.

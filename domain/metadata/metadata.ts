@@ -72,7 +72,11 @@ export interface StaticNffcFacts {
   readonly componentCount: number;
   readonly components: readonly StaticComponentFact[];
   readonly mintedAtBlock: number;
-  /** Derived at mint from the composition (TASK-14); `null` until then. Never market-sourced. */
+  /**
+   * `staticRarityScore(weights)` from `@domain/rarity` — a `[0, 1]` structural
+   * score (TASK-14), equal to `NFFC.getStaticRarity(tokenId) / 1e18`. Never
+   * market-sourced.
+   */
   readonly staticRarity: number | null;
   /**
    * Weighted market-state snapshot frozen at mint — `toMetadataTrait(...)` from
