@@ -196,7 +196,7 @@ synchronously by the caller.
 
 Branch `task/TASK-17-create-wizard`, based on **`main`** (TASK-00…16).
 
-**PR: <!-- filled in after push -->**
+**PR: https://github.com/victorhmlz/nffc-protocol/pull/20** — base `main`.
 
 **Do not merge** — Project Lead reviews and authorizes.
 
