@@ -6,8 +6,8 @@ COMPLETED
 
 `pnpm verify` (lint · typecheck · test · build) green locally — **58 files, 288 tests** (262 → +26).
 `pnpm contracts:build` / `pnpm contracts:test` unchanged — **172 Solidity tests** (TASK-21 touches
-no `.sol`). Also smoke-tested live under `pnpm dev` (see BUILD). Both CI jobs on PR #26 pass — run
-`34606118551`. See PULL REQUEST.
+no `.sol`). Also smoke-tested live under `pnpm dev` (see BUILD). Both CI jobs on PR #26 pass after
+the review clarification — run `34608068357`. See PULL REQUEST.
 
 ## OBJECTIVE
 
@@ -258,7 +258,8 @@ it reads a Request-time API — it reads only `params`, so it is).
 Branch `task/TASK-21-nffc-detail`, based on **`main`** (TASK-00…20).
 
 **PR: https://github.com/victorhmlz/nffc-protocol/pull/26** — base `main`.
-**CI: https://github.com/victorhmlz/nffc-protocol/actions/runs/34606118551 — success** — both jobs.
+**CI: https://github.com/victorhmlz/nffc-protocol/actions/runs/34608068357 — success** — both jobs,
+re-verified after the review clarification (previous green run: `34606118551`, before it).
 
 **Do not merge** — Project Lead reviews and authorizes.
 
