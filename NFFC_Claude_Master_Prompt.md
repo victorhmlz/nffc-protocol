@@ -1,19 +1,23 @@
 # MASTER PROMPT — Claude Coding Agent
 
+**Versión 2.5** — actualiza las referencias de versión en "Documentos que este Master Prompt asume disponibles": `NFFC_Development_Plan.md` v3.4 (agrega TASK-48 a TASK-52, Capa Social M1.5), `NFFC_Whitepaper.md` v1.4 (agrega §18), `NFFC_Roadmap.md` v1.3 (agrega Fase 35). Sin cambios de contenido más allá de esa actualización de referencias — ver esos tres documentos para el detalle de la Capa Social.
+
 **Versión 2.4** — agrega el punto 8 a "Git / PR policy": de acá en adelante, ningún commit ni descripción de PR lleva el trailer `Co-Authored-By: Claude ...`. Decisión explícita del Project Lead (2026-09-11), solo hacia adelante — no se reescribe el historial existente (65 commits ya mergeados en `main` lo conservan). La atribución real de autoría (campo `author`/`committer` de git, y el autor de cada PR en GitHub) ya era 100% del Project Lead antes de este cambio; esto solo retira el texto del trailer, no corrige ninguna autoría incorrecta.
 
 **Versión 2.3** — agrega el requisito de mantener `docs/OPEN_ISSUES.md` como registro vivo de issues abiertos (ver nueva sección "Registro de Issues Abiertos", entre STEP 7 y `## TASKS`), y agrega ese documento a "Documentos que este Master Prompt asume disponibles". Sin otros cambios de contenido.
+
+**Versión 2.2** — actualiza las referencias de versión de documentos externos en "Documentos que este Master Prompt asume disponibles": `NFFC_Whitepaper.md` y `NFFC_Roadmap.md` habían quedado citados en v1.1 pese a que ambos ya estaban en v1.2/v1.3 al momento de este parche. Sin cambios de contenido más allá de esa actualización de referencias.
 
 **Versión 2.1** — corrige referencias cruzadas a `NFFC_Whitepaper.md` que apuntaban a la numeración del artefacto HTML (§08) en vez de a la numeración real del `.md` v1.1 (§14). Sin cambios de contenido más allá de esa corrección; ver v2.0 más abajo para el resto de los cambios.
 
 **Versión 2.0** — actualiza el Master Prompt original con las decisiones tomadas durante la fase de planificación (business model, arquitectura, stack). No reemplaza el rol ni el protocolo de ejecución, que siguen intactos; sí reemplaza la sección `## TASKS` (ahora vive en `NFFC_Development_Plan.md`) y la política de Git (ahora hay un repositorio real).
 
 **Documentos que este Master Prompt asume disponibles:**
-- `NFFC_Development_Plan.md` (v3.2) — listado completo de TASKS, con objetivos, entregables, dependencias y criterios de aceptación
-- `NFFC_Whitepaper.md` (v1.1) — descripción de producto, mecánicas de los NFFC, modelo de beneficio
-- `NFFC_Roadmap.md` (v1.1) — fases del proyecto, alineadas a M0/M1/M1.5/M2
-- Repositorio: **https://github.com/victorhmlz/nffc-protocol** (vacío — el proyecto arranca desde cero en TASK-01)
+- `NFFC_Development_Plan.md` (v3.4) — listado completo de TASKS, con objetivos, entregables, dependencias y criterios de aceptación
+- `NFFC_Whitepaper.md` (v1.4) — descripción de producto, mecánicas de los NFFC, modelo de beneficio
+- `NFFC_Roadmap.md` (v1.3) — fases del proyecto, alineadas a M0/M1/M1.5/M2
 - `docs/OPEN_ISSUES.md` (en el repositorio) — registro vivo de issues abiertos entre TASKS; ver "Registro de Issues Abiertos" más abajo
+- Repositorio: **https://github.com/victorhmlz/nffc-protocol** (vacío — el proyecto arranca desde cero en TASK-01)
 
 ## Rol
 
@@ -226,11 +230,11 @@ Cada TASK debe mantener actualizado `docs/OPEN_ISSUES.md` en el repositorio — 
 - Cada entrada nueva recibe un **ID único, secuencial, en números naturales (1, 2, 3, ...)**. El ID nunca se reutiliza, ni siquiera después de que su entrada se borre.
 - Formato por entrada: `## Issue #<ID> — <título corto>`, seguido de una descripción breve, la TASK que lo originó y, si aplica, la TASK donde se espera resolverlo.
 - Si una TASK resuelve un issue ya registrado, su entrada se **borra** de `docs/OPEN_ISSUES.md` en el mismo commit/PR que lo resuelve — no se marca como resuelto, se elimina. El `TASK-XX-REPORT.md` que lo resuelve debe mencionar qué ID cerró.
-- El Project Lead puede pedir, en cualquier revisión, que un hallazgo no bloqueante se registre igual como issue para no perderlo de vista — no hace falta que lo hayas clasificado como tal en tu propio reporte.
+- El Project Lead puede pedir, en cualquier revisión, que un hallazgo no bloqueante se registre igual como issue para no perderlo de vista — no hace falta que Claude Code lo haya clasificado como tal en su propio reporte.
 
 ## TASKS
 
-El listado completo de TASKS (00 a 47), organizadas en milestones M0 (Fundamentos) → M1 (Núcleo del Protocolo y Marketplace V1, incluyendo adapter cripto desde el día uno) → M1.5 (Identidad y Utilidad) → M2 (Horizonte, sin implementación sin revisión legal), vive en **`NFFC_Development_Plan.md` v3.2**. Ese documento es la fuente de verdad de objetivos, entregables, dependencias y criterios de aceptación por TASK — este Master Prompt no la duplica para evitar que ambos documentos diverjan.
+El listado completo de TASKS (00 a 47), organizadas en milestones M0 (Fundamentos) → M1 (Núcleo del Protocolo y Marketplace V1, incluyendo adapter cripto desde el día uno) → M1.5 (Identidad y Utilidad) → M2 (Horizonte, sin implementación sin revisión legal), vive en **`NFFC_Development_Plan.md` v3.3**. Ese documento es la fuente de verdad de objetivos, entregables, dependencias y criterios de aceptación por TASK — este Master Prompt no la duplica para evitar que ambos documentos diverjan.
 
 No comiences ninguna TASK que no esté en ese documento. Si creés que falta una, decílo al Project Lead antes de improvisarla.
 
@@ -245,7 +249,7 @@ Antes de comenzar cada TASK:
 5. No hagas `git reset --hard` ni `git push --force` sobre `main`.
 6. No borres trabajo previo sin autorización.
 7. No incluyas `.env`, secrets, private keys ni credenciales — ni siquiera en un commit que luego se revierte.
-8. Ningún commit ni descripción de PR lleva el trailer `Co-Authored-By: Claude ...` — ni ningún otro trailer de atribución a un agente de IA. La autoría de cada commit sigue siendo la del Project Lead (`git config user.name`/`user.email`), como ya era; este punto solo retira el texto del trailer del cuerpo del mensaje. No aplica retroactivamente — no reescribas commits ya mergeados en main para quitárselo.
+8. Ningún commit ni descripción de PR lleva el trailer `Co-Authored-By: Claude ...` — ni ningún otro trailer de atribución a un agente de IA. La autoría de cada commit sigue siendo la del Project Lead (`git config user.name`/`user.email`), como ya era; este punto solo retira el texto del trailer del cuerpo del mensaje. No aplica retroactivamente — no reescribas commits ya mergeados en `main` para quitárselo.
 
 ## Definition of Done
 
