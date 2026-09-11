@@ -4,7 +4,7 @@ Registro vivo de issues abiertos entre TASKS — ver `NFFC_Claude_Master_Prompt.
 
 Reglas: cada entrada tiene un ID único, secuencial, en números naturales — el ID nunca se reutiliza. Al resolverse un issue, su entrada se borra (no se marca como resuelta).
 
-**Próximo ID a usar: 10**
+**Próximo ID a usar: 11**
 
 ---
 
@@ -121,3 +121,17 @@ Efecto concreto: nada en el pipeline actual (indexer, NAV materializer, ninguna 
 No bloqueante para TASK-24 tal como está definida en el Development Plan. No hay ninguna TASK futura nombrada explícitamente responsable de esto.
 
 **Posible resolución en:** sin asignar todavía — candidato para una TASK dedicada (o una extensión explícita de un TASK-24-bis) que decida la fuente de verdad de `collection` y la indexe.
+
+---
+
+## Issue #10 — `/portfolio` no puede cumplir la clasificación "Server for data" de `07-ux-map.md`
+
+**Origen:** TASK-25 (Portfolio).
+
+`docs/spec/07-ux-map.md` §1 clasifica `/portfolio` como "Server for data + Client for actions" — el mismo split que `/nffc/[tokenId]` (TASK-21), donde el Server Component lee `params.tokenId` de la URL y hace SSR real. `/portfolio` no tiene un segmento `[address]` en su URL (a diferencia de `/nffc/[tokenId]` o `/profile/[address]`, TASK-27): en este DApp de self-custody, la identidad de la wallet conectada solo existe del lado cliente (`useAccount()`, TASK-16, vía wagmi) — no hay sesión ni cookie que un Server Component pueda leer para saber de qué wallet renderizar el portfolio.
+
+Lo entregado en su lugar: el cómputo real (`getPortfolio`/`aggregatePortfolio`) corre server-side, detrás de `GET /api/portfolio/[address]` (never cached, mismo patrón que `/api/nffc/[tokenId]/market`) — pero `/portfolio` en sí es un Client Component (`usePortfolio`, TASK-25) cuyo único trabajo es saber a qué dirección preguntarle. Es el mismo tipo de tensión que Issue #5/#6 (TASK-20) ya documentaron entre lo que `07-ux-map.md` pide literalmente y lo que la arquitectura de este proyecto permite sin más cambios — aquí el límite no es el modelo de caché de Next.js sino la ausencia total de identidad de wallet server-side.
+
+No bloqueante — la página funciona, el cómputo pesado es server-side, y el patrón es honesto y ya documentado en el código (`src/app/portfolio/page.tsx`'s header comment). Pero es una brecha real entre la tabla de `07-ux-map.md` y lo construido.
+
+**Posible resolución en:** sin asignar todavía — evaluar junto con TASK-27 (Profiles, que sí tiene `[address]` en la URL) si un patrón de sesión/wallet-binding server-side tiene sentido para este proyecto, o si `07-ux-map.md` §1 debería corregirse para reflejar que "Server for data" solo aplica a superficies con una dirección en la URL.
