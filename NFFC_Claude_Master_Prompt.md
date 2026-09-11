@@ -1,5 +1,7 @@
 # MASTER PROMPT — Claude Coding Agent
 
+**Versión 2.4** — agrega el punto 8 a "Git / PR policy": de acá en adelante, ningún commit ni descripción de PR lleva el trailer `Co-Authored-By: Claude ...`. Decisión explícita del Project Lead (2026-09-11), solo hacia adelante — no se reescribe el historial existente (65 commits ya mergeados en `main` lo conservan). La atribución real de autoría (campo `author`/`committer` de git, y el autor de cada PR en GitHub) ya era 100% del Project Lead antes de este cambio; esto solo retira el texto del trailer, no corrige ninguna autoría incorrecta.
+
 **Versión 2.3** — agrega el requisito de mantener `docs/OPEN_ISSUES.md` como registro vivo de issues abiertos (ver nueva sección "Registro de Issues Abiertos", entre STEP 7 y `## TASKS`), y agrega ese documento a "Documentos que este Master Prompt asume disponibles". Sin otros cambios de contenido.
 
 **Versión 2.1** — corrige referencias cruzadas a `NFFC_Whitepaper.md` que apuntaban a la numeración del artefacto HTML (§08) en vez de a la numeración real del `.md` v1.1 (§14). Sin cambios de contenido más allá de esa corrección; ver v2.0 más abajo para el resto de los cambios.
@@ -243,6 +245,7 @@ Antes de comenzar cada TASK:
 5. No hagas `git reset --hard` ni `git push --force` sobre `main`.
 6. No borres trabajo previo sin autorización.
 7. No incluyas `.env`, secrets, private keys ni credenciales — ni siquiera en un commit que luego se revierte.
+8. Ningún commit ni descripción de PR lleva el trailer `Co-Authored-By: Claude ...` — ni ningún otro trailer de atribución a un agente de IA. La autoría de cada commit sigue siendo la del Project Lead (`git config user.name`/`user.email`), como ya era; este punto solo retira el texto del trailer del cuerpo del mensaje. No aplica retroactivamente — no reescribas commits ya mergeados en main para quitárselo.
 
 ## Definition of Done
 

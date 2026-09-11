@@ -19,7 +19,7 @@ supported providers from V1.
 - NFFC detail: [`docs/nffc-detail.md`](docs/nffc-detail.md) · live at `/nffc/[tokenId]`
 - Price engine: [`docs/price-engine.md`](docs/price-engine.md) — `ChainlinkPriceOracle` (TASK-22)
 - Design system: [`docs/design-system.md`](docs/design-system.md) · live at `/style-guide`
-- Governance: `NFFC_Claude_Master_Prompt.md` (v2.3), `NFFC_Development_Plan.md` (v3.2),
+- Governance: `NFFC_Claude_Master_Prompt.md` (v2.4), `NFFC_Development_Plan.md` (v3.2),
   `NFFC_Whitepaper.md` (v1.1), `NFFC_Roadmap.md` (v1.1)
 - Per-task reports: [`docs/reports/`](docs/reports/)
 - Open issues log: [`docs/OPEN_ISSUES.md`](docs/OPEN_ISSUES.md) — live record of unresolved findings between TASKS
