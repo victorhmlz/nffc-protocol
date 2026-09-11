@@ -1,5 +1,7 @@
 # MASTER PROMPT — Claude Coding Agent
 
+**Versión 2.3** — agrega el requisito de mantener `docs/OPEN_ISSUES.md` como registro vivo de issues abiertos (ver nueva sección "Registro de Issues Abiertos", entre STEP 7 y `## TASKS`), y agrega ese documento a "Documentos que este Master Prompt asume disponibles". Sin otros cambios de contenido.
+
 **Versión 2.1** — corrige referencias cruzadas a `NFFC_Whitepaper.md` que apuntaban a la numeración del artefacto HTML (§08) en vez de a la numeración real del `.md` v1.1 (§14). Sin cambios de contenido más allá de esa corrección; ver v2.0 más abajo para el resto de los cambios.
 
 **Versión 2.0** — actualiza el Master Prompt original con las decisiones tomadas durante la fase de planificación (business model, arquitectura, stack). No reemplaza el rol ni el protocolo de ejecución, que siguen intactos; sí reemplaza la sección `## TASKS` (ahora vive en `NFFC_Development_Plan.md`) y la política de Git (ahora hay un repositorio real).
@@ -9,6 +11,7 @@
 - `NFFC_Whitepaper.md` (v1.1) — descripción de producto, mecánicas de los NFFC, modelo de beneficio
 - `NFFC_Roadmap.md` (v1.1) — fases del proyecto, alineadas a M0/M1/M1.5/M2
 - Repositorio: **https://github.com/victorhmlz/nffc-protocol** (vacío — el proyecto arranca desde cero en TASK-01)
+- `docs/OPEN_ISSUES.md` (en el repositorio) — registro vivo de issues abiertos entre TASKS; ver "Registro de Issues Abiertos" más abajo
 
 ## Rol
 
@@ -212,6 +215,16 @@ COMPLETED / BLOCKED
 ## NEXT TASK
 
 No declares COMPLETED si una comprobación crítica falla.
+
+## Registro de Issues Abiertos
+
+Cada TASK debe mantener actualizado `docs/OPEN_ISSUES.md` en el repositorio — un documento vivo, no versionado por TASK, que junta en un solo lugar los hallazgos que quedan sin resolver entre una TASK y otra.
+
+- Cada entrada de `## KNOWN ISSUES` en el `TASK-XX-REPORT.md` que sea un hallazgo real (una brecha, un riesgo o una decisión de diseño que amerita revisión explícita del Project Lead más adelante) — y no simplemente alcance diferido a una TASK futura ya prevista en `NFFC_Development_Plan.md` (ej. "esto depende del Price Engine, que es TASK-22") — se agrega a `docs/OPEN_ISSUES.md` en el mismo commit/PR que produce ese reporte.
+- Cada entrada nueva recibe un **ID único, secuencial, en números naturales (1, 2, 3, ...)**. El ID nunca se reutiliza, ni siquiera después de que su entrada se borre.
+- Formato por entrada: `## Issue #<ID> — <título corto>`, seguido de una descripción breve, la TASK que lo originó y, si aplica, la TASK donde se espera resolverlo.
+- Si una TASK resuelve un issue ya registrado, su entrada se **borra** de `docs/OPEN_ISSUES.md` en el mismo commit/PR que lo resuelve — no se marca como resuelto, se elimina. El `TASK-XX-REPORT.md` que lo resuelve debe mencionar qué ID cerró.
+- El Project Lead puede pedir, en cualquier revisión, que un hallazgo no bloqueante se registre igual como issue para no perderlo de vista — no hace falta que lo hayas clasificado como tal en tu propio reporte.
 
 ## TASKS
 

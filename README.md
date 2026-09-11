@@ -15,9 +15,10 @@ supported providers from V1.
 - Create wizard: [`docs/create-wizard.md`](docs/create-wizard.md) · live at `/create`
 - Mint flow: [`docs/mint-flow.md`](docs/mint-flow.md) — Step 7 of the wizard
 - Design system: [`docs/design-system.md`](docs/design-system.md) · live at `/style-guide`
-- Governance: `NFFC_Claude_Master_Prompt.md` (v2.1), `NFFC_Development_Plan.md` (v3.2),
+- Governance: `NFFC_Claude_Master_Prompt.md` (v2.3), `NFFC_Development_Plan.md` (v3.2),
   `NFFC_Whitepaper.md` (v1.1), `NFFC_Roadmap.md` (v1.1)
 - Per-task reports: [`docs/reports/`](docs/reports/)
+- Open issues log: [`docs/OPEN_ISSUES.md`](docs/OPEN_ISSUES.md) — live record of unresolved findings between TASKS
 
 > **Status: mint flow (TASK-18).** Toolchain (TASK-01) → boundaries (TASK-02) → design system
 > (TASK-03) → infrastructure (TASK-04) → registries (TASK-05) → Robinhood + crypto adapters
