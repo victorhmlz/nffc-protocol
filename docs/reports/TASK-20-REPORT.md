@@ -6,8 +6,8 @@ COMPLETED
 
 `pnpm verify` (lint · typecheck · test · build) green locally — **49 files, 262 tests** (213 → +49;
 +21 added during the pre-TASK-21 audit response, see CHANGES "Review fixes"). `pnpm contracts:build`
-/ `pnpm contracts:test` unchanged — **172 Solidity tests** (TASK-20 touches no `.sol`). CI on PR #25
-re-verified green after the review fixes — see PULL REQUEST for the current run link.
+/ `pnpm contracts:test` unchanged — **172 Solidity tests** (TASK-20 touches no `.sol`). Both CI jobs
+on PR #25 pass after the review fixes — run `34602317309`. See PULL REQUEST.
 
 ## OBJECTIVE
 
@@ -263,7 +263,8 @@ repeated requests for an identical query don't redo the work.
 Branch `task/TASK-20-marketplace-ui`, based on **`main`** (TASK-00…19).
 
 **PR: https://github.com/victorhmlz/nffc-protocol/pull/25** — base `main`.
-**CI: https://github.com/victorhmlz/nffc-protocol/actions/runs/34599027083 — success** — both jobs.
+**CI: https://github.com/victorhmlz/nffc-protocol/actions/runs/34602317309 — success** — both jobs,
+re-verified after the review fixes (previous green run: `34599027083`, before them).
 
 **Do not merge** — Project Lead reviews and authorizes.
 
