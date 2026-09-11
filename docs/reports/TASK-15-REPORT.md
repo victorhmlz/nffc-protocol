@@ -176,7 +176,7 @@ no re-fetch loops. `formatAge` is O(1).
 
 Branch `task/TASK-15-dynamic-nffc-ui`, based on **`main`** (TASK-00…14).
 
-**PR: <!-- filled in after push -->**
+**PR: https://github.com/victorhmlz/nffc-protocol/pull/18** — base `main`.
 
 **Do not merge** — Project Lead reviews and authorizes.
 
