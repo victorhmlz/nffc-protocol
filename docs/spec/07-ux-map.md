@@ -17,12 +17,21 @@ marketplace**. Explicitly not meme-coin / casino.
 | NFFC detail | `/nffc/[tokenId]` | Server-rendered + ISR; stable, shareable, correct social preview of the generative art | No to view; yes to buy/offer |
 | Create wizard | `/create` | Client (wallet + signing) | Yes |
 | Mint flow | part of `/create` (final steps) | Client | Yes |
-| Portfolio | `/portfolio` | Server for data + Client for actions | Yes (shows the connected wallet's holdings) |
+| Portfolio | `/portfolio` | Client (see note¹) | Yes (shows the connected wallet's holdings) |
 | Activity | `/activity`, plus per-NFFC / per-wallet timelines | Server-first | No |
-| Profiles | `/profile/[address]` (creator + collector view) | Server-first | No |
+| Profiles | `/profile/[address]` (creator + collector view) | Server-first — real SSR, since the wallet is in the URL | No |
 | Search | `/search` (NFFCs, assets, collections, wallets) | Server-first over **indexed** data | No |
 | Collection page | `/collection/[collectionId]` | Server-first | No to view |
 | Admin | `/admin/*` | Client, gated by role; sensitive actions via multisig | Yes (admin) |
+
+¹ **Portfolio note (TASK-25/27, resolves `docs/OPEN_ISSUES.md` Issue #10):** this row originally
+read "Server for data + Client for actions", the same split as NFFC detail. That split needs an
+address to render *against* — NFFC detail has `[tokenId]`, Profile has `[address]`, both real SSR.
+`/portfolio` has no such URL segment: in this self-custody DApp, wallet identity exists only
+client-side (`useAccount()`, TASK-16), so a Server Component has nothing to read. The heavy
+computation still runs server-side, behind `GET /api/portfolio/[address]` — only the page shell
+that decides *which* address to ask for is a Client Component. "Server for data" in this table
+means real SSR keyed off the URL; it doesn't apply to a route with no address of its own.
 
 ## 2. Server-first vs. Client boundary
 
