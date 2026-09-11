@@ -26,6 +26,7 @@ import type {
 } from "@domain/registry/types";
 import type { CompositionSegment } from "@domain/nffc/composition";
 import { BPS_TOTAL } from "@domain/nffc/composition";
+import type { PerformancePoint } from "@domain/valuation/types";
 
 export const STATIC_METADATA_SCHEMA = "nffc.static.v1";
 
@@ -307,6 +308,8 @@ export interface NffcMarketSnapshot {
   readonly tokenId: string;
   readonly referenceNav: MarketDataPoint | null;
   readonly components: readonly ComponentMarketPoint[];
+  /** 1D / 7D / 30D / SINCE_MINT — each window's `to.at` is its own provenance timestamp. */
+  readonly performance: readonly PerformancePoint[];
   readonly asOf: number; // unix seconds — when this snapshot was assembled
   readonly degraded: boolean; // any component price stale or missing
   readonly unavailableReason?: string;
@@ -322,6 +325,7 @@ export function emptyMarketSnapshot(
     tokenId,
     referenceNav: null,
     components: [],
+    performance: [],
     asOf,
     degraded: true,
     unavailableReason,

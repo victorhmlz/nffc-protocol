@@ -34,12 +34,98 @@ import {
   TableHead,
   TableHeader,
   TableRow,
+  CompositionTable,
   GeoEligibilityNotice,
   NffcArt,
+  NffcMarketPanel,
   SegmentBadge,
+  StaticRarityStat,
   TransactionStatus,
 } from "@/components/ui";
+import type {
+  NffcMarketSnapshot,
+  StaticComponentFact,
+} from "@domain/metadata/metadata";
+import type { PerformancePoint } from "@domain/valuation/types";
 import type { TransactionState } from "@/lib/wallet/transaction-state";
+
+const DEMO_NOW = 1_700_000_000_000; // fixed "now" so the sample ages are stable across builds
+
+const DEMO_COMPONENTS: StaticComponentFact[] = [
+  {
+    position: 0,
+    assetId: "0xnvda" as never,
+    assetSymbol: "NVDA",
+    assetClass: "EQUITY",
+    providerId: "ROBINHOOD" as never,
+    representationId: "0xnvdarep" as never,
+    weightBps: 6000 as never,
+  },
+  {
+    position: 1,
+    assetId: "0xbtc" as never,
+    assetSymbol: "BTC",
+    assetClass: "CRYPTO",
+    providerId: "CRYPTO_NATIVE" as never,
+    representationId: "0xbtcrep" as never,
+    weightBps: 4000 as never,
+  },
+];
+
+const DEMO_PERFORMANCE: PerformancePoint[] = (
+  [
+    ["1D", 0.042],
+    ["7D", -0.061],
+    ["30D", 0.118],
+    ["SINCE_MINT", 0.5],
+  ] as const
+).map(([window, change]) => ({
+  window,
+  change,
+  from: {
+    tokenId: "1" as never,
+    value: 100,
+    at: (DEMO_NOW / 1000 - 300) as never,
+    degraded: false,
+  },
+  to: {
+    tokenId: "1" as never,
+    value: 124.8,
+    at: (DEMO_NOW / 1000 - 120) as never,
+    degraded: false,
+  },
+}));
+
+const DEMO_SNAPSHOT_OK: NffcMarketSnapshot = {
+  tokenId: "1",
+  referenceNav: {
+    value: 12480.42,
+    source: "chainlink:0xfeed…",
+    observedAt: DEMO_NOW / 1000 - 120,
+    stale: false,
+  },
+  components: [],
+  performance: DEMO_PERFORMANCE,
+  asOf: DEMO_NOW / 1000,
+  degraded: false,
+};
+
+const DEMO_SNAPSHOT_STALE: NffcMarketSnapshot = {
+  ...DEMO_SNAPSHOT_OK,
+  referenceNav: { ...DEMO_SNAPSHOT_OK.referenceNav!, stale: true },
+  degraded: true,
+};
+
+const DEMO_SNAPSHOT_UNAVAILABLE: NffcMarketSnapshot = {
+  tokenId: "1",
+  referenceNav: null,
+  components: [],
+  performance: [],
+  asOf: DEMO_NOW / 1000,
+  degraded: true,
+  unavailableReason:
+    "Reference NAV and prices are available once the price and NAV engines are deployed (TASK-22/23).",
+};
 
 const ART_SEED =
   "0x9f8e7d6c5b4a39281706f5e4d3c2b1a0ffeeddccbbaa99887766554433221100";
@@ -390,6 +476,57 @@ export default function StyleGuidePage() {
               </figcaption>
             </figure>
           ))}
+        </div>
+      </Section>
+
+      <Section title="Dynamic NFFC UI/Data (TASK-15)">
+        <p className="max-w-prose text-sm text-subtle-foreground">
+          Every market number carries an oracle source and a visible age;
+          loading and unavailable states are explicit, never a blank value (
+          <code>docs/spec/07-ux-map.md</code> §6). Rarity and composition are
+          on-chain and need no oracle.
+        </p>
+
+        <div className="grid gap-6 sm:grid-cols-3">
+          <div className="flex flex-col gap-2">
+            <p className="text-xs font-medium text-subtle-foreground">Loaded</p>
+            <NffcMarketPanel snapshot={DEMO_SNAPSHOT_OK} now={DEMO_NOW} />
+          </div>
+          <div className="flex flex-col gap-2">
+            <p className="text-xs font-medium text-subtle-foreground">
+              Stale / degraded
+            </p>
+            <NffcMarketPanel snapshot={DEMO_SNAPSHOT_STALE} now={DEMO_NOW} />
+          </div>
+          <div className="flex flex-col gap-2">
+            <p className="text-xs font-medium text-subtle-foreground">
+              Unavailable
+            </p>
+            <NffcMarketPanel
+              snapshot={DEMO_SNAPSHOT_UNAVAILABLE}
+              now={DEMO_NOW}
+            />
+          </div>
+        </div>
+
+        <div className="flex flex-col gap-2">
+          <p className="text-xs font-medium text-subtle-foreground">Loading</p>
+          <NffcMarketPanel snapshot={null} loading />
+        </div>
+
+        <div className="grid gap-6 sm:grid-cols-2">
+          <div className="flex flex-col gap-2">
+            <p className="text-xs font-medium text-subtle-foreground">
+              Composition (on-chain, no oracle)
+            </p>
+            <CompositionTable components={DEMO_COMPONENTS} />
+          </div>
+          <div className="flex flex-col gap-2">
+            <p className="text-xs font-medium text-subtle-foreground">
+              Static rarity (structural, no oracle)
+            </p>
+            <StaticRarityStat score={0.4029} />
+          </div>
         </div>
       </Section>
     </Container>

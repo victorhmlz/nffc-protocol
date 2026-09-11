@@ -27,6 +27,7 @@ describe("GET /api/nffc/[tokenId]/market", () => {
       tokenId: string;
       referenceNav: null;
       components: unknown[];
+      performance: unknown[];
       asOf: number;
       degraded: boolean;
       unavailableReason: string;
@@ -35,6 +36,7 @@ describe("GET /api/nffc/[tokenId]/market", () => {
     expect(body.tokenId).toBe("3");
     expect(body.referenceNav).toBeNull();
     expect(body.components).toEqual([]);
+    expect(body.performance).toEqual([]);
     expect(body.degraded).toBe(true);
     expect(body.asOf).toBeGreaterThanOrEqual(before);
     expect(body.unavailableReason).toMatch(/TASK-22\/23/);

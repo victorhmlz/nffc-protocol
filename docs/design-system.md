@@ -124,6 +124,9 @@ Chart chrome: `chart-surface`, `chart-grid` (hairline), `chart-axis` (baseline),
 | `TransactionStatus` | Presentational view of the wallet state machine (`src/lib/wallet/transaction-state.ts`); icon + label + description, `role="status"` `aria-live="polite"`. |
 | `SegmentBadge` / `GeoEligibilityNotice` | The derived composition segment (`CRYPTO_ONLY` / `STOCK_ONLY` / `MIXED`, from `@domain/nffc/segment`) + the geographic-eligibility disclosure. Presentational — the segment is computed, never chosen (TASK-08; `docs/spec/07-ux-map.md` §6). Copy is legal-reviewed before mainnet (TASK-40). |
 | `NffcArt` | The NFFC's generative art — a deterministic pure function of its composition + `compositionHash` (`@domain/art`, palette = `--chart-1..8`). Same composition → byte-identical SVG (TASK-12; `docs/art-algorithm.md`). |
+| `ReferenceNavStat` / `PerformanceWindows` / `NffcMarketPanel` | Dynamic market data (TASK-15). Always labelled "Reference NAV"; every value carries oracle `source` + a visible age; explicit loading / stale / unavailable states, never a blank number (`docs/spec/07-ux-map.md` §6). `NffcMarketPanel` composes the two around the exact `NffcMarketSnapshot` shape `/api/nffc/[tokenId]/market` returns. |
+| `CompositionTable` | Per-component asset / provider / weight, from on-chain data only — no oracle needed. |
+| `StaticRarityStat` | The structural rarity score (TASK-14) as a 0–100 index; explicitly notes it is not market data. |
 | `Container` | Page gutter + max width (`max-w-6xl`, or `wide` → `1600px` for dense market views). |
 | `Skeleton` | Loading placeholder — every async surface shows this or an explicit error. |
 
