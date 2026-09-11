@@ -128,7 +128,7 @@ buy (13)            happy path (no fees); fee+royalty split (exact math) + a fuz
                     missing approval (OZ's own error, not reimplemented); stale listing after a
                     direct off-marketplace transfer; paused; rejecting fee recipient; two reentrancy
                     tests (fee-payout leg, safeTransferFrom receiver-hook leg)
-offers (16)         escrow + id increment; cancel by buyer (refund) / by non-buyer; cancel when not
+offers (15)         escrow + id increment; cancel by buyer (refund) / by non-buyer; cancel when not
                     active; cancel pause behavior; accept happy path; accept also cancels a stale
                     listing on the same token; accept by non-owner; accept expired (+ the
                     exact-boundary "still valid at expiry" case); accept when not active; accept
