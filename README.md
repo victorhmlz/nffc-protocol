@@ -12,19 +12,21 @@ supported providers from V1.
 - Mint-condition trait: [`docs/mint-condition-trait.md`](docs/mint-condition-trait.md)
 - Static rarity: [`docs/static-rarity.md`](docs/static-rarity.md)
 - Wallet integration: [`docs/wallet-integration.md`](docs/wallet-integration.md)
+- Create wizard: [`docs/create-wizard.md`](docs/create-wizard.md) · live at `/create`
 - Design system: [`docs/design-system.md`](docs/design-system.md) · live at `/style-guide`
 - Governance: `NFFC_Claude_Master_Prompt.md` (v2.1), `NFFC_Development_Plan.md` (v3.2),
   `NFFC_Whitepaper.md` (v1.1), `NFFC_Roadmap.md` (v1.1)
 - Per-task reports: [`docs/reports/`](docs/reports/)
 
-> **Status: wallet / self-custody (TASK-16).** Toolchain (TASK-01) → boundaries (TASK-02) → design
-> system (TASK-03) → infrastructure (TASK-04) → registries (TASK-05) → Robinhood + crypto adapters
+> **Status: create wizard (TASK-17).** Toolchain (TASK-01) → boundaries (TASK-02) → design system
+> (TASK-03) → infrastructure (TASK-04) → registries (TASK-05) → Robinhood + crypto adapters
 > (TASK-06/07) → composition segmentation (TASK-08) → NFFC ERC-721 core (TASK-09) → Collection
 > contract (TASK-10) → metadata split (TASK-11) → generative art (TASK-12) → mint-condition trait
-> (TASK-13) → static rarity (TASK-14) → dynamic NFFC UI (TASK-15), and now wallet connect — wagmi +
-> viem, self-custody only, automatic wrong-network detection with a switch to Robinhood Chain
-> (4663), and a transaction state machine that cannot skip a step
-> (`docs/wallet-integration.md`). No product surfaces yet — `/style-guide` demos every component.
+> (TASK-13) → static rarity (TASK-14) → dynamic NFFC UI (TASK-15) → wallet (TASK-16), and now the
+> first real product surface: **`/create`**, the 7-step wizard — one surface for Stock Tokens and
+> native crypto, an art preview that is byte-identical to the post-mint result, and a fee total
+> that is structurally unreachable-around before Mint (`docs/create-wizard.md`). Fixtures stand in
+> for the indexer and deployed contracts until TASK-20/24/30/31.
 
 ## Stack
 
