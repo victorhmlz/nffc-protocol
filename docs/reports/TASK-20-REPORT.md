@@ -6,7 +6,7 @@ COMPLETED
 
 `pnpm verify` (lint · typecheck · test · build) green locally — **44 files, 241 tests** (213 → +28).
 `pnpm contracts:build` / `pnpm contracts:test` unchanged — **172 Solidity tests** (TASK-20 touches
-no `.sol`). See PULL REQUEST for CI links once opened.
+no `.sol`). Both CI jobs on PR #25 pass — run `34599027083`. See PULL REQUEST.
 
 ## OBJECTIVE
 
@@ -204,7 +204,8 @@ repeated requests for an identical query don't redo the work.
 
 Branch `task/TASK-20-marketplace-ui`, based on **`main`** (TASK-00…19).
 
-**PR:** to be opened against `main` — link recorded here once created.
+**PR: https://github.com/victorhmlz/nffc-protocol/pull/25** — base `main`.
+**CI: https://github.com/victorhmlz/nffc-protocol/actions/runs/34599027083 — success** — both jobs.
 
 **Do not merge** — Project Lead reviews and authorizes.
 
