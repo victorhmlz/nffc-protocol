@@ -35,6 +35,12 @@ export type ActivityKind =
 export interface ActivityEntry {
   readonly id: string;
   readonly kind: ActivityKind;
+  /** `null` for non-token events — none exist yet (every current
+   *  `ActivityKind` is token-scoped), kept nullable to match the spec's own
+   *  "nullable for non-token events" column, added in TASK-24 (the indexer,
+   *  which writes one global table across every token and genuinely needs
+   *  this — TASK-21's original per-token detail page didn't). */
+  readonly tokenId: string | null;
   readonly actorAddress: string;
   readonly counterpartyAddress: string | null;
   /** Wei, as a decimal string; `null` for non-value events (e.g. `TRANSFER`). */

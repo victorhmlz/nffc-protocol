@@ -4,7 +4,7 @@ Registro vivo de issues abiertos entre TASKS — ver `NFFC_Claude_Master_Prompt.
 
 Reglas: cada entrada tiene un ID único, secuencial, en números naturales — el ID nunca se reutiliza. Al resolverse un issue, su entrada se borra (no se marca como resuelta).
 
-**Próximo ID a usar: 7**
+**Próximo ID a usar: 10**
 
 ---
 
@@ -81,3 +81,43 @@ No bloqueante — la página funciona, es SSR, es crawleable. Pero es una brecha
 Decisión de producto pendiente: ¿`/` debería redirigir a `/market`, mostrar el mismo contenido, o quedar como landing separada permanentemente? No bloqueante — ambas rutas funcionan, no hay contenido roto — pero amerita una decisión explícita del Project Lead en vez de asumirse.
 
 **Posible resolución en:** sin asignar todavía — podría resolverse en cualquier TASK posterior de UI, o explícitamente antes de TASK-40 (mainnet gate) como parte de la revisión de superficie pública.
+
+---
+
+## Issue #7 — Los módulos `infra/*` marcados `server-only` no se pueden importar (ni estática ni dinámicamente, una vez alcanzado el código) desde ningún worker corrido con `tsx`/`pnpm worker`
+
+**Origen:** TASK-24 (Indexer), descubierto al intentar cablear `createPostgresIndexerStore()` en `workers/indexer/index.ts`.
+
+`docs/conventions.md` §3 establece que los workers (`workers/provider-sync/`, `workers/nav-materializer/`, `workers/indexer/`) son procesos standalone, re-invocados por un scheduler externo (cron, un loop supervisado) — corren fuera de Next.js, vía `pnpm worker <archivo>` (= `tsx <archivo>`). Pero `infra/valuation/postgres-price-store.ts`, `infra/valuation/postgres-nav-store.ts` (TASK-23) e `infra/indexer/postgres-indexer-store.ts` (TASK-24) empiezan con `import "server-only"`.
+
+El paquete `server-only` (`node_modules/server-only/package.json`) resuelve su export condicional `"react-server"` (el único que sirve un módulo no-op, `empty.js`) solo cuando el bundler que resuelve el import declara esa condición — algo que únicamente el compilador de Next.js hace. Bajo Node/`tsx` sin ese bundler, siempre resuelve `index.js`, que hace `throw new Error("This module cannot be imported from a Client Component module...")` **incondicionalmente**, sin importar si el módulo se usa o no. Verificado en este TASK: un `import` estático de `@infra/indexer` en `workers/indexer/index.ts` rompía el worker incluso en el camino "not configured" (el único invocable hoy, antes de TASK-31). Se mitigó ahí con un `import()` dinámico gateado detrás del chequeo de configuración — pero eso solo evita el crash mientras el worker no está configurado; el día que TASK-31 despliegue los contratos y `CONTRACT_NFFC`/`CONTRACT_MARKETPLACE` (o el registry de `nav-materializer`) estén seteados, ese mismo `import()` se ejecutará igual y **también** va a tirar el mismo error — el worker jamás llega a usar la store real.
+
+No bloqueante hoy (ningún worker se corre "configured: true" en ningún ambiente todavía), pero es un defecto latente que va a manifestarse en el primer intento real de correr cualquiera de estos tres workers fuera de Next.js una vez desplegados los contratos — no es específico de TASK-24, alcanza igual a `nav-materializer` (TASK-23) apenas cablee sus stores.
+
+**Posible resolución en:** decisión de arquitectura del Project Lead — candidatas: (a) quitar `import "server-only"` de los módulos `infra/*` que los workers necesitan en tiempo de ejecución real (dejando que la barrera cliente/servidor la sigan imponiendo solo los módulos que de verdad importa Next.js, p. ej. `infra/env.ts` no lo tiene y no tuvo este problema), (b) mover esos tres store modules fuera de `infra/` a una ruta que ni Next.js ni los workers compartan, evitando la necesidad del marker, o (c) ejecutar los workers en producción con un runtime que sí declare la condición `react-server` en vez de `tsx` plano. Candidato para revisar junto con TASK-31 (deploy), antes de que cualquier worker necesite correr con datos reales.
+
+---
+
+## Issue #8 — `OfferCancelled(offerId)` no lleva `tokenId`; el indexer no puede completar `activity.token_id` para esa fila
+
+**Origen:** TASK-24 (Indexer).
+
+`docs/spec/09-data-model.md` define `activity.token_id` como columna de la tabla; `domain/nffc-detail/detail.ts`'s `ActivityEntry.tokenId` (extendido en este mismo TASK, ver CHANGES del reporte) la espera para toda fila. Pero `Marketplace.sol` (TASK-19) emite `event OfferCancelled(uint256 indexed offerId)` sin `tokenId` ni ningún otro campo — el propio actor tampoco viene en el evento, por lo que `domain/indexer/plan.ts` usa `ctx.transactionSender` (`LogEvent.transactionSender`, agregado en este TASK) como fallback razonable para `actorAddress`, pero no existe un fallback equivalente para `tokenId`: la fila de actividad para un offer cancelado queda con `tokenId: null`.
+
+No bloqueante — el resto de la fila (actor, txHash, timestamp) es correcta y completa; solo el campo `tokenId` queda vacío para este único tipo de evento. Documentado también como limitación explícita en el doc comment de `planWrite`.
+
+**Posible resolución en:** sin asignar todavía — requeriría cambiar la firma de `OfferCancelled` en `Marketplace.sol` para incluir `tokenId` (rompe el ABI ya usado por TASK-19/20/21), algo que solo tiene sentido decidir antes de TASK-31 (deploy real, donde el ABI recién se vuelve inmutable de verdad). Candidato para revisar junto con TASK-31.
+
+---
+
+## Issue #9 — El indexer (TASK-24) no llena la tabla `collection` ni escucha `CollectionCreated`
+
+**Origen:** TASK-24 (Indexer), decisión de alcance tomada dentro de la propia TASK, documentada en el header de `db/migrations/0003_indexer_mirror.sql`, y elevada acá para que quede visible fuera de un comentario SQL.
+
+`docs/spec/09-data-model.md` incluye `collection` entre las tablas espejo del indexer. `NFFC_Development_Plan.md` (TASK-24) enumera explícitamente los eventos a indexar — Transfer, Mint (+composición), listing, sale, offer — y no incluye `CollectionCreated` (TASK-10) en esa lista. Se decidió, dentro de esta TASK, no indexar `collection` ni escuchar `CollectionCreated`, ya que hacerlo abre preguntas propias sin resolver (¿de dónde sale el nombre/creador de una colección para el mirror — del evento, o de una llamada de lectura aparte a `Collection.sol`?) mejor señalizadas que resueltas u omitidas en silencio.
+
+Efecto concreto: nada en el pipeline actual (indexer, NAV materializer, ninguna TASK de UI) llena `collection` — cualquier consumidor futuro que espere esa tabla poblada (p. ej. una vista "por colección") no va a encontrar filas.
+
+No bloqueante para TASK-24 tal como está definida en el Development Plan. No hay ninguna TASK futura nombrada explícitamente responsable de esto.
+
+**Posible resolución en:** sin asignar todavía — candidato para una TASK dedicada (o una extensión explícita de un TASK-24-bis) que decida la fuente de verdad de `collection` y la indexe.

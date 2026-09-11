@@ -10,6 +10,10 @@ export interface LogEvent {
   readonly blockNumber: bigint;
   readonly logIndex: number;
   readonly transactionHash: string;
+  /** The transaction's sender — some events (e.g. `OfferCancelled`, which
+   *  carries only an `offerId`) don't name an actor in their own args at
+   *  all; this is the fallback every event has. */
+  readonly transactionSender: Address;
   /** Decoded name, e.g. `"Sale"`, `"NFFCMinted"`. */
   readonly eventName: string;
   readonly args: Readonly<Record<string, unknown>>;

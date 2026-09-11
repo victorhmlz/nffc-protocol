@@ -15,6 +15,7 @@ export {
 } from "@infra/pricing/chainlink-price-oracle";
 export { createPostgresPriceStore } from "@infra/valuation/postgres-price-store";
 export { createPostgresNavStore } from "@infra/valuation/postgres-nav-store";
+export { createPostgresIndexerStore } from "@infra/indexer/postgres-indexer-store";
 export {
   DatabaseNotConfiguredError,
   closePool,

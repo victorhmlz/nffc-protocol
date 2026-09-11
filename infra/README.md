@@ -14,6 +14,7 @@ import `domain/`, `config/`; may **not** import `src/`, `adapters/`, `workers/`,
 | `health.ts` | `checkHealth()` — per-dependency readiness snapshot; probes never throw. | TASK-04 |
 | `pricing/chainlink-price-oracle.ts` | `ChainlinkPriceOracle implements PriceOracle` (`@domain/ports`) — reads each representation's oracle metadata from `RepresentationRegistry` + the standard Chainlink `AggregatorV3Interface.latestRoundData()`; no asset-class branch (`docs/price-engine.md`). | TASK-22 |
 | `valuation/postgres-price-store.ts`, `valuation/postgres-nav-store.ts` | `PriceStore` / `NavStore` (`@domain/ports`) over the `price_point` / `nav_point` tables (`db/migrations/0002_price_nav.sql`) — thin, untested glue, like `db/pool.ts` itself (`docs/valuation.md`). | TASK-23 |
+| `indexer/postgres-indexer-store.ts` | `IndexerStore` (`@domain/ports`) over the `nffc` / `nffc_component` / `listing` / `offer` / `activity` mirror tables (`db/migrations/0003_indexer_mirror.sql`) — thin, untested glue, same boundary as the `valuation/postgres-*` stores (`docs/indexer.md`). | TASK-24 |
 
 Consumed by Route Handlers (`src/app/api/*`), Server Component data functions, and workers — always
 at a composition root, never from `domain/`.

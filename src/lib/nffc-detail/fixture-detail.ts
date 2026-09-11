@@ -77,6 +77,7 @@ function buildOne(item: (typeof FIXTURE_LISTINGS)[number], index: number): NffcD
     {
       id: `${item.tokenId}-mint`,
       kind: "MINT",
+      tokenId: item.tokenId,
       actorAddress: item.creatorAddress,
       counterpartyAddress: null,
       amountWei: null,
@@ -89,6 +90,7 @@ function buildOne(item: (typeof FIXTURE_LISTINGS)[number], index: number): NffcD
     activity.push({
       id: `${item.tokenId}-transfer`,
       kind: "TRANSFER",
+      tokenId: item.tokenId,
       actorAddress: item.creatorAddress,
       counterpartyAddress: item.ownerAddress,
       amountWei: null,
@@ -101,6 +103,7 @@ function buildOne(item: (typeof FIXTURE_LISTINGS)[number], index: number): NffcD
     activity.push({
       id: `${item.tokenId}-listed`,
       kind: "LISTING_CREATED",
+      tokenId: item.tokenId,
       actorAddress: item.listing.sellerAddress,
       counterpartyAddress: null,
       amountWei: item.listing.priceWei,
