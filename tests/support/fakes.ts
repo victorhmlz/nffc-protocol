@@ -3,10 +3,12 @@
  * Import these in tests instead of touching a network, database, or wallet
  * (`docs/conventions.md` §4).
  */
-import type { ChainReader, ContractCall, PriceOracle } from "@domain/ports";
+import type { ChainReader, ContractCall, NavStore, PriceOracle, PriceStore } from "@domain/ports";
 import type { ChainId, RepresentationId } from "@domain/registry/types";
+import type { TokenId } from "@domain/nffc/composition";
 import type { UnixMillis } from "@domain/shared/branded";
 import type { NormalizedPrice } from "@domain/pricing/types";
+import type { NavPoint, ReferenceNav } from "@domain/valuation/types";
 import type { Logger } from "@infra/logging/logger";
 
 export class FakeClock {
@@ -70,6 +72,50 @@ export function createStaticPriceOracle(
         representationIds.map(async (id) => [id, await this.getPrice(id)] as const),
       );
       return new Map(entries);
+    },
+  };
+}
+
+/** In-memory `PriceStore` — records observations, no real database
+ *  (`domain/ports/price-store.ts`, TASK-23). */
+export function createInMemoryPriceStore(): PriceStore & { records: NormalizedPrice[] } {
+  const records: NormalizedPrice[] = [];
+  return {
+    records,
+    async record(price) {
+      const exists = records.some(
+        (p) => p.representationId === price.representationId && p.observedAt === price.observedAt && p.source === price.source,
+      );
+      if (!exists) records.push(price);
+    },
+    async getLatest(representationId) {
+      const forRep = records.filter((p) => p.representationId === representationId);
+      if (forRep.length === 0) return null;
+      return forRep.reduce((latest, p) => (p.observedAt > latest.observedAt ? p : latest));
+    },
+    async getHistory(representationId, sinceUnixSeconds) {
+      return records
+        .filter((p) => p.representationId === representationId && p.observedAt >= sinceUnixSeconds)
+        .sort((a, b) => a.observedAt - b.observedAt);
+    },
+  };
+}
+
+/** In-memory `NavStore` — records Reference NAV points, no real database
+ *  (`domain/ports/nav-store.ts`, TASK-23). */
+export function createInMemoryNavStore(): NavStore & { records: ReferenceNav[] } {
+  const records: ReferenceNav[] = [];
+  return {
+    records,
+    async record(nav) {
+      const exists = records.some((n) => n.tokenId === nav.tokenId && n.computedAt === nav.computedAt);
+      if (!exists) records.push(nav);
+    },
+    async getHistory(tokenId: TokenId, sinceUnixSeconds: number): Promise<readonly NavPoint[]> {
+      return records
+        .filter((n) => n.tokenId === tokenId && n.computedAt >= sinceUnixSeconds)
+        .sort((a, b) => a.computedAt - b.computedAt)
+        .map((n) => ({ tokenId: n.tokenId, value: n.value, at: n.computedAt, degraded: n.degraded }));
     },
   };
 }

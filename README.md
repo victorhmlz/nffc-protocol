@@ -18,27 +18,27 @@ supported providers from V1.
 - Marketplace UI: [`docs/marketplace-ui.md`](docs/marketplace-ui.md) · live at `/market`
 - NFFC detail: [`docs/nffc-detail.md`](docs/nffc-detail.md) · live at `/nffc/[tokenId]`
 - Price engine: [`docs/price-engine.md`](docs/price-engine.md) — `ChainlinkPriceOracle` (TASK-22)
+- Reference NAV engine: [`docs/valuation.md`](docs/valuation.md) — NAV + performance windows (TASK-23)
 - Design system: [`docs/design-system.md`](docs/design-system.md) · live at `/style-guide`
 - Governance: `NFFC_Claude_Master_Prompt.md` (v2.4), `NFFC_Development_Plan.md` (v3.2),
   `NFFC_Whitepaper.md` (v1.1), `NFFC_Roadmap.md` (v1.1)
 - Per-task reports: [`docs/reports/`](docs/reports/)
 - Open issues log: [`docs/OPEN_ISSUES.md`](docs/OPEN_ISSUES.md) — live record of unresolved findings between TASKS
 
-> **Status: price engine (TASK-22).** Toolchain (TASK-01) → boundaries (TASK-02) → design system
-> (TASK-03) → infrastructure (TASK-04) → registries (TASK-05) → Robinhood + crypto adapters
+> **Status: Reference NAV engine (TASK-23).** Toolchain (TASK-01) → boundaries (TASK-02) → design
+> system (TASK-03) → infrastructure (TASK-04) → registries (TASK-05) → Robinhood + crypto adapters
 > (TASK-06/07) → composition segmentation (TASK-08) → NFFC ERC-721 core (TASK-09) → Collection
 > contract (TASK-10) → metadata split (TASK-11) → generative art (TASK-12) → mint-condition trait
 > (TASK-13) → static rarity (TASK-14) → dynamic NFFC UI (TASK-15) → wallet (TASK-16) → the 7-step
 > create wizard (TASK-17) → the mint flow wired end-to-end (TASK-18) → `Marketplace.sol` (TASK-19)
-> → `/market` explore/filter/sort/buy (TASK-20) → the NFFC detail page (TASK-21), and now
-> **`ChainlinkPriceOracle`**: a provider-agnostic price abstraction — the same engine, the same
-> code path, serves Stock Token and native-crypto prices with no per-asset-class branch (the
-> on-chain data it reads doesn't even carry that field), no price without a named oracle source and
-> a timestamp, and a second oracle provider is a second implementation of an already-fixed data
-> contract, proven by running one shared test suite against two independent implementations
-> (`docs/price-engine.md`). Not wired into any UI yet — Reference NAV composition over it is
-> TASK-23. The indexer (TASK-24), the NAV engine (TASK-23), and `Marketplace.sol`'s deployment
-> (TASK-31) are all still fixtures.
+> → `/market` explore/filter/sort/buy (TASK-20) → the NFFC detail page (TASK-21) → the price engine
+> (TASK-22), and now **`computeReferenceNav` / `computePerformanceWindows`**: `Reference NAV =
+> Σ(weight × normalizedPrice)`, persisted history (`price_point` / `nav_point`,
+> `db/migrations/0002_price_nav.sql`) reproducible from the stored oracle prices, and performance
+> windows in the exact shape TASK-15's UI already renders — orchestrated by
+> `workers/nav-materializer/`, whose logic is complete and fully tested even though it has nothing
+> to run against yet (no deployed registry, no token source) (`docs/valuation.md`). The indexer
+> (TASK-24) and `Marketplace.sol`'s deployment (TASK-31) are still fixtures.
 
 ## Stack
 

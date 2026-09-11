@@ -15,6 +15,8 @@ export * from "@domain/art/art";
 export * from "@domain/mint-condition/mint-condition";
 export * from "@domain/pricing/types";
 export * from "@domain/valuation/types";
+export * from "@domain/valuation/compute-reference-nav";
+export * from "@domain/valuation/compute-performance";
 export * from "@domain/rarity/types";
 export * from "@domain/rarity/rarity";
 export * from "@domain/marketplace/listings";
