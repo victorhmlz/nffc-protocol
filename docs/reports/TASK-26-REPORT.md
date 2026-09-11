@@ -7,8 +7,7 @@ COMPLETED
 `pnpm verify` (lint · typecheck · test · build) green locally — **76 files, 415 tests** (385 → +30).
 `pnpm contracts:build` / `pnpm contracts:test` unchanged — **172 Solidity tests** (TASK-26 touches
 no `.sol`). `/activity` smoke-tested live via `pnpm dev`, both unfiltered and with a `?tokenId=`
-filter — see BUILD. PR not yet opened at time of writing this section — see PULL REQUEST for the
-final link.
+filter — see BUILD. Both CI jobs on PR #32 pass — run `34637625394`. See PULL REQUEST.
 
 ## OBJECTIVE
 
@@ -181,8 +180,8 @@ per request (`unstable_cache`, `revalidate: 300`).
 
 Branch `task/TASK-26-activity`, based on **`main`** (TASK-00…25).
 
-**PR: (to be filled in once opened)**
-**CI: (to be filled in once green)**
+**PR: https://github.com/victorhmlz/nffc-protocol/pull/32** — base `main`.
+**CI: https://github.com/victorhmlz/nffc-protocol/actions/runs/34637625394 — success** — both jobs.
 
 **Do not merge** — Project Lead reviews and authorizes.
 
