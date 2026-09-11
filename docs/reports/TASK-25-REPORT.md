@@ -6,8 +6,8 @@ COMPLETED
 
 `pnpm verify` (lint · typecheck · test · build) green locally — **73 files, 385 tests** (352 → +33).
 `pnpm contracts:build` / `pnpm contracts:test` unchanged — **172 Solidity tests** (TASK-25 touches
-no `.sol`). `/portfolio` smoke-tested live via `pnpm dev` — `GET /portfolio` → `200`, renders. PR
-not yet opened at time of writing this section — see PULL REQUEST for the final link.
+no `.sol`). `/portfolio` smoke-tested live via `pnpm dev` — `GET /portfolio` → `200`, renders. Both
+CI jobs on PR #31 pass — run `34634958041`. See PULL REQUEST.
 
 ## OBJECTIVE
 
@@ -230,8 +230,8 @@ of a wallet's holdings' snapshots in parallel (`Promise.all`), not serially.
 
 Branch `task/TASK-25-portfolio`, based on **`main`** (TASK-00…24).
 
-**PR: (to be filled in once opened)**
-**CI: (to be filled in once green)**
+**PR: https://github.com/victorhmlz/nffc-protocol/pull/31** — base `main`.
+**CI: https://github.com/victorhmlz/nffc-protocol/actions/runs/34634958041 — success** — both jobs.
 
 **Do not merge** — Project Lead reviews and authorizes.
 
