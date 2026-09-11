@@ -246,6 +246,7 @@ describe("dynamic layer", () => {
       tokenId: "7",
       referenceNav: null,
       components: [],
+      performance: [],
       asOf: 1_700_000_000,
       degraded: true,
       unavailableReason: "price engine not deployed",

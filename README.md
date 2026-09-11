@@ -16,13 +16,15 @@ supported providers from V1.
   `NFFC_Whitepaper.md` (v1.1), `NFFC_Roadmap.md` (v1.1)
 - Per-task reports: [`docs/reports/`](docs/reports/)
 
-> **Status: static rarity engine (TASK-14).** Toolchain (TASK-01) → boundaries (TASK-02) → design
-> system (TASK-03) → infrastructure (TASK-04) → registries (TASK-05) → Robinhood + crypto adapters
-> (TASK-06/07) → composition segmentation (TASK-08) → NFFC ERC-721 core (TASK-09) → Collection
-> contract (TASK-10) → metadata split (TASK-11) → generative art (TASK-12) → mint-condition trait
-> (TASK-13), and now `NFFC.getStaticRarity` / `StaticRarityLib` — structural birth rarity from
-> weight concentration + component count, on-chain, no oracle, mirrored bit-identically in
-> `domain/rarity` (`docs/static-rarity.md`). No product surfaces yet.
+> **Status: dynamic NFFC UI/data components (TASK-15).** Toolchain (TASK-01) → boundaries (TASK-02)
+> → design system (TASK-03) → infrastructure (TASK-04) → registries (TASK-05) → Robinhood + crypto
+> adapters (TASK-06/07) → composition segmentation (TASK-08) → NFFC ERC-721 core (TASK-09) →
+> Collection contract (TASK-10) → metadata split (TASK-11) → generative art (TASK-12) →
+> mint-condition trait (TASK-13) → static rarity (TASK-14), and now the display components —
+> `ReferenceNavStat` / `PerformanceWindows` / `NffcMarketPanel` / `CompositionTable` /
+> `StaticRarityStat` — every market number carries its oracle source and a visible age, with
+> explicit loading/stale/unavailable states, ready to wire into the Price/NAV Engines (TASK-22/23)
+> and the detail page (TASK-21). No product surfaces yet — `/style-guide` demos every state.
 
 ## Stack
 
