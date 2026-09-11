@@ -6,6 +6,8 @@ export type {
   LogEvent,
 } from "@domain/ports/event-source";
 export type { PriceOracle } from "@domain/ports/price-oracle";
+export type { PriceStore } from "@domain/ports/price-store";
+export type { NavStore } from "@domain/ports/nav-store";
 export type {
   ProviderAdapter,
   ProviderRepresentationRecord,

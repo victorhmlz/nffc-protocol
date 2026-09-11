@@ -18,7 +18,7 @@ Long-running / scheduled processes that run **outside** the Next.js request cycl
 | `robinhood-sync/index.ts` | Thin wrapper — `ROBINHOOD` provider, `RobinhoodAdapter` | TASK-06 |
 | `crypto-sync/index.ts` | Thin wrapper — `CRYPTO_NATIVE` provider, `CryptoAdapter` (a peer, same engine) | TASK-07 |
 | Blockchain indexer | Idempotent event indexing into PostgreSQL | TASK-24 |
-| NAV materialization | Normalize oracle prices, compute Reference NAV history | TASK-22 / TASK-23 |
+| `nav-materializer/` | Fetch prices (TASK-22) → persist → compute Reference NAV → persist (TASK-23); `materialize.ts`'s orchestrator is fully unit-tested, `index.ts` is thin and logs "not configured" until TASK-24 supplies a token source | TASK-23 |
 | Art rendering | Generative art from composition | TASK-12 |
 
 ## Convention
