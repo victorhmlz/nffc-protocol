@@ -6,7 +6,7 @@ COMPLETED
 
 `pnpm verify` (lint · typecheck · test · build) green locally — **38 files, 203 tests** (168 → +35).
 `pnpm contracts:build` / `pnpm contracts:test` green — **128 Solidity tests**, unchanged (no `.sol`
-touched). See PULL REQUEST for CI.
+touched). Both CI jobs on PR #20 pass — run `34585330330`. See PULL REQUEST.
 
 ## OBJECTIVE
 
@@ -197,6 +197,7 @@ synchronously by the caller.
 Branch `task/TASK-17-create-wizard`, based on **`main`** (TASK-00…16).
 
 **PR: https://github.com/victorhmlz/nffc-protocol/pull/20** — base `main`.
+**CI: https://github.com/victorhmlz/nffc-protocol/actions/runs/34585330330 — success** — both jobs.
 
 **Do not merge** — Project Lead reviews and authorizes.
 
