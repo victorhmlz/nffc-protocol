@@ -12,6 +12,7 @@ import {
   StaticRarityStat,
 } from "@/components/ui";
 import { BuyButton } from "@/components/market/buy-button";
+import { formatEth } from "@/lib/format-eth";
 
 const REGIME_LABEL: Record<IndexedNffcSummary["mintConditionRegime"], string> = {
   "at-highs": "Minted at highs",
@@ -19,15 +20,6 @@ const REGIME_LABEL: Record<IndexedNffcSummary["mintConditionRegime"], string> = 
   mid: "Minted mid-drawdown",
   "deep-drawdown": "Minted in deep drawdown",
 };
-
-/** `wei` decimal string → a short ETH display; not a price feed, just formatting. */
-function formatEth(weiDecimal: string): string {
-  const wei = BigInt(weiDecimal);
-  const whole = wei / 1_000_000_000_000_000_000n;
-  const fracRaw = wei % 1_000_000_000_000_000_000n;
-  const frac = fracRaw.toString().padStart(18, "0").slice(0, 3).replace(/0+$/, "");
-  return frac ? `${whole}.${frac} ETH` : `${whole} ETH`;
-}
 
 /**
  * One NFFC in the marketplace grid (TASK-20). Server-Component-compatible —
