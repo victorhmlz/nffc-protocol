@@ -6,7 +6,7 @@ COMPLETED
 
 `pnpm verify` (lint · typecheck · test · build) green locally — **59 files, 305 tests** (288 → +17).
 `pnpm contracts:build` / `pnpm contracts:test` unchanged — **172 Solidity tests** (TASK-22 touches
-no `.sol`). See PULL REQUEST for CI links once opened.
+no `.sol`). Both CI jobs on PR #27 pass — run `34612154512`. See PULL REQUEST.
 
 ## OBJECTIVE
 
@@ -173,7 +173,8 @@ improvement, not attempted here (see KNOWN ISSUES).
 
 Branch `task/TASK-22-price-engine`, based on **`main`** (TASK-00…21).
 
-**PR:** to be opened against `main` — link recorded here once created.
+**PR: https://github.com/victorhmlz/nffc-protocol/pull/27** — base `main`.
+**CI: https://github.com/victorhmlz/nffc-protocol/actions/runs/34612154512 — success** — both jobs.
 
 **Do not merge** — Project Lead reviews and authorizes.
 
