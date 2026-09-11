@@ -11,26 +11,27 @@ supported providers from V1.
 - Generative art algorithm: [`docs/art-algorithm.md`](docs/art-algorithm.md)
 - Mint-condition trait: [`docs/mint-condition-trait.md`](docs/mint-condition-trait.md)
 - Static rarity: [`docs/static-rarity.md`](docs/static-rarity.md)
+- Wallet integration: [`docs/wallet-integration.md`](docs/wallet-integration.md)
 - Design system: [`docs/design-system.md`](docs/design-system.md) · live at `/style-guide`
 - Governance: `NFFC_Claude_Master_Prompt.md` (v2.1), `NFFC_Development_Plan.md` (v3.2),
   `NFFC_Whitepaper.md` (v1.1), `NFFC_Roadmap.md` (v1.1)
 - Per-task reports: [`docs/reports/`](docs/reports/)
 
-> **Status: dynamic NFFC UI/data components (TASK-15).** Toolchain (TASK-01) → boundaries (TASK-02)
-> → design system (TASK-03) → infrastructure (TASK-04) → registries (TASK-05) → Robinhood + crypto
-> adapters (TASK-06/07) → composition segmentation (TASK-08) → NFFC ERC-721 core (TASK-09) →
-> Collection contract (TASK-10) → metadata split (TASK-11) → generative art (TASK-12) →
-> mint-condition trait (TASK-13) → static rarity (TASK-14), and now the display components —
-> `ReferenceNavStat` / `PerformanceWindows` / `NffcMarketPanel` / `CompositionTable` /
-> `StaticRarityStat` — every market number carries its oracle source and a visible age, with
-> explicit loading/stale/unavailable states, ready to wire into the Price/NAV Engines (TASK-22/23)
-> and the detail page (TASK-21). No product surfaces yet — `/style-guide` demos every state.
+> **Status: wallet / self-custody (TASK-16).** Toolchain (TASK-01) → boundaries (TASK-02) → design
+> system (TASK-03) → infrastructure (TASK-04) → registries (TASK-05) → Robinhood + crypto adapters
+> (TASK-06/07) → composition segmentation (TASK-08) → NFFC ERC-721 core (TASK-09) → Collection
+> contract (TASK-10) → metadata split (TASK-11) → generative art (TASK-12) → mint-condition trait
+> (TASK-13) → static rarity (TASK-14) → dynamic NFFC UI (TASK-15), and now wallet connect — wagmi +
+> viem, self-custody only, automatic wrong-network detection with a switch to Robinhood Chain
+> (4663), and a transaction state machine that cannot skip a step
+> (`docs/wallet-integration.md`). No product surfaces yet — `/style-guide` demos every component.
 
 ## Stack
 
 |                 |                                                                                 |
 | --------------- | ------------------------------------------------------------------------------- |
 | Framework       | Next.js 16 (App Router), React 19, TypeScript `strict`                          |
+| Wallet          | wagmi + viem, self-custody only (TASK-16) — `docs/wallet-integration.md`        |
 | Styling         | Tailwind CSS v4 (tokens/components defined in TASK-03)                          |
 | Package manager | pnpm (via Corepack) — version pinned in `package.json` `packageManager`         |
 | Lint / format   | ESLint 9 (flat config, `eslint-config-next`, explicit `any` = error) + Prettier |

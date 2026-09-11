@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { ThemeToggle } from "@/components/theme/theme-toggle";
+import { ConnectWalletButton } from "@/components/wallet/connect-wallet-button";
+import { NetworkBanner } from "@/components/wallet/network-banner";
 import {
   Badge,
   Button,
@@ -528,6 +530,19 @@ export default function StyleGuidePage() {
             <StaticRarityStat score={0.4029} />
           </div>
         </div>
+      </Section>
+
+      <Section title="Wallet (self-custody — TASK-16)">
+        <p className="max-w-prose text-sm text-subtle-foreground">
+          Every configured connector is self-custody only — no exchange or
+          custodial option. Wrong-network detection is automatic, with a
+          one-click switch to Robinhood Chain (4663). See{" "}
+          <code>docs/wallet-integration.md</code>. These use the real app
+          connectors (no mock wallet is available outside tests), so connecting
+          needs a browser wallet extension.
+        </p>
+        <ConnectWalletButton />
+        <NetworkBanner />
       </Section>
     </Container>
   );
