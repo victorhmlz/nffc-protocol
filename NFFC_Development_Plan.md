@@ -1,7 +1,14 @@
 # NFFC Protocol — Plan de Desarrollo Detallado (Marketplace App)
 
-**Versión:** 3.2 — actualiza y reemplaza la sección `## TASKS` del `NFFC_Claude_Master_Prompt.md` original.
-**Vigente sin cambios:** Rol, Reglas absolutas, Protocolo de ejecución por TASK, Git/PR policy, Definition of Done y Comunicación del `NFFC_Claude_Master_Prompt.md` v2.1. Este documento solo redefine **qué** se construye y **en qué orden**.
+**Versión:** 3.4 — actualiza y reemplaza la sección `## TASKS` del `NFFC_Claude_Master_Prompt.md` original.
+**Vigente sin cambios:** Rol, Reglas absolutas, Protocolo de ejecución por TASK, Git/PR policy, Definition of Done y Comunicación del `NFFC_Claude_Master_Prompt.md` v2.4. Este documento solo redefine **qué** se construye y **en qué orden**.
+
+**Cambios de la v3.4 respecto a la v3.3:**
+- Agrega TASK-48 a TASK-52 (M1.5 — Capa Social: reputación 1–5 estrellas por rol, verificación de redes externas, comentarios por NFFC/colección, posts + feed general, herramientas de moderación) — ver `NFFC_Whitepaper.md` §18. Decisión del Project Lead; mensajería directa fue evaluada y descartada explícitamente (ver razonamiento en Whitepaper §18), no forma parte de ninguna TASK.
+- Actualiza "Cómo leer este plan": la descripción de M1.5 ahora menciona la capa social junto a rareza dinámica, estado del mercado y token nativo.
+
+**Cambios de la v3.3 respecto a la v3.2:**
+- "Cómo leer este plan" decía que las TASKS se agrupan en "tres milestones" pero a continuación listaba cuatro (M0, M1, M1.5, M2). Corregido a "cuatro milestones".
 
 **Cambios de la v3.2 respecto a la v3.1:**
 - Corregidas 4 referencias cruzadas a `NFFC_Whitepaper.md` que apuntaban a la numeración del artefacto HTML (§08, §06) en vez de a la numeración real del `.md` v1.1 (§14 riesgos, §16 características de los NFFC) — TASK-08, TASK-32, TASK-40, TASK-42.
@@ -19,17 +26,17 @@
 
 **Documentos relacionados:** Whitepaper (público) y Roadmap (público) — ambos publicados como referencia de producto y actualizados junto con este plan.
 
-**Protocolo de cada TASK (definido en el Master Prompt v2.1, no en este documento):** `INSPECT → PLAN → IMPLEMENT → TEST → AUDIT → PULL REQUEST → REPORT`. Ninguna TASK se declara `COMPLETED` si build, lint, typecheck o tests relevantes fallan. Cada TASK produce: cambios de código, tests, documentación afectada, un Pull Request contra `main` y `docs/reports/TASK-XX-REPORT.md`.
+**Protocolo de cada TASK (definido en el Master Prompt v2.2, no en este documento):** `INSPECT → PLAN → IMPLEMENT → TEST → AUDIT → PULL REQUEST → REPORT`. Ninguna TASK se declara `COMPLETED` si build, lint, typecheck o tests relevantes fallan. Cada TASK produce: cambios de código, tests, documentación afectada, un Pull Request contra `main` y `docs/reports/TASK-XX-REPORT.md`.
 
 ---
 
 ## Cómo leer este plan
 
-Las TASKS se agrupan en tres milestones que corresponden a las versiones del Roadmap público:
+Las TASKS se agrupan en cuatro milestones que corresponden a las versiones del Roadmap público:
 
 - **M0 — Fundamentos.** Especificación, inicialización del proyecto desde cero, arquitectura base, design system, infraestructura. Nada de esto es visible al usuario final.
 - **M1 — Núcleo del Protocolo y Marketplace (V1).** Todo lo necesario para mintear, valorar y comerciar un NFFC en Robinhood Chain — incluyendo, desde el día uno, la posibilidad de componer con criptomonedas nativas además de Stock Tokens. Este milestone es el criterio de lanzamiento de mainnet.
-- **M1.5 — Identidad y Utilidad.** Las capas que se agregan una vez que V1 tiene tracción real: rareza dinámica ganada con el tiempo, estado del mercado, token nativo.
+- **M1.5 — Identidad y Utilidad.** Las capas que se agregan una vez que V1 tiene tracción real: rareza dinámica ganada con el tiempo, estado del mercado, token nativo, y una capa social alrededor de los perfiles (reputación, feed, comentarios — sin mensajería directa, ver Whitepaper §18).
 - **M2 — Horizonte.** Investigación únicamente. Ninguna TASK de este bloque se implementa sin revisión legal previa.
 
 Cada TASK incluye: **Objetivo**, **Entregables**, **Depende de** y **Criterios de aceptación**.
@@ -631,6 +638,86 @@ Cada TASK incluye: **Objetivo**, **Entregables**, **Depende de** y **Criterios d
 **Objetivo:** Agregar subgraphs (Goldsky/Ormi u otro proveedor de indexación de Robinhood Chain) como redundancia y capa de analytics avanzado.
 
 **Depende de:** TASK-24.
+
+---
+
+### TASK-48 — Sistema de Reputación
+
+**Objetivo:** Calificación 1–5 estrellas por rol (creador/holder/trader), nunca una etiqueta acusatoria tipo "scammer" (ver Whitepaper §18 para el razonamiento). Persistida off-chain, nunca on-chain — a diferencia de la composición, una calificación debe poder corregirse.
+
+**Entregables:**
+- Esquema PostgreSQL para calificaciones, ligadas a una transacción verificable entre las dos partes (compra, venta, oferta aceptada) indexada por TASK-24
+- Cálculo de las etiquetas de rol (creador/holder/trader) derivado de actividad on-chain (mints, tenencia, volumen), no auto-declarado
+- Agregación del promedio de estrellas por perfil y por rol
+
+**Depende de:** TASK-19, TASK-24, TASK-27.
+
+**Criterios de aceptación:**
+- Una calificación solo puede dejarla una wallet con al menos una transacción verificable indexada contra la wallet calificada — ninguna calificación sin esa relación se acepta
+- Ninguna calificación se almacena on-chain
+- El protocolo nunca genera ni muestra una etiqueta acusatoria (ej. "scammer") — solo la calificación numérica y su agregado
+
+---
+
+### TASK-49 — Verificación de Redes Externas
+
+**Objetivo:** Permitir vincular redes sociales externas (X/Twitter u otras) al perfil, con prueba de propiedad — nunca un campo de texto libre sin verificar.
+
+**Entregables:**
+- Flujo de verificación (firma de un mensaje publicado en la red externa, u OAuth según la red)
+- Persistencia del vínculo verificado en el perfil (PostgreSQL)
+
+**Depende de:** TASK-27.
+
+**Criterios de aceptación:**
+- Ningún vínculo a una red externa se muestra en el perfil sin haber pasado por el flujo de verificación
+- Revocar o cambiar el vínculo requiere volver a verificar, nunca sobreescribe sin prueba
+
+---
+
+### TASK-50 — Comentarios (NFFC y Colección)
+
+**Objetivo:** Comentarios en la página de detalle de un NFFC (TASK-21) y en la página de una colección, con reporte y moderación integrados al panel de Admin existente (TASK-31) — no una superficie de moderación nueva y separada.
+
+**Entregables:**
+- Modelo de comentarios (PostgreSQL), asociado a `tokenId` o a `collectionId`
+- UI de comentario + reporte en ambas superficies
+- Cola de reportes visible y accionable desde Admin (TASK-31): ocultar, eliminar, o desestimar
+
+**Depende de:** TASK-21, TASK-31.
+
+**Criterios de aceptación:**
+- Todo comentario es reportable desde la propia UI, sin pasos adicionales
+- Un comentario reportado queda oculto solo tras acción administrativa — el reporte por sí solo no oculta nada automáticamente, para evitar abuso del propio sistema de reportes
+
+---
+
+### TASK-51 — Posts y Feed General
+
+**Objetivo:** Un usuario publica posts en su propio perfil; esos posts aparecen también en un feed general compartido, mezclados con los eventos de actividad que el protocolo ya genera (mint, venta, badge ganado — TASK-26/41). Sin mensajería directa: fuera de alcance en cualquier forma (Whitepaper §18).
+
+**Entregables:**
+- Modelo de posts (PostgreSQL), asociado al perfil del autor
+- Feed general: unión ordenada cronológicamente de posts + eventos de actividad indexados (TASK-24/26)
+- Reporte de posts, mismo mecanismo y misma cola de Admin que TASK-50
+
+**Depende de:** TASK-26, TASK-27, TASK-50.
+
+**Criterios de aceptación:**
+- El feed general nunca mezcla contenido no verificado como si fuera un evento on-chain — un post de usuario y un evento de actividad son visualmente distinguibles
+- Todo post es reportable con el mismo mecanismo que TASK-50
+
+---
+
+### TASK-52 — Herramientas de Moderación (extiende Admin)
+
+**Objetivo:** Extender el panel de Admin (TASK-31) con la cola de reportes de TASK-50/51, límites de tasa (rate limiting) para posts/comentarios, y bloqueo de usuario a nivel de wallet para publicar contenido nuevo (no para operar en el marketplace — eso nunca se restringe desde acá).
+
+**Depende de:** TASK-31, TASK-50, TASK-51.
+
+**Criterios de aceptación:**
+- Un bloqueo de publicación nunca impide comprar, vender, ni transferir — solo publicar posts/comentarios nuevos
+- Toda acción de moderación queda registrada con quién la tomó y cuándo, igual que el resto de las acciones administrativas sensibles (multisig, Whitepaper §10)
 
 ---
 

@@ -2,9 +2,13 @@
 
 ## Changelog
 
-**v1.1 (2026-09-09)** — parche de reconciliación con `NFFC_Development_Plan.md` v3.1 y `NFFC_Claude_Master_Prompt.md` v2.0. Numeración de Fases sin cambios.
+**v1.3 (2026-09-11)** — agrega Fase 35 (Capa Social, V1.5): reputación 1–5 estrellas, verificación de redes externas, comentarios, posts y feed general — ver `NFFC_Whitepaper.md` §18 y `NFFC_Development_Plan.md` TASK-48 a TASK-52. Mensajería directa fue evaluada y descartada explícitamente, no forma parte del roadmap. Es la primera fase de M1.5 con detalle propio en este documento (las fases 00–34 cubren V1; M1.5 hasta ahora solo se mencionaba a nivel conceptual en el Development Plan).
+
+**v1.2 (2026-09-09)** — corrige referencia de versión en la entrada v1.1 (decía "reconciliación con v3.1/v2.0"; los documentos vigentes al momento de este parche ya eran v3.2/v2.1). Renombra el título de Fase 01 (ver nota) en vez de solo agregar una nota redirigiendo. Sin otros cambios de contenido.
+
+**v1.1 (2026-09-09)** — parche de reconciliación con `NFFC_Development_Plan.md` v3.2 y `NFFC_Claude_Master_Prompt.md` v2.1. Numeración de Fases sin cambios.
 - Fase 05 → se agrega el Crypto Adapter (BTC, ETH vía Chainlink) como parte de la misma fase que el Robinhood Adapter, no de una fase posterior.
-- Regla de ejecución → se corrige el orden de STEP 6/7 para que coincida con el Master Prompt v2.0: `PULL REQUEST` reemplaza a `PATCH` como STEP 6 (ya no se generan `.patch` sueltos — el repositorio es real, en GitHub, y cada TASK entrega un Pull Request contra `main`).
+- Regla de ejecución → se corrige el orden de STEP 6/7 para que coincida con el Master Prompt v2.1: `PULL REQUEST` reemplaza a `PATCH` como STEP 6 (ya no se generan `.patch` sueltos — el repositorio es real, en GitHub, y cada TASK entrega un Pull Request contra `main`).
 - Regla de ejecución → se agrega `typecheck` a la lista de comprobaciones obligatorias (proyecto en TypeScript).
 
 **v1.0** — versión original.
@@ -26,21 +30,10 @@ Construir una DApp profesional para crear, explorar, valorar y comerciar NFFCs, 
 
 **Salida:** Product Specification.
 
-## Fase 01 — Auditoría del proyecto existente
+## Fase 01 — Auditoría del proyecto existente (o inicialización, si el repo arranca vacío)
 
-- Inspeccionar repositorio.
-- Stack.
-- dependencias.
-- estructura.
-- scripts.
-- lint/build.
-- deuda técnica.
-- seguridad.
-- compatibilidad con arquitectura objetivo.
-
-**Salida:** audit report + patch si procede.
-
-> Nota (v1.1): esta fase describe el caso general de un proyecto con historia previa. Para el arranque actual del repositorio (`github.com/victorhmlz/nffc-protocol`, vacío), la fase equivalente es la inicialización descrita en TASK-01 de `NFFC_Development_Plan.md` — no hay repositorio previo que auditar.
+- **Si hay historia previa:** inspeccionar repositorio, stack, dependencias, estructura, scripts, lint/build, deuda técnica, seguridad, compatibilidad con arquitectura objetivo. Salida: audit report + patch si procede.
+- **Si el repo arranca vacío** (caso actual de `github.com/victorhmlz/nffc-protocol`): bootstrap descrito en TASK-01 de `NFFC_Development_Plan.md` — no hay repositorio previo que auditar.
 
 ## Fase 02 — Arquitectura
 
@@ -386,6 +379,16 @@ No mainnet hasta completar:
 - backups;
 - emergency procedures;
 - legal review appropriate to launch scope.
+
+## Fase 35 — Capa Social (V1.5)
+
+- Perfiles con reputación 1–5 estrellas por rol (creador/holder/trader), off-chain, dejada solo por una contraparte con transacción verificable — nunca una etiqueta acusatoria tipo "scammer".
+- Verificación de redes sociales externas vinculadas al perfil (firma o OAuth, nunca texto libre sin probar).
+- Comentarios por NFFC y por colección.
+- Posts de usuario en su propio perfil, agregados a un feed general junto a los eventos de actividad ya existentes (mint, venta, badge).
+- Herramientas de moderación integradas al panel de Admin ya existente — sin superficie de moderación separada.
+
+**Explícitamente fuera de alcance, en cualquier versión:** mensajería directa (DM) entre usuarios. En una plataforma con activos financieros referenciados, un canal de DM nativo es el vector de phishing/ingeniería social más común en cripto; el riesgo no se mitiga moderando, se mitiga no construyendo el canal. Ver `NFFC_Whitepaper.md` §18 para el razonamiento completo.
 
 ## Regla de ejecución
 

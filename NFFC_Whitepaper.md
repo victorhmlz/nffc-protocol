@@ -2,11 +2,19 @@
 
 ## Changelog
 
-**v1.1 (2026-09-09)** — parche de reconciliación con `NFFC_Development_Plan.md` v3.1 y `NFFC_Claude_Master_Prompt.md` v2.0. Numeración de secciones 1–15 sin cambios; se agregan las secciones 16–17.
+**v1.4 (2026-09-11)** — agrega §18 Capa Social (V1.5): perfiles con reputación, feed general, posts y comentarios. Decisión del Project Lead tras evaluar y descartar explícitamente mensajería directa (DM) por el riesgo de phishing/scam dirigido en una plataforma con activos financieros referenciados — ver §18 para el razonamiento completo. Citada por TASK-48 a TASK-52 del Development Plan (nuevas, M1.5). Sin cambios a las secciones 1–17.
+
+**v1.3 (2026-09-09)** — corrige dos referencias cruzadas incorrectas detectadas en revisión de consistencia:
+- §16 Estado del Mercado → la cita "(ver TASK-40 del Development Plan)" era incorrecta: TASK-40 es el gate de mainnet de V1 (M1) y sus criterios de aceptación solo cubren los riesgos de §14; quien implementa Estado del Mercado es TASK-42 (M1.5), que ocurre después de TASK-40 según el propio diagrama de dependencias del Development Plan, y ya trae su propio criterio de revisión legal. Corregido a "(ver TASK-42 del Development Plan)".
+- Entrada de changelog v1.1 (más abajo) → el rango "citada por TASK-10 a TASK-14" era demasiado amplio: TASK-10 (Collection Contract) y TASK-11 (Metadata Architecture) no tienen relación con las cuatro características de §16. Corregido a "TASK-12 a TASK-14".
+
+**v1.2 (2026-09-09)** — corrige referencia de versión en la entrada v1.1 (decía "reconciliación con v3.1/v2.0"; los documentos vigentes al momento de este parche ya eran v3.2/v2.1). Sin cambios de contenido.
+
+**v1.1 (2026-09-09)** — parche de reconciliación con `NFFC_Development_Plan.md` v3.2 y `NFFC_Claude_Master_Prompt.md` v2.1. Numeración de secciones 1–15 sin cambios; se agregan las secciones 16–17.
 - §9 Arquitectura → Frontend: `JavaScript` reemplazado por `TypeScript` (modo `strict`).
 - §4 V1 → se agrega que las representaciones cripto-nativas están disponibles desde V1, no como extensión posterior.
 - §5 Agnosticismo de red → se aclara que el adapter de criptomonedas nativas se lanza **junto con** Robinhood en V1, no secuencialmente después.
-- Nueva §16 Características de los NFFC (arte generativo, doble eje de rareza, trait de condición de mercado al mint, Estado del Mercado) — citada por TASK-10 a TASK-14, TASK-41, TASK-42 del Development Plan.
+- Nueva §16 Características de los NFFC (arte generativo, doble eje de rareza, trait de condición de mercado al mint, Estado del Mercado) — citada por TASK-12 a TASK-14, TASK-41, TASK-42 del Development Plan.
 - Nueva §17 V1.5 — Token fungible nativo — citada por TASK-43, TASK-44 del Development Plan.
 
 **v1.0** — versión original.
@@ -241,7 +249,7 @@ Cuatro mecánicas distinguen a un NFFC de un collectible genérico o de un token
 
 **Condición de mercado al mint.** Cada NFFC queda marcado, de forma inmutable, con el estado del mercado en el instante del mint — por ejemplo, a qué distancia de máximos históricos operaba el conjunto ponderado. Es un hecho de mercado público registrado on-chain, no una promesa: documenta cuándo y en qué condiciones nació esa pieza.
 
-**Estado del Mercado.** Una vista agregada que ordena los NFFC en circulación por su Reference NAV relativo desde el mint. Es información de mercado pública presentada de forma legible — no una promoción de rendimiento de inversión. El copy y la UI de esta característica se revisan junto con asesoría legal antes de publicarse (ver TASK-40 del Development Plan).
+**Estado del Mercado.** Una vista agregada que ordena los NFFC en circulación por su Reference NAV relativo desde el mint. Es información de mercado pública presentada de forma legible — no una promoción de rendimiento de inversión. El copy y la UI de esta característica se revisan junto con asesoría legal antes de publicarse (ver TASK-42 del Development Plan).
 
 ## 17. V1.5 — Token fungible nativo
 
@@ -253,3 +261,19 @@ Una vez que el protocolo tiene mercado secundario real y una base de holders act
 - **Elegibilidad para programas futuros** — cualquier mecanismo de reparto de ingresos queda supeditado a la estructura legal que resulte de la revisión regulatoria; no se anuncia ni se implementa antes de esa validación.
 
 El token no se lanza en V1. Su emisión, oferta y mecánica exacta se especifican como TASK-43 una vez validado el modelo de negocio de V1 con datos de uso reales.
+
+## 18. V1.5 — Capa Social
+
+Una vez que el protocolo tiene mercado secundario real, V1.5 agrega una capa social alrededor de los perfiles de creador/coleccionista ya existentes (§ Profile, TASK-27). El objetivo es dar contexto social a las decisiones financieras que ya ocurren en el protocolo — con quién se está comerciando, qué tan confiable es un creador — sin convertir NFFC Protocol en una red social genérica ni introducir un vector de mensajería privada.
+
+**Mensajería directa queda explícitamente fuera de alcance, en cualquier versión.** No es una omisión temporal: en una plataforma donde los usuarios poseen activos financieros referenciados por lo que tienen, un canal de DM nativo es el vector de phishing/ingeniería social más común en cripto (falso soporte, falso comprador, falso protocolo, dirigiendo a la víctima a firmar algo o enviar fondos). El riesgo no se resuelve con moderación — se resuelve no construyendo el canal. Cualquier conversación entre usuarios ocurre fuera del protocolo, en herramientas de terceros con su propia moderación.
+
+**Perfiles con redes externas verificadas.** Un usuario puede vincular redes sociales externas (X/Twitter u otras) a su perfil. El vínculo requiere prueba de propiedad de la cuenta externa (firma de un mensaje publicado ahí, u OAuth) — nunca un campo de texto libre sin verificar, porque un vínculo no verificado es un vector de suplantación, no una señal de reputación.
+
+**Reputación como calificación 1–5 estrellas, no como etiqueta acusatoria.** El protocolo no aplica etiquetas binarias tipo "scammer" — es una forma de calificación con alto riesgo de difamación si se aplica mal. En su lugar, cada usuario acumula una calificación de 1 a 5 estrellas por rol (creador, holder, trader), dejada únicamente por una contraparte con la que tuvo una transacción verificable en el marketplace del protocolo (compra, venta, oferta aceptada) — nunca por un desconocido sin interacción registrada, para no habilitar brigading. Un creador con calificación baja simplemente no vende: el mercado lo penaliza sin que el protocolo tenga que acusarlo de nada. Las etiquetas de rol (creador/holder/trader) se derivan de actividad on-chain — mints realizados, tenencia, volumen operado — no son auto-declaradas.
+
+**La reputación vive en PostgreSQL, nunca on-chain.** A diferencia de la composición de un NFFC — un hecho financiero que se congela deliberadamente en el mint — una calificación tiene que poder corregirse. El protocolo nunca trata una reputación como verdad inmutable; es índice/cache igual que el resto de los datos dinámicos (§9 Arquitectura, Backend).
+
+**Feed general, posts y comentarios.** Los usuarios pueden publicar posts en su propio perfil, que aparecen también en un feed general compartido; y comentar tanto NFFCs individuales como colecciones. El feed general mezcla estos posts con los eventos de actividad que el protocolo ya genera (mint, venta, badge de desempeño ganado). Todo contenido publicado por usuarios (posts, comentarios) pasa por las mismas herramientas de reporte y revisión administrativa que el resto del panel de Admin (§ Admin, TASK-31) — no hay una superficie de moderación nueva y separada, se extiende la existente.
+
+Esta capa social no otorga ningún derecho económico ni cambia la valoración de referencia de ningún NFFC — es exclusivamente contexto reputacional y de descubrimiento.
