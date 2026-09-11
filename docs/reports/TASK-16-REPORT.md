@@ -202,7 +202,7 @@ STEP 5 AUDIT (`docs/spec/08-security-principles.md`):
 
 Branch `task/TASK-16-wallet`, based on **`main`** (TASK-00…15).
 
-**PR: <!-- filled in after push -->**
+**PR: https://github.com/victorhmlz/nffc-protocol/pull/19** — base `main`.
 
 **Do not merge** — Project Lead reviews and authorizes.
 
