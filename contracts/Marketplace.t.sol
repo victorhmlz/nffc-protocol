@@ -288,6 +288,26 @@ contract MarketplaceTest is Test {
         assertEq(nffc.ownerOf(tokenId), bob);
     }
 
+    /// TASK-32 hardening: property version of `test_buy_underpay_reverts` /
+    /// `test_buy_overpay_reverts` — for any listed price and any mismatched
+    /// `msg.value` at all, `buy` reverts and the listing stays active (no
+    /// partial-payment path, no rounding tolerance).
+    function testFuzz_buy_priceMismatch_reverts(uint96 priceRaw, uint96 sentRaw) public {
+        uint256 price = bound(priceRaw, 1, 1000 ether);
+        uint256 sent = bound(sentRaw, 0, 1000 ether);
+        vm.assume(sent != price);
+
+        uint256 tokenId = _mint(alice, 0);
+        _listAndApprove(alice, tokenId, price);
+
+        vm.deal(bob, sent);
+        vm.prank(bob);
+        vm.expectRevert(abi.encodeWithSelector(IMarketplace.PriceMismatch.selector, sent, price));
+        mkt.buy{value: sent}(tokenId);
+
+        assertTrue(mkt.getListing(tokenId).active);
+    }
+
     function test_buy_underpay_reverts() public {
         uint256 tokenId = _mint(alice, 0);
         _listAndApprove(alice, tokenId, 1 ether);
@@ -488,6 +508,22 @@ contract MarketplaceTest is Test {
         assertTrue(mkt.getOffer(offerId).active);
     }
 
+    /// TASK-32 hardening: the fixed-caller version above (`test_cancelOffer_
+    /// byNonBuyer_reverts`, always `carol`) proves the gate works for one
+    /// address; this proves it for every address that isn't the offer's buyer.
+    function testFuzz_cancelOffer_onlyBuyer(address caller) public {
+        uint256 tokenId = _mint(alice, 0);
+        vm.deal(bob, 1 ether);
+        vm.prank(bob);
+        uint256 offerId = mkt.createOffer{value: 1 ether}(tokenId, uint64(block.timestamp + 1 days));
+        vm.assume(caller != bob);
+
+        vm.prank(caller);
+        vm.expectRevert(abi.encodeWithSelector(Marketplace.NotOfferBuyer.selector, offerId, caller));
+        mkt.cancelOffer(offerId);
+        assertTrue(mkt.getOffer(offerId).active);
+    }
+
     function test_cancelOffer_notActive_reverts() public {
         vm.prank(bob);
         vm.expectRevert(abi.encodeWithSelector(IMarketplace.OfferNotActive.selector, 1));
@@ -550,6 +586,49 @@ contract MarketplaceTest is Test {
         vm.prank(carol); // not the token owner
         vm.expectRevert(abi.encodeWithSelector(IMarketplace.NotTokenOwner.selector, tokenId, carol));
         mkt.acceptOffer(offerId);
+    }
+
+    /// TASK-32 hardening: the fixed-caller version above (`test_acceptOffer_
+    /// notOwner_reverts`, always `carol`) proves the gate works for one address;
+    /// this proves it for every address that isn't the token's current owner.
+    function testFuzz_acceptOffer_onlyCurrentOwner(address caller) public {
+        uint256 tokenId = _mint(alice, 0);
+        vm.assume(caller != alice);
+        vm.deal(bob, 1 ether);
+        vm.prank(bob);
+        uint256 offerId = mkt.createOffer{value: 1 ether}(tokenId, uint64(block.timestamp + 1 days));
+
+        vm.prank(caller);
+        vm.expectRevert(abi.encodeWithSelector(IMarketplace.NotTokenOwner.selector, tokenId, caller));
+        mkt.acceptOffer(offerId);
+    }
+
+    /// TASK-32 hardening: property version of `test_acceptOffer_expired_reverts`
+    /// / `test_acceptOffer_atExpiryTimestamp_stillAcceptable` — for any expiry
+    /// and any current time, acceptance succeeds iff `now <= expiry` (TASK-29
+    /// acceptance: strict, inclusive of the exact deadline).
+    function testFuzz_acceptOffer_expiryBoundary(uint64 expiryOffset, uint64 warpOffset) public {
+        expiryOffset = uint64(bound(expiryOffset, 0, 365 days));
+        warpOffset = uint64(bound(warpOffset, 0, 365 days));
+        uint256 tokenId = _mint(alice, 0);
+        uint64 expiry = uint64(block.timestamp) + expiryOffset;
+        vm.deal(bob, 1 ether);
+        vm.prank(bob);
+        uint256 offerId = mkt.createOffer{value: 1 ether}(tokenId, expiry);
+
+        vm.warp(uint64(block.timestamp) + warpOffset);
+        vm.prank(alice);
+        nffc.approve(address(mkt), tokenId);
+
+        if (block.timestamp > expiry) {
+            vm.prank(alice);
+            vm.expectRevert(abi.encodeWithSelector(IMarketplace.OfferExpired.selector, offerId, expiry));
+            mkt.acceptOffer(offerId);
+        } else {
+            vm.prank(alice);
+            mkt.acceptOffer(offerId); // does not revert
+            assertEq(nffc.ownerOf(tokenId), bob);
+        }
     }
 
     /// Acceptance: an expired offer is not acceptable on-chain even if the caller
@@ -660,6 +739,16 @@ contract MarketplaceTest is Test {
         bytes32 role = mkt.PAUSER_ROLE();
         vm.prank(bob);
         vm.expectRevert(abi.encodeWithSelector(IAccessControl.AccessControlUnauthorizedAccount.selector, bob, role));
+        mkt.pause();
+    }
+
+    /// TASK-32 hardening — see `NFFC.t.sol`'s `testFuzz_pause_onlyPauser` for
+    /// the same property on the mint path.
+    function testFuzz_pause_onlyPauser(address caller) public {
+        vm.assume(caller != admin);
+        bytes32 role = mkt.PAUSER_ROLE();
+        vm.prank(caller);
+        vm.expectRevert(abi.encodeWithSelector(IAccessControl.AccessControlUnauthorizedAccount.selector, caller, role));
         mkt.pause();
     }
 

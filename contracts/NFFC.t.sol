@@ -448,6 +448,18 @@ contract NFFCTest is Test {
         nffc.pause();
     }
 
+    /// TASK-32 hardening: the fixed-caller version above (`bob`) proves the role
+    /// gate works for one address; this proves it for every address that isn't
+    /// `admin` (the only account granted `PAUSER_ROLE` in `setUp`) — no forgotten
+    /// allowlisted caller can pause minting.
+    function testFuzz_pause_onlyPauser(address caller) public {
+        vm.assume(caller != admin);
+        bytes32 role = nffc.PAUSER_ROLE();
+        vm.prank(caller);
+        vm.expectRevert(abi.encodeWithSelector(IAccessControl.AccessControlUnauthorizedAccount.selector, caller, role));
+        nffc.pause();
+    }
+
     // ----------------------------------------------------------- construction ---
 
     function test_constructor_rejectsZeroAdmin() public {
@@ -507,5 +519,35 @@ contract NFFCTest is Test {
 
         assertEq(nffc.getComposition(id).length, k);
         assertEq(nffc.getSegment(id), CRYPTO_ONLY);
+    }
+
+    /// TASK-32 hardening: I2 ("weights sum to exactly 10_000") over the whole
+    /// two-component input space, not just valid sums — `testFuzz_mint_
+    /// twoComponentWeights` above only ever fuzzes `w1` with `w2` derived to
+    /// make the sum valid; this fuzzes both weights independently and asserts
+    /// every non-10_000 sum reverts.
+    function testFuzz_mint_weightSumMismatch_reverts(uint16 w1, uint16 w2) public {
+        w1 = uint16(bound(w1, 1, BPS_TOTAL - 1));
+        w2 = uint16(bound(w2, 1, BPS_TOTAL - 1));
+        vm.assume(uint256(w1) + uint256(w2) != BPS_TOTAL);
+
+        vm.prank(alice);
+        vm.expectRevert(abi.encodeWithSelector(INFFC.WeightSumNot10000.selector, uint256(w1) + uint256(w2)));
+        nffc.mint(_params(0, _arr(_c(nvda, nvdaRep, w1), _c(btc, btcRep, w2))));
+    }
+
+    /// TASK-32 hardening: `test_mint_underpay_reverts`/`test_mint_overpay_reverts`
+    /// each check exactly one off-by-one case; this asserts the property for any
+    /// mismatched `msg.value` at all — mint never silently accepts the wrong fee.
+    function testFuzz_mint_feeMismatch_reverts(uint256 sentValue) public {
+        fees.setCurve(0.01 ether, 0.005 ether);
+        uint256 required = nffc.quoteMintFee(1);
+        sentValue = bound(sentValue, 0, 10 ether);
+        vm.assume(sentValue != required);
+
+        vm.deal(alice, sentValue);
+        vm.prank(alice);
+        vm.expectRevert(abi.encodeWithSelector(INFFC.MintFeeNotMet.selector, sentValue, required));
+        nffc.mint{value: sentValue}(_params(0, _arr(_c(nvda, nvdaRep, BPS_TOTAL))));
     }
 }
