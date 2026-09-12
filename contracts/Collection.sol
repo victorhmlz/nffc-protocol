@@ -97,7 +97,8 @@ contract Collection is ICollection, AccessControl, Pausable, ReentrancyGuard {
         return _metadataURI[collectionId];
     }
 
-    function collectionExists(uint256 collectionId) external view returns (bool) {
+    /// @inheritdoc ICollection
+    function collectionExists(uint256 collectionId) external view override returns (bool) {
         return _owner[collectionId] != address(0);
     }
 

@@ -2,8 +2,9 @@
 
 `Marketplace.sol` — list, cancel, buy, and offer on NFFCs (`docs/spec/04-contract-interfaces.md`
 §6, `IMarketplace`). Depends on TASK-09 (`NFFC.sol`); reads fees and royalties from `IFeeConfig`
-(TASK-10's interface, TASK-30's future implementation — `MockFeeConfig` stands in until then) and
-resolves royalty recipients via `ICollection` (TASK-10, already merged).
+(TASK-10's interface, `FeeConfig.sol`'s concrete implementation is TASK-30 — this contract's own
+tests still use `MockFeeConfig`, unaffected by that) and resolves royalty recipients via
+`ICollection` (TASK-10, already merged).
 
 ## Acceptance criteria (`NFFC_Development_Plan.md` v3.2)
 
@@ -49,16 +50,17 @@ royalty → seller proceeds, each an independent `.call`, each required to succe
 call) fails the whole settlement rather than silently dropping funds.
 
 **Buyer pays exactly the listing/offer price; fee and royalty come out of the seller's proceeds.**
-`docs/spec/06-fee-model.md` §1 leaves the marketplace-fee buyer/seller split `// OPEN`, a TASK-30
-decision — this is TASK-19's provisional choice, kept because it makes `buy`/`acceptOffer` a
-single-amount call the UI can preview exactly (`price`), with no separate "plus fee" line the buyer
-has to compute. Revisiting the split is TASK-30 scope, not a `Marketplace.sol` change.
+TASK-19's provisional choice — kept because it makes `buy`/`acceptOffer` a single-amount call the
+UI can preview exactly (`price`), with no separate "plus fee" line the buyer has to compute —
+**is now TASK-30's ratified decision** (`docs/spec/06-fee-model.md` §3, `docs/fee-engine.md`): no
+change needed to this already-working, already-tested settlement math.
 
-**V1 enforces royalties on this native marketplace only** (`docs/spec/06-fee-model.md` §3's
-TASK-19/TASK-30 decision) — external venues are not assumed to honor them, and this contract
-advertises nothing via EIP-2981. The royalty recipient is the collection's creator
-(`ICollection.ownerOfCollection`), resolved only when `royaltyBps(collectionId) != 0` — see
-`docs/OPEN_ISSUES.md` Issue #3 for the edge case this leaves open.
+**V1 enforces royalties on this native marketplace only** (`docs/spec/06-fee-model.md` §3, ratified
+TASK-30) — external venues are not assumed to honor them, and this contract advertises nothing via
+EIP-2981. The royalty recipient is the collection's creator (`ICollection.ownerOfCollection`),
+resolved only when `royaltyBps(collectionId) != 0` — `FeeConfig.setRoyaltyBps` (TASK-30) now
+requires the collection to actually exist before accepting a nonzero royalty for it, closing the
+edge case `docs/OPEN_ISSUES.md`'s former Issue #3 described; see `docs/fee-engine.md`.
 
 ## `getCollectionId` — the one addition to `INFFC` (TASK-09's interface)
 
@@ -72,5 +74,7 @@ themselves use for `IFeeConfig`.
 ## What's still a fixture
 
 `Marketplace.t.sol` uses `MockFeeConfig` (the same test double from TASK-10) for
-`marketplaceFeeBps` / `royaltyBps` / `feeRecipient` — `FeeConfig.sol` itself is TASK-30. There is no
-deployed address for any of this yet (TASK-31).
+`marketplaceFeeBps` / `royaltyBps` / `feeRecipient` — a deliberate, unchanged test-only choice, not
+a gap: `FeeConfig.sol` (TASK-30, `docs/fee-engine.md`) is the concrete implementation the real
+deployment uses, but `Marketplace.t.sol` doesn't need to switch to it for its own coverage. There
+is no deployed address for any of this yet (TASK-31).

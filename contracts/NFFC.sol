@@ -10,6 +10,7 @@ import {ReentrancyGuard} from "@openzeppelin/contracts/utils/ReentrancyGuard.sol
 import {INFFC} from "./interfaces/INFFC.sol";
 import {IAssetIdentityRegistry} from "./interfaces/IAssetIdentityRegistry.sol";
 import {IRepresentationRegistry} from "./interfaces/IRepresentationRegistry.sol";
+import {IFeeConfig} from "./interfaces/IFeeConfig.sol";
 import {CompositionSegmentLib} from "./lib/CompositionSegmentLib.sol";
 import {StaticRarityLib} from "./lib/StaticRarityLib.sol";
 
@@ -26,9 +27,10 @@ import {StaticRarityLib} from "./lib/StaticRarityLib.sol";
  *   component's asset class via {CompositionSegmentLib}; the caller cannot pass it
  *   (docs/spec/05-adapter-architecture.md §2 sanctions asset-class use for
  *   segmentation only — it is not a per-provider branch and gates nothing).
- * - `mint` is `payable` because the mint fee is collected here
- *   (docs/spec/06-fee-model.md); routing lands with `IFeeConfig` (TASK-30). Until
- *   then it must be called with no value.
+ * - `mint` is `payable`: it collects the current on-chain mint fee, read from
+ *   `IFeeConfig` (TASK-30) and forwarded to `feeConfig.feeRecipient()` in the
+ *   same call (checks-effects-interactions; `nonReentrant`) — the exact
+ *   pattern `Collection.sol`'s creation fee already established.
  * - Static rarity is a TASK-14 hook (returns 0 here).
  * - Collection existence / ownership is validated in TASK-10; `collectionId` is
  *   only recorded here.
@@ -44,6 +46,7 @@ contract NFFC is INFFC, ERC721URIStorage, AccessControl, Pausable, ReentrancyGua
 
     IAssetIdentityRegistry public immutable assetRegistry;
     IRepresentationRegistry public immutable representationRegistry;
+    IFeeConfig public immutable feeConfig;
 
     uint256 private _nextTokenId = 1;
 
@@ -52,14 +55,18 @@ contract NFFC is INFFC, ERC721URIStorage, AccessControl, Pausable, ReentrancyGua
     mapping(uint256 tokenId => uint8) private _segment;
     mapping(uint256 tokenId => uint256) private _collectionId;
 
-    constructor(address admin, address assetRegistry_, address representationRegistry_)
+    constructor(address admin, address assetRegistry_, address representationRegistry_, address feeConfig_)
         ERC721("Non-Fungible Financial Collectible", "NFFC")
     {
-        if (admin == address(0) || assetRegistry_ == address(0) || representationRegistry_ == address(0)) {
+        if (
+            admin == address(0) || assetRegistry_ == address(0) || representationRegistry_ == address(0)
+                || feeConfig_ == address(0)
+        ) {
             revert ZeroAddress();
         }
         assetRegistry = IAssetIdentityRegistry(assetRegistry_);
         representationRegistry = IRepresentationRegistry(representationRegistry_);
+        feeConfig = IFeeConfig(feeConfig_);
         _grantRole(DEFAULT_ADMIN_ROLE, admin);
         _grantRole(PAUSER_ROLE, admin);
     }
@@ -75,11 +82,12 @@ contract NFFC is INFFC, ERC721URIStorage, AccessControl, Pausable, ReentrancyGua
         whenNotPaused
         returns (uint256 tokenId)
     {
-        if (msg.value != 0) revert UnexpectedPayment();
-
         Component[] calldata comps = params.components;
         uint256 n = comps.length;
         if (n == 0 || n > MAX_COMPONENTS) revert InvalidComponentCount(n); // I1
+
+        uint256 required = feeConfig.mintFee(uint16(n));
+        if (msg.value != required) revert MintFeeNotMet(msg.value, required);
 
         bool[] memory isCryptoNative = new bool[](n);
         uint256 sum;
@@ -128,7 +136,13 @@ contract NFFC is INFFC, ERC721URIStorage, AccessControl, Pausable, ReentrancyGua
         emit NFFCMinted(tokenId, params.collectionId, msg.sender, compositionHash, uint16(n)); // I8
         emit NFFCCompositionRecorded(tokenId, comps); // I8
 
-        // interactions last (CEI) — may invoke `onERC721Received` on the recipient.
+        // interactions last (CEI) — forwarding the fee and minting the token are
+        // both external calls; `nonReentrant` covers either being the reentrant
+        // surface, so their relative order doesn't matter for safety.
+        if (required != 0) {
+            (bool ok,) = feeConfig.feeRecipient().call{value: required}("");
+            if (!ok) revert FeeTransferFailed();
+        }
         _safeMint(msg.sender, tokenId);
     }
 
@@ -174,6 +188,11 @@ contract NFFC is INFFC, ERC721URIStorage, AccessControl, Pausable, ReentrancyGua
     function getCollectionId(uint256 tokenId) external view override returns (uint256) {
         _requireOwned(tokenId);
         return _collectionId[tokenId];
+    }
+
+    /// @inheritdoc INFFC
+    function quoteMintFee(uint16 componentCount) external view override returns (uint256) {
+        return feeConfig.mintFee(componentCount);
     }
 
     // --------------------------------------------------------------- pausing ---

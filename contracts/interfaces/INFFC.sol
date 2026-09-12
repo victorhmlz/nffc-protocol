@@ -47,9 +47,9 @@ interface INFFC {
     /// I7. Unreachable in this implementation — the composition has no mutator at
     /// all (see the note below); retained so the interface matches the spec surface.
     error CompositionIsImmutable();
-    /// The mint fee (docs/spec/06-fee-model.md) is routed via `IFeeConfig` (TASK-30);
-    /// until that exists, `mint` is payable but must be called with no value.
-    error UnexpectedPayment();
+    /// The mint fee (docs/spec/06-fee-model.md), routed via `IFeeConfig` (TASK-30).
+    error MintFeeNotMet(uint256 provided, uint256 required);
+    error FeeTransferFailed();
 
     function mint(MintParams calldata params) external payable returns (uint256 tokenId);
 
@@ -61,6 +61,10 @@ interface INFFC {
     /// that collection is enforced by `Collection.sol` (TASK-10), not here;
     /// `Marketplace.sol` (TASK-19) reads this to resolve the royalty recipient.
     function getCollectionId(uint256 tokenId) external view returns (uint256);
+    /// The current on-chain mint fee (TASK-30) for a composition of this size —
+    /// the exact amount `mint` requires as `msg.value`. Mirrors
+    /// `ICollection.quoteCollectionCreationFee`.
+    function quoteMintFee(uint16 componentCount) external view returns (uint256);
     // NOTE: there is intentionally NO setComposition / addComponent / reweight of
     // any kind, under any role. I7 is enforced structurally, not by a guard.
 }

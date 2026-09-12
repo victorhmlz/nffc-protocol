@@ -25,13 +25,14 @@ supported providers from V1.
 - Profiles: [`docs/profile.md`](docs/profile.md) · live at `/profile/[address]` (TASK-27)
 - Search: [`docs/search.md`](docs/search.md) · live at `/search` (TASK-28)
 - Offers: [`docs/offers.md`](docs/offers.md) — create/accept/cancel, on `/nffc/[tokenId]` (TASK-29)
+- Fee engine: [`docs/fee-engine.md`](docs/fee-engine.md) — `FeeConfig.sol`, the concrete `IFeeConfig` (TASK-30)
 - Design system: [`docs/design-system.md`](docs/design-system.md) · live at `/style-guide`
 - Governance: `NFFC_Claude_Master_Prompt.md` (v2.5), `NFFC_Development_Plan.md` (v3.4),
   `NFFC_Whitepaper.md` (v1.4), `NFFC_Roadmap.md` (v1.3)
 - Per-task reports: [`docs/reports/`](docs/reports/)
 - Open issues log: [`docs/OPEN_ISSUES.md`](docs/OPEN_ISSUES.md) — live record of unresolved findings between TASKS
 
-> **Status: Offers (TASK-29).** Toolchain (TASK-01) → boundaries (TASK-02) → design
+> **Status: Fee Engine (TASK-30).** Toolchain (TASK-01) → boundaries (TASK-02) → design
 > system (TASK-03) → infrastructure (TASK-04) → registries (TASK-05) → Robinhood + crypto adapters
 > (TASK-06/07) → composition segmentation (TASK-08) → NFFC ERC-721 core (TASK-09) → Collection
 > contract (TASK-10) → metadata split (TASK-11) → generative art (TASK-12) → mint-condition trait
@@ -40,15 +41,18 @@ supported providers from V1.
 > → `/market` explore/filter/sort/buy (TASK-20) → the NFFC detail page (TASK-21) → the price engine
 > (TASK-22) → the Reference NAV engine (TASK-23) → the blockchain indexer (TASK-24) →
 > `/portfolio` (TASK-25) → `/activity` (TASK-26) → `/profile/[address]` (TASK-27) → `/search`
-> (TASK-28), and now **offers**: `/nffc/[tokenId]` grows a real create/accept/cancel flow around
-> `Marketplace.sol`'s already-strict on-chain expiry enforcement (TASK-19) — this TASK verifies and
-> exposes that guarantee, it doesn't re-implement it. `useBuyFlow` (TASK-20) is now the generalized
-> `useMarketplaceActionFlow`, reused for all four marketplace writes rather than copied a fourth
-> time (`docs/offers.md`). `Marketplace.sol`'s deployment (TASK-31) is still the only thing standing
-> between every one of these read/write paths and live data — every layer (`provider-sync/`,
-> `nav-materializer/`, `indexer/`, `portfolio`, `activity`, `profile`, `search`, now the offer
-> flows) is complete and fully tested against fakes/fixtures, and reports "not available yet" (or,
-> for writes, never actually opens a wallet) honestly until then.
+> (TASK-28) → the offer flows (TASK-29), and now **`FeeConfig.sol`**: the concrete `IFeeConfig`
+> every fee in this protocol already reads from — an affine curve for collection-creation and mint
+> fees, hard caps no admin transaction can exceed, and `NFFC.sol`'s mint fee finally wired
+> end-to-end. Also **resolves `docs/OPEN_ISSUES.md`'s former Issue #3** outright: a royalty can now
+> only ever be configured for a collection that actually exists, closing the failure mode that
+> issue described rather than re-documenting it a third time (`docs/fee-engine.md`). Purely a
+> contracts-side TASK — `pnpm verify` is unchanged at 86 files / 463 tests, exactly matching this
+> TASK's own acceptance criterion ("sin tocar el frontend"). `Marketplace.sol`'s deployment
+> (TASK-31) is still the only thing standing between every one of these read/write paths and live
+> data — every layer (`provider-sync/`, `nav-materializer/`, `indexer/`, `portfolio`, `activity`,
+> `profile`, `search`, the offer flows, now the fee engine) is complete and fully tested, and
+> reports "not available yet" (or, for writes, never actually opens a wallet) honestly until then.
 
 ## Stack
 

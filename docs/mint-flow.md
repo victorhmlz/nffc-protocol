@@ -75,6 +75,6 @@ the true `tokenId`/`mintedAtBlock` are known is out of scope for TASK-18.
   tests.
 - `buildMintCall` → a stub, provably unreachable while `simulateMint` always rejects.
 
-Once TASK-31 deploys `NFFC` (and TASK-22/TASK-30 land the oracle + real fee config), these three
-fixtures are replaced with real implementations; `useMintFlow`, `StepMint`, and
+Once TASK-31 deploys `NFFC` (TASK-22's oracle and TASK-30's `FeeConfig.sol` have already landed),
+these three fixtures are replaced with real implementations; `useMintFlow`, `StepMint`, and
 `prepareMintMetadata` need no changes.
