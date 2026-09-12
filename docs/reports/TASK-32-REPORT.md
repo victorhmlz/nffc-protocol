@@ -207,8 +207,9 @@ Plus this authorization's own two conditions, both answered explicitly above (Is
 
 Branch `task/TASK-32-security-hardening`, based on **`main`** (TASK-00…31).
 
-**PR: (to be filled in once opened)**
-**CI: (to be filled in once green)**
+**PR:** https://github.com/victorhmlz/nffc-protocol/pull/39
+**CI:** green — https://github.com/victorhmlz/nffc-protocol/actions/runs/34689927501
+(`lint · typecheck · test · build` pass, 2m18s; `solidity · compile · test` pass, 28s)
 
 **Do not merge** — Project Lead reviews and authorizes.
 
