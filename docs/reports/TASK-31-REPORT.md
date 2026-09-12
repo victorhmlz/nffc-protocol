@@ -254,8 +254,9 @@ per-item network/DB calls — every admin page does at most 1–2 data-fetch cal
 
 Branch `task/TASK-31-admin`, based on **`main`** (TASK-00…30).
 
-**PR: (to be filled in once opened)**
-**CI: (to be filled in once green)**
+**PR:** https://github.com/victorhmlz/nffc-protocol/pull/38
+**CI:** green — https://github.com/victorhmlz/nffc-protocol/actions/runs/34686650113
+(`lint · typecheck · test · build` pass, 2m10s; `solidity · compile · test` pass, 32s)
 
 **Do not merge** — Project Lead reviews and authorizes.
 
