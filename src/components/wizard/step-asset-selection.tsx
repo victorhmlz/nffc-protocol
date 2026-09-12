@@ -79,6 +79,7 @@ export function StepAssetSelection({
                         ? onRemove(asset.representationId)
                         : onAdd(asset)
                     }
+                    aria-label={`${isSelected ? "Remove" : "Add"} ${asset.assetSymbol}`}
                   >
                     {isSelected ? "Remove" : "Add"}
                   </Button>

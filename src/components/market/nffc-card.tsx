@@ -25,8 +25,7 @@ const REGIME_LABEL: Record<IndexedNffcSummary["mintConditionRegime"], string> = 
  * One NFFC in the marketplace grid (TASK-20). Server-Component-compatible —
  * every prop is data already resolved server-side (`getMarketplaceListings`);
  * the only interactive island is `<BuyButton>`. Links to `/nffc/[tokenId]`
- * (TASK-21) — that route doesn't exist yet, so the link 404s until TASK-21
- * lands; see `docs/marketplace-ui.md` KNOWN ISSUES.
+ * (TASK-21, merged since).
  */
 export function NffcCard({ nffc }: { nffc: IndexedNffcSummary }) {
   return (

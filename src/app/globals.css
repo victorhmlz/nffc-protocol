@@ -52,14 +52,30 @@
 
   --muted: #f1f1ee;
   --muted-foreground: #52514e;
-  --subtle-foreground: #898781;
+  /* TASK-34: darkened from #898781 (3.4:1 on surface, fails WCAG AA's 4.5:1
+     for normal text — this token is used for meta/timestamp text at
+     text-xs/text-sm, never large text). #6e6c67 keeps the same warm-gray
+     hue, ~5:1 on both background and surface. */
+  --subtle-foreground: #6e6c67;
 
   --border: #e1e0d9;
   --border-strong: #c3c2b7;
-  --input: #d7d6ce;
-  --ring: #2a78d6;
+  /* TASK-34: darkened from #d7d6ce (1.4:1 against background/surface — a
+     resting, unfocused <Input> had no boundary meeting WCAG 1.4.11's 3:1
+     non-text contrast for essential UI boundaries). #8c8b86 clears 3:1
+     against both. */
+  --input: #8c8b86;
+  /* TASK-34: kept in sync with --primary below (same brand blue by design,
+     `docs/design-system.md` §1). */
+  --ring: #2569c4;
 
-  --primary: #2a78d6;
+  /* TASK-34: darkened from #2a78d6 — #ffffff `--primary-foreground` text on
+     it was 4.42:1, narrowly failing WCAG AA's 4.5:1 (Button `variant=
+     "primary"` at text-xs/text-sm/text-sm, none of which qualify for the
+     large-text exception). #2569c4 clears 4.5:1 for both that pairing and
+     `text-primary` (Button `variant="link"`, TransactionStatus's pending
+     tone) against the page background. */
+  --primary: #2569c4;
   --primary-foreground: #ffffff;
   --accent: #eef4fc;
   --accent-foreground: #184f95;
@@ -80,7 +96,14 @@
   --chart-surface: #fcfcfb;
   --chart-grid: #e1e0d9;
   --chart-axis: #c3c2b7;
-  --chart-label: #898781;
+  /* TASK-34: same fix and reasoning as --subtle-foreground above — this is
+     the same meta-text role (axis labels), not consumed by any component
+     yet (real charts are TASK-10+/later), fixed anyway so nothing inherits
+     a failing value once one is built. --chart-axis/--chart-grid are
+     structural/decorative (baseline, gridlines), not text — left for the
+     `dataviz` skill's own validator to tune together with a real chart
+     palette when one exists. */
+  --chart-label: #6e6c67;
   --chart-1: #2a78d6;
   --chart-2: #eb6834;
   --chart-3: #1baf7a;
@@ -107,7 +130,9 @@
 
   --border: #2c2c2a;
   --border-strong: #383835;
-  --input: #383835;
+  /* TASK-34: same finding as light mode's --input (1.65:1 against
+     background) — #6a6a65 clears 3:1 against both background and surface. */
+  --input: #6a6a65;
   --ring: #3987e5;
 
   --primary: #3987e5;
@@ -154,7 +179,7 @@
     --subtle-foreground: #898781;
     --border: #2c2c2a;
     --border-strong: #383835;
-    --input: #383835;
+    --input: #6a6a65;
     --ring: #3987e5;
     --primary: #3987e5;
     --primary-foreground: #0b0b0b;

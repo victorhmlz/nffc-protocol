@@ -29,36 +29,37 @@ supported providers from V1.
 - Admin: [`docs/admin.md`](docs/admin.md) · live at `/admin` (TASK-31)
 - Threat model & security hardening: [`docs/threat-model.md`](docs/threat-model.md) (TASK-32)
 - Error handling: [`docs/error-handling.md`](docs/error-handling.md) (TASK-33)
+- Responsive & accessibility: [`docs/accessibility.md`](docs/accessibility.md) (TASK-34)
 - Design system: [`docs/design-system.md`](docs/design-system.md) · live at `/style-guide`
 - Governance: `NFFC_Claude_Master_Prompt.md` (v2.5), `NFFC_Development_Plan.md` (v3.4),
   `NFFC_Whitepaper.md` (v1.4), `NFFC_Roadmap.md` (v1.3)
 - Per-task reports: [`docs/reports/`](docs/reports/)
 - Open issues log: [`docs/OPEN_ISSUES.md`](docs/OPEN_ISSUES.md) — live record of unresolved findings between TASKS
 
-> **Status: Error Handling (TASK-33).** Toolchain (TASK-01) → boundaries (TASK-02) → design
-> system (TASK-03) → infrastructure (TASK-04) → registries (TASK-05) → Robinhood + crypto adapters
-> (TASK-06/07) → composition segmentation (TASK-08) → NFFC ERC-721 core (TASK-09) → Collection
-> contract (TASK-10) → metadata split (TASK-11) → generative art (TASK-12) → mint-condition trait
-> (TASK-13) → static rarity (TASK-14) → dynamic NFFC UI (TASK-15) → wallet (TASK-16) → the 7-step
-> create wizard (TASK-17) → the mint flow wired end-to-end (TASK-18) → `Marketplace.sol` (TASK-19)
-> → `/market` explore/filter/sort/buy (TASK-20) → the NFFC detail page (TASK-21) → the price engine
-> (TASK-22) → the Reference NAV engine (TASK-23) → the blockchain indexer (TASK-24) →
-> `/portfolio` (TASK-25) → `/activity` (TASK-26) → `/profile/[address]` (TASK-27) → `/search`
-> (TASK-28) → the offer flows (TASK-29) → `FeeConfig.sol` (TASK-30) → `/admin` (TASK-31) → a written
-> threat model (TASK-32), and now a **unified error vocabulary** (`docs/error-handling.md`): nine
-> categories (`domain/errors/errors.ts`) seeded in `docs/spec/07-ux-map.md` §7, rendered by one
-> shared `ErrorNotice` component. Found and fixed a real gap along the way — all ten write-flow
-> components (`BuyButton`, offer/admin forms, `StatusToggleButton`) were rendering raw, unfiltered
-> wagmi/viem exception text directly to users; every one now renders the unified vocabulary instead.
-> Also unified three different wordings for the same "oracle stale" condition down to one, gave
-> `/api/portfolio/[address]` and `/api/nffc/[tokenId]/market` a consistent JSON error envelope for
-> unexpected RPC/DB failures, and defined (but honestly can't yet wire up) an `indexer_lag` category
-> — no live indexer-freshness signal exists anywhere in the pipeline before TASK-36 deploys.
-> `Marketplace.sol`'s deployment (TASK-36) is still the only thing standing between every read/write
-> path built so far and live data — every layer (`provider-sync/`, `nav-materializer/`, `indexer/`,
-> `portfolio`, `activity`, `profile`, `search`, the offer flows, the fee engine, admin) is complete
-> and fully tested, and reports "not available yet" (or, for writes, never actually opens a wallet)
-> honestly until then.
+> **Status: Responsive & Accessibility (TASK-34).** Toolchain (TASK-01) → boundaries (TASK-02) →
+> design system (TASK-03) → infrastructure (TASK-04) → registries (TASK-05) → Robinhood + crypto
+> adapters (TASK-06/07) → composition segmentation (TASK-08) → NFFC ERC-721 core (TASK-09) →
+> Collection contract (TASK-10) → metadata split (TASK-11) → generative art (TASK-12) →
+> mint-condition trait (TASK-13) → static rarity (TASK-14) → dynamic NFFC UI (TASK-15) → wallet
+> (TASK-16) → the 7-step create wizard (TASK-17) → the mint flow wired end-to-end (TASK-18) →
+> `Marketplace.sol` (TASK-19) → `/market` explore/filter/sort/buy (TASK-20) → the NFFC detail page
+> (TASK-21) → the price engine (TASK-22) → the Reference NAV engine (TASK-23) → the blockchain
+> indexer (TASK-24) → `/portfolio` (TASK-25) → `/activity` (TASK-26) → `/profile/[address]`
+> (TASK-27) → `/search` (TASK-28) → the offer flows (TASK-29) → `FeeConfig.sol` (TASK-30) →
+> `/admin` (TASK-31) → a written threat model (TASK-32) → a unified error vocabulary (TASK-33), and
+> now a **contrast + keyboard audit** (`docs/accessibility.md`): 4 design tokens darkened to clear
+> WCAG AA (a real gap in the original palette — `--subtle-foreground`, `--primary`, and both
+> themes' `--input` border all narrowly or badly failed their required ratio; now a regression-
+> tested fixture, `tests/design-tokens-contrast.test.ts`), a `<main>` landmark added once to the
+> root layout for every route, per-row buttons in the create wizard given distinct accessible names,
+> and the mint flow's error surface (missed by TASK-33 — it predates `useWriteFlow`'s lineage) folded
+> into the same unified vocabulary. The rest of the codebase's keyboard/ARIA foundations (Radix
+> primitives, `Field` wiring, real interactive elements everywhere, no click-only `div`s) were
+> audited and confirmed sound, not rebuilt. `Marketplace.sol`'s deployment (TASK-36) is still the
+> only thing standing between every read/write path built so far and live data — every layer
+> (`provider-sync/`, `nav-materializer/`, `indexer/`, `portfolio`, `activity`, `profile`, `search`,
+> the offer flows, the fee engine, admin) is complete and fully tested, and reports "not available
+> yet" (or, for writes, never actually opens a wallet) honestly until then.
 
 ## Stack
 

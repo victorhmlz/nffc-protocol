@@ -37,7 +37,14 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <ThemeScript />
       </head>
       <body>
-        <Providers>{children}</Providers>
+        <Providers>
+          {/* TASK-34: no page in this codebase had a `<main>` landmark —
+              every route's content sat directly in `<body>` with no
+              structural region a screen reader could jump to. One wrapper
+              here covers every route; a page's own `<header>`/`<h1>` nests
+              inside it without conflict. */}
+          <main>{children}</main>
+        </Providers>
       </body>
     </html>
   );
