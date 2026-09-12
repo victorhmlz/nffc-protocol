@@ -199,8 +199,9 @@ contrast, and mobile layouts... validated in TASK-34," is the concrete target):
 
 Branch `task/TASK-34-accessibility`, based on **`main`** (TASK-00…33).
 
-**PR: (to be filled in once opened)**
-**CI: (to be filled in once green)**
+**PR:** https://github.com/victorhmlz/nffc-protocol/pull/41
+**CI:** green — https://github.com/victorhmlz/nffc-protocol/actions/runs/34699403856
+(`lint · typecheck · test · build` pass, 2m14s; `solidity · compile · test` pass, 32s)
 
 **Do not merge** — Project Lead reviews and authorizes.
 
