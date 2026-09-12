@@ -231,8 +231,9 @@ plan for this TASK — `docs/spec/07-ux-map.md` §7's nine-category vocabulary i
 
 Branch `task/TASK-33-error-handling`, based on **`main`** (TASK-00…32).
 
-**PR: (to be filled in once opened)**
-**CI: (to be filled in once green)**
+**PR:** https://github.com/victorhmlz/nffc-protocol/pull/40
+**CI:** green — https://github.com/victorhmlz/nffc-protocol/actions/runs/34697111935
+(`lint · typecheck · test · build` pass, 2m18s; `solidity · compile · test` pass, 30s)
 
 **Do not merge** — Project Lead reviews and authorizes.
 
