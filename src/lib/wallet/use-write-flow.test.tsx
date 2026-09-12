@@ -48,6 +48,11 @@ describe("useWriteFlow — a simulation failure is communicated before a signatu
     act(() => result.current.flow.execute());
 
     await waitFor(() => expect(result.current.flow.error).toBe("would revert: OfferExpired"));
+    // TASK-33: the raw message above is kept only for logs — every renderable
+    // surface uses `errorCode` instead, and a simulation failure always
+    // classifies as `simulation_failed` regardless of its message text (it
+    // never reaches `transactionFlowReducer` to be classified any other way).
+    expect(result.current.flow.errorCode).toBe("simulation_failed");
     expect(result.current.flow.state).toBe("idle");
     expect(buildCall).not.toHaveBeenCalled();
   });

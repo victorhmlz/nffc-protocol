@@ -1,4 +1,5 @@
 import type { NffcMarketSnapshot } from "@domain/metadata/metadata";
+import { ERROR_VOCABULARY } from "@domain/errors/errors";
 import { Badge } from "@/components/ui/badge";
 import { PerformanceWindows } from "@/components/ui/performance-windows";
 import { ReferenceNavStat } from "@/components/ui/reference-nav-stat";
@@ -47,8 +48,8 @@ export function NffcMarketPanel({
       />
       <PerformanceWindows points={snapshot?.performance ?? null} now={now} />
       {snapshot?.degraded && snapshot.referenceNav && (
-        <Badge variant="warning" className="w-fit">
-          Some component prices are stale — figures may be degraded
+        <Badge variant="warning" className="w-fit" title={ERROR_VOCABULARY.oracle_stale.recoveryAction}>
+          {ERROR_VOCABULARY.oracle_stale.message}
         </Badge>
       )}
     </div>

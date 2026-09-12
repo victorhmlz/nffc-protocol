@@ -3,6 +3,7 @@
 import type { useWriteContract } from "wagmi";
 import { useAccount } from "wagmi";
 import { Button } from "@/components/ui/button";
+import { ErrorNotice } from "@/components/ui/error-notice";
 import { TransactionStatus } from "@/components/ui/transaction-status";
 import { useWriteFlow } from "@/lib/wallet/use-write-flow";
 
@@ -72,11 +73,7 @@ export function OfferRowActions({ offerId, buyerAddress, ownerAddress }: OfferRo
       ) : (
         flow.state !== "idle" && <TransactionStatus state={flow.state} />
       )}
-      {flow.error && (
-        <p role="alert" className="text-xs text-loss">
-          {flow.error}
-        </p>
-      )}
+      {flow.errorCode && <ErrorNotice code={flow.errorCode} />}
       <Button
         type="button"
         size="sm"

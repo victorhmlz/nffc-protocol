@@ -25,10 +25,10 @@ describe("StatusToggleButton", () => {
     expect(screen.getByRole("button", { name: "Activate NVDA" })).toBeInTheDocument();
   });
 
-  it("surfaces the simulation error without ever building the call", async () => {
+  it("surfaces the unified simulation_failed notice without ever building the call", async () => {
     const { buildCall } = renderButton(true);
     fireEvent.click(screen.getByRole("button", { name: "Deactivate NVDA" }));
-    await waitFor(() => expect(screen.getByRole("alert")).toHaveTextContent(/not deployed yet/i));
+    await waitFor(() => expect(screen.getByRole("alert")).toHaveTextContent(/can't be completed right now/i));
     expect(buildCall).not.toHaveBeenCalled();
   });
 });

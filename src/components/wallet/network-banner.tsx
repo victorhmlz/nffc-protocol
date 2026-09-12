@@ -1,6 +1,7 @@
 "use client";
 
 import { AlertTriangle } from "lucide-react";
+import { ERROR_VOCABULARY } from "@domain/errors/errors";
 import { Button } from "@/components/ui/button";
 import { useNetworkGuard } from "@/lib/wallet/network-guard";
 import { cn } from "@/lib/cn";
@@ -8,7 +9,11 @@ import { cn } from "@/lib/cn";
 /**
  * Automatic wrong-network detection with a one-click switch to Robinhood Chain
  * (TASK-16 acceptance). Renders nothing when disconnected or already on the
- * right chain — never a false warning.
+ * right chain — never a false warning. The headline reuses
+ * `ERROR_VOCABULARY.wrong_network` (TASK-33) so "Wrong network" reads
+ * identically here and anywhere else this vocabulary is used; the button
+ * below is a strictly better recovery action than the vocabulary's own text
+ * hint, so it replaces `recoveryAction` rather than repeating it as prose.
  */
 export function NetworkBanner({ className }: { className?: string }) {
   const {
@@ -31,8 +36,8 @@ export function NetworkBanner({ className }: { className?: string }) {
     >
       <AlertTriangle aria-hidden className="size-4 shrink-0 text-foreground" />
       <p className="flex-1 text-sm text-foreground">
-        Wrong network — connected to chain {currentChainId}. This app runs on
-        Robinhood Chain ({targetChainId}).
+        <span className="font-medium">{ERROR_VOCABULARY.wrong_network.message}</span> — connected
+        to chain {currentChainId}. This app runs on Robinhood Chain ({targetChainId}).
       </p>
       <Button
         variant="secondary"

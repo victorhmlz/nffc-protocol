@@ -13,6 +13,8 @@
 import { useEffect, useReducer, useState } from "react";
 import { useWaitForTransactionReceipt, useWriteContract } from "wagmi";
 import type { TransactionState } from "@/lib/wallet/transaction-state";
+import { classifyWalletError } from "@/lib/wallet/classify-wallet-error";
+import type { ErrorCode } from "@domain/errors/errors";
 
 export type TransactionEvent =
   | { readonly type: "RESET" }
@@ -65,7 +67,10 @@ export function transactionFlowReducer(
 
 export interface UseTransactionFlowResult {
   readonly state: TransactionState;
+  /** Raw wagmi/viem message — kept for logs, never rendered directly (TASK-33). */
   readonly error: string | null;
+  /** The unified vocabulary code for `error` — `null` outside "rejected"/"failed". */
+  readonly errorCode: ErrorCode | null;
   readonly txHash: `0x${string}` | undefined;
   /** Same signature as wagmi's `writeContract` — call it to start the flow. */
   readonly request: ReturnType<typeof useWriteContract>["writeContract"];
@@ -132,9 +137,13 @@ export function useTransactionFlow(): UseTransactionFlowResult {
       ? (receipt.error?.message ?? "Transaction failed")
       : null);
 
+  const errorCode: ErrorCode | null =
+    state === "rejected" || state === "failed" ? classifyWalletError(state, error) : null;
+
   return {
     state,
     error,
+    errorCode,
     txHash,
     request: writeContract,
     reset: () => {

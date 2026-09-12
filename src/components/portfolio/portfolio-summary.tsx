@@ -1,4 +1,5 @@
 import type { Portfolio } from "@domain/portfolio/portfolio";
+import { ERROR_VOCABULARY } from "@domain/errors/errors";
 import { Badge, Stat } from "@/components/ui";
 import { formatUsd } from "@/lib/format-usd";
 
@@ -39,7 +40,9 @@ export function PortfolioSummary({ portfolio }: { portfolio: Portfolio }) {
           hint={`${portfolio.holdings.length} NFFC${portfolio.holdings.length === 1 ? "" : "s"}`}
         />
         {portfolio.degraded && (
-          <Badge variant="warning">Some holdings&apos; prices are stale or unavailable</Badge>
+          <Badge variant="warning" title={ERROR_VOCABULARY.oracle_stale.recoveryAction}>
+            {ERROR_VOCABULARY.oracle_stale.message}
+          </Badge>
         )}
       </div>
       {portfolio.performance.length > 0 ? (

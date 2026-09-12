@@ -26,13 +26,13 @@ describe("MakeOfferForm", () => {
     expect(screen.getByRole("button", { name: /make an offer/i })).not.toBeDisabled();
   });
 
-  it("surfaces the honest 'not deployed yet' error without ever opening a wallet (acceptance)", async () => {
+  it("surfaces the unified simulation_failed notice without ever opening a wallet (acceptance)", async () => {
     renderForm();
     fireEvent.change(screen.getByLabelText(/offer price/i), { target: { value: "0.5" } });
     fireEvent.click(screen.getByRole("button", { name: /make an offer/i }));
 
     await waitFor(() =>
-      expect(screen.getByRole("alert")).toHaveTextContent(/marketplace is not deployed yet/i),
+      expect(screen.getByRole("alert")).toHaveTextContent(/can't be completed right now/i),
     );
   });
 });

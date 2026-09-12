@@ -29,10 +29,12 @@ describe("PortfolioSummary", () => {
   });
 
   it("shows a degraded warning badge only when degraded", () => {
+    // TASK-33: unified with ERROR_VOCABULARY.oracle_stale — the same wording
+    // NffcMarketPanel now uses for the same condition.
     const { rerender } = render(<PortfolioSummary portfolio={portfolio({ degraded: false })} />);
-    expect(screen.queryByText(/stale or unavailable/i)).not.toBeInTheDocument();
+    expect(screen.queryByText(/some prices are stale/i)).not.toBeInTheDocument();
     rerender(<PortfolioSummary portfolio={portfolio({ degraded: true })} />);
-    expect(screen.getByText(/stale or unavailable/i)).toBeInTheDocument();
+    expect(screen.getByText(/some prices are stale/i)).toBeInTheDocument();
   });
 
   it("shows an explicit unavailable message when there is no performance yet", () => {

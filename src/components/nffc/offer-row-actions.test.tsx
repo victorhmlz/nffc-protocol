@@ -62,10 +62,10 @@ describe("OfferRowActions", () => {
     expect(screen.queryByRole("button", { name: /accept|cancel/i })).not.toBeInTheDocument();
   });
 
-  it("surfaces the honest 'not deployed yet' error on Cancel without ever opening a wallet", async () => {
+  it("surfaces the unified simulation_failed notice on Cancel without ever opening a wallet", async () => {
     renderActions({ buyerAddress: MOCK_ACCOUNT, ownerAddress: OTHER });
     await connect();
     fireEvent.click(screen.getByRole("button", { name: /cancel offer #1/i }));
-    await waitFor(() => expect(screen.getByRole("alert")).toHaveTextContent(/marketplace is not deployed yet/i));
+    await waitFor(() => expect(screen.getByRole("alert")).toHaveTextContent(/can't be completed right now/i));
   });
 });

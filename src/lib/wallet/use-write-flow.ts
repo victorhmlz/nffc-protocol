@@ -17,6 +17,7 @@ import { useState } from "react";
 import type { useWriteContract } from "wagmi";
 import { useTransactionFlow, type UseTransactionFlowResult } from "@/lib/wallet/transaction-flow";
 import type { TransactionState } from "@/lib/wallet/transaction-state";
+import type { ErrorCode } from "@domain/errors/errors";
 
 type WriteContractParams = Parameters<ReturnType<typeof useWriteContract>["writeContract"]>[0];
 
@@ -28,7 +29,10 @@ export interface UseWriteFlowParams {
 export interface UseWriteFlowResult {
   readonly state: TransactionState;
   readonly isSimulating: boolean;
+  /** Raw message — kept for logs, never rendered directly (TASK-33). */
   readonly error: string | null;
+  /** The unified vocabulary code for `error` — `null` while there is none. */
+  readonly errorCode: ErrorCode | null;
   readonly txHash: UseTransactionFlowResult["txHash"];
   readonly execute: () => void;
   readonly reset: () => void;
@@ -59,6 +63,11 @@ export function useWriteFlow({ simulate, buildCall }: UseWriteFlowParams): UseWr
     state: flow.state,
     isSimulating,
     error: simError ?? flow.error,
+    // A simulation failure never reaches transactionFlowReducer (`execute`
+    // returns before `flow.request` is ever called) — it always gets its own
+    // code rather than falling through to `flow.errorCode` (`null`, since the
+    // flow never left "idle").
+    errorCode: simError ? "simulation_failed" : flow.errorCode,
     txHash: flow.txHash,
     execute,
     reset: () => {

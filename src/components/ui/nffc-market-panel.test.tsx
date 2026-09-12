@@ -68,8 +68,8 @@ describe("NffcMarketPanel", () => {
         now={NOW}
       />,
     );
-    expect(
-      screen.getByText(/stale — figures may be degraded/i),
-    ).toBeInTheDocument();
+    // TASK-33: unified with ERROR_VOCABULARY.oracle_stale — the same wording
+    // portfolio-summary.tsx now uses for the same condition.
+    expect(screen.getByText(/some prices are stale/i)).toBeInTheDocument();
   });
 });

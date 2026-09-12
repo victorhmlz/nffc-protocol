@@ -14,6 +14,8 @@ export {
 } from "@/components/ui/card";
 export { ChartFrame, ChartLegendItem } from "@/components/ui/chart-frame";
 export { Container } from "@/components/ui/container";
+export { ErrorNotice } from "@/components/ui/error-notice";
+export type { ErrorNoticeProps } from "@/components/ui/error-notice";
 export {
   Dialog,
   DialogClose,
