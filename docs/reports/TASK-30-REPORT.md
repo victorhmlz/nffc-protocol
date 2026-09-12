@@ -7,8 +7,8 @@ COMPLETED
 `pnpm contracts:build` / `pnpm contracts:test` green — **211 Solidity tests** (172 → +39: 33 new
 in `FeeConfig.t.sol`, 6 new in `NFFC.t.sol`'s fee-gate coverage). `pnpm verify` (lint · typecheck ·
 test · build, the TypeScript/Next.js side) is **unchanged** at 86 files / 463 tests — this TASK
-touches no `.ts`/`.tsx` file, matching its own acceptance criterion literally. PR not yet opened
-at time of writing this section — see PULL REQUEST for the final link.
+touches no `.ts`/`.tsx` file, matching its own acceptance criterion literally. Both CI jobs on
+PR #37 pass — run `34664716034`. See PULL REQUEST.
 
 ## OBJECTIVE
 
@@ -235,8 +235,8 @@ the same cost `Collection.sol`'s creation fee already carries, not a new pattern
 
 Branch `task/TASK-30-fee-engine`, based on **`main`** (TASK-00…29).
 
-**PR: (to be filled in once opened)**
-**CI: (to be filled in once green)**
+**PR: https://github.com/victorhmlz/nffc-protocol/pull/37** — base `main`.
+**CI: https://github.com/victorhmlz/nffc-protocol/actions/runs/34664716034 — success** — both jobs.
 
 **Do not merge** — Project Lead reviews and authorizes.
 
