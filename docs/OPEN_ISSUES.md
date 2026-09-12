@@ -4,7 +4,7 @@ Registro vivo de issues abiertos entre TASKS — ver `NFFC_Claude_Master_Prompt.
 
 Reglas: cada entrada tiene un ID único, secuencial, en números naturales — el ID nunca se reutiliza. Al resolverse un issue, su entrada se borra (no se marca como resuelta).
 
-**Próximo ID a usar: 12**
+**Próximo ID a usar: 13**
 
 ---
 
@@ -28,7 +28,7 @@ No bloqueante: el `tokenId` no es insumo del algoritmo de arte (TASK-12) ni del 
 
 No bloqueante para TASK-18, pero tensiona la garantía de verificabilidad prometida por TASK-13 y el Whitepaper §16.
 
-**Posible resolución en:** antes de TASK-31 (deploy real del contrato) — re-derivar y re-pinear el trait post-confirmación, o ajustar la redacción de TASK-13/Whitepaper §16 a "as of submission".
+**Posible resolución en:** antes de TASK-36 (deploy real del contrato) — re-derivar y re-pinear el trait post-confirmación, o ajustar la redacción de TASK-13/Whitepaper §16 a "as of submission".
 
 ---
 
@@ -76,11 +76,11 @@ Decisión de producto pendiente: ¿`/` debería redirigir a `/market`, mostrar e
 
 `docs/conventions.md` §3 establece que los workers (`workers/provider-sync/`, `workers/nav-materializer/`, `workers/indexer/`) son procesos standalone, re-invocados por un scheduler externo (cron, un loop supervisado) — corren fuera de Next.js, vía `pnpm worker <archivo>` (= `tsx <archivo>`). Pero `infra/valuation/postgres-price-store.ts`, `infra/valuation/postgres-nav-store.ts` (TASK-23) e `infra/indexer/postgres-indexer-store.ts` (TASK-24) empiezan con `import "server-only"`.
 
-El paquete `server-only` (`node_modules/server-only/package.json`) resuelve su export condicional `"react-server"` (el único que sirve un módulo no-op, `empty.js`) solo cuando el bundler que resuelve el import declara esa condición — algo que únicamente el compilador de Next.js hace. Bajo Node/`tsx` sin ese bundler, siempre resuelve `index.js`, que hace `throw new Error("This module cannot be imported from a Client Component module...")` **incondicionalmente**, sin importar si el módulo se usa o no. Verificado en este TASK: un `import` estático de `@infra/indexer` en `workers/indexer/index.ts` rompía el worker incluso en el camino "not configured" (el único invocable hoy, antes de TASK-31). Se mitigó ahí con un `import()` dinámico gateado detrás del chequeo de configuración — pero eso solo evita el crash mientras el worker no está configurado; el día que TASK-31 despliegue los contratos y `CONTRACT_NFFC`/`CONTRACT_MARKETPLACE` (o el registry de `nav-materializer`) estén seteados, ese mismo `import()` se ejecutará igual y **también** va a tirar el mismo error — el worker jamás llega a usar la store real.
+El paquete `server-only` (`node_modules/server-only/package.json`) resuelve su export condicional `"react-server"` (el único que sirve un módulo no-op, `empty.js`) solo cuando el bundler que resuelve el import declara esa condición — algo que únicamente el compilador de Next.js hace. Bajo Node/`tsx` sin ese bundler, siempre resuelve `index.js`, que hace `throw new Error("This module cannot be imported from a Client Component module...")` **incondicionalmente**, sin importar si el módulo se usa o no. Verificado en este TASK: un `import` estático de `@infra/indexer` en `workers/indexer/index.ts` rompía el worker incluso en el camino "not configured" (el único invocable hoy, antes de TASK-36). Se mitigó ahí con un `import()` dinámico gateado detrás del chequeo de configuración — pero eso solo evita el crash mientras el worker no está configurado; el día que TASK-36 despliegue los contratos y `CONTRACT_NFFC`/`CONTRACT_MARKETPLACE` (o el registry de `nav-materializer`) estén seteados, ese mismo `import()` se ejecutará igual y **también** va a tirar el mismo error — el worker jamás llega a usar la store real.
 
 No bloqueante hoy (ningún worker se corre "configured: true" en ningún ambiente todavía), pero es un defecto latente que va a manifestarse en el primer intento real de correr cualquiera de estos tres workers fuera de Next.js una vez desplegados los contratos — no es específico de TASK-24, alcanza igual a `nav-materializer` (TASK-23) apenas cablee sus stores.
 
-**Posible resolución en:** decisión de arquitectura del Project Lead — candidatas: (a) quitar `import "server-only"` de los módulos `infra/*` que los workers necesitan en tiempo de ejecución real (dejando que la barrera cliente/servidor la sigan imponiendo solo los módulos que de verdad importa Next.js, p. ej. `infra/env.ts` no lo tiene y no tuvo este problema), (b) mover esos tres store modules fuera de `infra/` a una ruta que ni Next.js ni los workers compartan, evitando la necesidad del marker, o (c) ejecutar los workers en producción con un runtime que sí declare la condición `react-server` en vez de `tsx` plano. Candidato para revisar junto con TASK-31 (deploy), antes de que cualquier worker necesite correr con datos reales.
+**Posible resolución en:** decisión de arquitectura del Project Lead — candidatas: (a) quitar `import "server-only"` de los módulos `infra/*` que los workers necesitan en tiempo de ejecución real (dejando que la barrera cliente/servidor la sigan imponiendo solo los módulos que de verdad importa Next.js, p. ej. `infra/env.ts` no lo tiene y no tuvo este problema), (b) mover esos tres store modules fuera de `infra/` a una ruta que ni Next.js ni los workers compartan, evitando la necesidad del marker, o (c) ejecutar los workers en producción con un runtime que sí declare la condición `react-server` en vez de `tsx` plano. Candidato para revisar junto con TASK-36 (deploy), antes de que cualquier worker necesite correr con datos reales.
 
 ---
 
@@ -92,7 +92,7 @@ No bloqueante hoy (ningún worker se corre "configured: true" en ningún ambient
 
 No bloqueante — el resto de la fila (actor, txHash, timestamp) es correcta y completa; solo el campo `tokenId` queda vacío para este único tipo de evento. Documentado también como limitación explícita en el doc comment de `planWrite`.
 
-**Posible resolución en:** sin asignar todavía — requeriría cambiar la firma de `OfferCancelled` en `Marketplace.sol` para incluir `tokenId` (rompe el ABI ya usado por TASK-19/20/21), algo que solo tiene sentido decidir antes de TASK-31 (deploy real, donde el ABI recién se vuelve inmutable de verdad). Candidato para revisar junto con TASK-31.
+**Posible resolución en:** sin asignar todavía — requeriría cambiar la firma de `OfferCancelled` en `Marketplace.sol` para incluir `tokenId` (rompe el ABI ya usado por TASK-19/20/21), algo que solo tiene sentido decidir antes de TASK-36 (deploy real, donde el ABI recién se vuelve inmutable de verdad). Candidato para revisar junto con TASK-36.
 
 ---
 
@@ -121,3 +121,21 @@ Efecto concreto hoy: `CollectionsList` (TASK-27) enlaza cada colección a `/coll
 No bloqueante para TASK-27. Si nadie construye esta página antes de TASK-50, esa TASK (M1.5) queda con una dependencia implícita sin dueño, la misma clase de problema que Issue #3 ya describió para `Marketplace.sol`/`Collection.sol`.
 
 **Posible resolución en:** sin asignar todavía — requiere que el Project Lead asigne una TASK explícita para `/collection/[collectionId]` antes de TASK-50, o confirme que queda fuera de alcance de V1/V1.5 y TASK-50 se ajusta en consecuencia.
+
+---
+
+## Issue #12 — "TASK-31" se citó erróneamente como "deploy real de los contratos" en ~26 archivos ya mergeados (el número correcto es TASK-36)
+
+**Origen:** TASK-31 (Admin), descubierto al escribir el propio comentario "not deployed yet" de esta TASK y notar que TASK-31 es "Admin", no deploy.
+
+`NFFC_Development_Plan.md` es inequívoco: **TASK-31 = Admin** (esta TASK); **TASK-36 = Testnet Deployment** ("Deploy, verificación de contratos, seed de datos..."). En algún punto anterior de esta sesión (antes de que existiera un registro visible de cuándo) se estableció incorrectamente "TASK-31" como el número a citar para "todavía no hay contrato desplegado", y ese número incorrecto se copió consistentemente de TASK en TASK durante TASK-18 a TASK-30 — comentarios de código (`simulateBuy`/`simulateMint`/`simulateMakeOffer`/etc. fixtures, mensajes de error mostrados al usuario), casi todos los `docs/*.md`, y varios `docs/reports/TASK-XX-REPORT.md` ya mergeados.
+
+Es un error puramente de **cita/documentación**, no funcional ni de seguridad: el comportamiento en sí (todo intento de simulación falla honestamente porque no hay contrato desplegado) es correcto en cada caso; solo el número de TASK mencionado en el texto es incorrecto.
+
+**Ya corregido, como parte de este mismo TASK** (tocados de todas formas por la relocalización de `useMarketplaceActionFlow` → `useWriteFlow`, `src/lib/wallet/use-write-flow.ts`): `src/components/market/buy-button.tsx` (+ su test), `src/components/nffc/make-offer-form.tsx`, `src/components/nffc/offer-row-actions.tsx`, `docs/marketplace-ui.md`, `docs/offers.md`, y las tres citas dentro de este mismo archivo (Issues #2, #7, #8 — ver historial de este archivo, ya no aparecen porque se corrigieron in situ, no se dejaron como issues nuevos).
+
+**Todavía sin corregir** (no tocados en esta TASK — barrido no realizado unilateralmente, ver más abajo): `docs/activity.md`, `docs/fee-engine.md`, `docs/mint-flow.md`, `docs/portfolio.md`, `docs/price-engine.md`, `docs/valuation.md`, `docs/reports/TASK-18-REPORT.md`, `docs/reports/TASK-20-REPORT.md`, `docs/reports/TASK-22-REPORT.md`, `docs/reports/TASK-24-REPORT.md`, `docs/reports/TASK-25-REPORT.md`, `docs/reports/TASK-26-REPORT.md`, `docs/reports/TASK-27-REPORT.md`, `docs/reports/TASK-30-REPORT.md`, `src/app/create/page.tsx`, `src/lib/portfolio/get-portfolio.ts`, `workers/indexer/index.ts`, `workers/indexer/onchain.ts`, `workers/nav-materializer/config.ts`, `workers/README.md`.
+
+No bloqueante — ningún comportamiento depende de este número siendo correcto. Los `docs/reports/TASK-XX-REPORT.md` ya mergeados son además snapshots históricos que esta sesión no reescribe unilateralmente (mismo criterio ya aplicado en TASK-19/TASK-20/TASK-21).
+
+**Posible resolución en:** una TASK/chore dedicada y pequeña (mismo patrón que `docs/fix-task-19-test-count`) que reemplace "TASK-31" por "TASK-36" en los archivos listados arriba que aún no lo tienen corregido — código fuente y `docs/*.md` vigentes sin problema; para los `docs/reports/TASK-XX-REPORT.md` ya mergeados, el Project Lead debería decidir si se corrigen in situ (son snapshots, no se han tratado como inmutables en otros casos de esta magnitud) o se dejan como están con una nota aclaratoria.

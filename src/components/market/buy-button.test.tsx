@@ -12,12 +12,12 @@ function renderButton() {
 }
 
 describe("BuyButton — honest fixture demonstrates the acceptance property live", () => {
-  it("shows 'Marketplace is not deployed yet' and never opens the wallet, since Marketplace has no address until TASK-31", async () => {
+  it("shows 'Marketplace is not deployed yet' and never opens the wallet, since Marketplace has no address until TASK-36", async () => {
     renderButton();
     fireEvent.click(screen.getByRole("button", { name: /buy nffc #1/i }));
 
     const alert = await screen.findByRole("alert");
-    expect(alert).toHaveTextContent(/not deployed yet \(task-31\)/i);
+    expect(alert).toHaveTextContent(/not deployed yet \(task-36\)/i);
     // idle/failed/rejected are all still clickable — confirms no wallet flow
     // was ever entered (a truly "in-flight" transaction would disable it).
     await waitFor(() => expect(screen.getByRole("button", { name: /buy nffc #1/i })).not.toBeDisabled());

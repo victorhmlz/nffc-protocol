@@ -41,9 +41,10 @@ link reproduces the exact same result set, not just the exact same UI.
 
 ## Buy — reusing TASK-18's mint-flow pattern, not reinventing it
 
-`useMarketplaceActionFlow` (`src/lib/marketplace/use-marketplace-action-flow.ts` — generalized in
-TASK-29 from this TASK's original `useBuyFlow`, once "buy" got two more actions as siblings:
-create/cancel/accept offer, all needing the identical shape) is `useMintFlow` minus the
+`useWriteFlow` (`src/lib/wallet/use-write-flow.ts` — generalized in TASK-29 from this TASK's
+original `useBuyFlow` as `useMarketplaceActionFlow`, once "buy" got two more actions as siblings:
+create/cancel/accept offer, all needing the identical shape; relocated and renamed again in
+TASK-31 once admin writes needed it too) is `useMintFlow` minus the
 metadata-prep step: a `simulate` → `buildCall` pre-flight composed *outside* TASK-16's
 `transactionFlowReducer` (unmodified, again), so a simulation failure surfaces before any signature
 is requested — the same acceptance property TASK-18 established for mint, reused rather than
@@ -53,8 +54,8 @@ fixture `simulateBuy` / `buildBuyCall` are defined locally in the client file, n
 props from the server page (unlike `/create`, which is a Client page throughout and can inject
 fixtures via props).
 
-`Marketplace.sol` has no deployed address yet (TASK-31), so `simulateBuy` always rejects with
-"Marketplace is not deployed yet (TASK-31)" — an honest, live demonstration that the wallet is never
+`Marketplace.sol` has no deployed address yet (TASK-36), so `simulateBuy` always rejects with
+"Marketplace is not deployed yet (TASK-36)" — an honest, live demonstration that the wallet is never
 engaged, exactly like `/create`'s mint fixture.
 
 ## Server-rendered, but not classic ISR — a documented tension
@@ -84,7 +85,7 @@ in TASK-20. Flagged as `docs/OPEN_ISSUES.md` Issue #5.
 - `FIXTURE_LISTINGS` (`src/lib/marketplace/fixture-listings.ts`) stands in for the indexer
   (TASK-24) — five representative NFFCs spanning every segment, a spread of static rarity and
   mint-condition regimes, and both listed and unlisted tokens.
-- `BuyButton`'s `simulateBuy` always rejects — no deployed `Marketplace` (TASK-31).
+- `BuyButton`'s `simulateBuy` always rejects — no deployed `Marketplace` (TASK-36).
 - `NffcCard` links to `/nffc/[tokenId]` (TASK-21), which doesn't exist yet — a 404 until then, not a
   regression; the URL contract is the one TASK-21's own route will fill in unchanged.
 
