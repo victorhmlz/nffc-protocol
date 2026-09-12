@@ -101,7 +101,7 @@ export default async function NffcDetailPage({
           creatorAddress={detail.creatorAddress}
           ownerLastSyncedBlock={detail.ownerLastSyncedBlock}
         />
-        <OffersList offers={detail.offers} />
+        <OffersList tokenId={tokenId} ownerAddress={detail.ownerAddress} offers={detail.offers} />
       </div>
 
       <ActivityTimeline activity={detail.activity} />

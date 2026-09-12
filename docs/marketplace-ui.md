@@ -41,14 +41,17 @@ link reproduces the exact same result set, not just the exact same UI.
 
 ## Buy — reusing TASK-18's mint-flow pattern, not reinventing it
 
-`useBuyFlow` (`src/lib/marketplace/use-buy-flow.ts`) is `useMintFlow` minus the metadata-prep step:
-a `simulateBuy` → `buildBuyCall` pre-flight composed *outside* TASK-16's `transactionFlowReducer`
-(unmodified, again), so a simulation failure surfaces before any signature is requested — the same
-acceptance property TASK-18 established for mint, reused rather than re-derived. `BuyButton`
-(`src/components/market/buy-button.tsx`) is the Client Component island inside each (Server)
-`NffcCard` — functions can't cross the server/client RSC boundary, so its fixture `simulateBuy` /
-`buildBuyCall` are defined locally in the client file, not passed down as props from the server
-page (unlike `/create`, which is a Client page throughout and can inject fixtures via props).
+`useMarketplaceActionFlow` (`src/lib/marketplace/use-marketplace-action-flow.ts` — generalized in
+TASK-29 from this TASK's original `useBuyFlow`, once "buy" got two more actions as siblings:
+create/cancel/accept offer, all needing the identical shape) is `useMintFlow` minus the
+metadata-prep step: a `simulate` → `buildCall` pre-flight composed *outside* TASK-16's
+`transactionFlowReducer` (unmodified, again), so a simulation failure surfaces before any signature
+is requested — the same acceptance property TASK-18 established for mint, reused rather than
+re-derived. `BuyButton` (`src/components/market/buy-button.tsx`) is the Client Component island
+inside each (Server) `NffcCard` — functions can't cross the server/client RSC boundary, so its
+fixture `simulateBuy` / `buildBuyCall` are defined locally in the client file, not passed down as
+props from the server page (unlike `/create`, which is a Client page throughout and can inject
+fixtures via props).
 
 `Marketplace.sol` has no deployed address yet (TASK-31), so `simulateBuy` always rejects with
 "Marketplace is not deployed yet (TASK-31)" — an honest, live demonstration that the wallet is never
@@ -90,8 +93,9 @@ in TASK-20. Flagged as `docs/OPEN_ISSUES.md` Issue #5.
 - **Offers** ("compra/oferta" in the Entregable's own wording, but the Objetivo's verb list —
   "Explorar, buscar, filtrar, ordenar, listar, comprar" — omits "ofertar", and TASK-29 (Offers) is
   the TASK that explicitly owns create/accept/cancel/expiry for the full offer lifecycle,
-  `Depende de: TASK-19, TASK-24`). TASK-20 implements Buy only; offer creation is TASK-29's job, not
-  silently dropped — see `docs/reports/TASK-20-REPORT.md` KNOWN ISSUES.
+  `Depende de: TASK-19, TASK-24`). TASK-20 implements Buy only; offer creation was TASK-29's job,
+  not silently dropped — see `docs/reports/TASK-20-REPORT.md` KNOWN ISSUES. **Built in TASK-29** —
+  see `docs/nffc-detail.md` and `docs/reports/TASK-29-REPORT.md`.
 - Whether `/` (the TASK-01 bootstrap landing page) should become or redirect to `/market` — the
   ux-map lists `/` and `/market` as the same "Marketplace / explore" surface, but TASK-20
   deliberately only builds `/market`, leaving `/` untouched. Flagged as `docs/OPEN_ISSUES.md`

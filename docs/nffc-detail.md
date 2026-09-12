@@ -88,11 +88,14 @@ though it's a `data:` URI, which Satori (the renderer behind `ImageResponse`) re
 external image hosting or pinning dependency. Verified live (`docs/reports/TASK-21-REPORT.md`):
 `GET /nffc/1/opengraph-image` returns `200 image/png`.
 
-## Offers are read-only here, same scope decision as TASK-20's Buy-only choice
+## Offers — full create/accept/cancel lifecycle (TASK-29)
 
-`OffersList` shows active offers; it has no "make an offer" form. TASK-29 (Offers) explicitly owns
-the full create/accept/cancel/expiry lifecycle (`Depende de: TASK-19, TASK-24`) — the same reasoning
-TASK-20 already applied to Buy vs. Offer, applied consistently here.
+`OffersList` originally shipped read-only (TASK-21), the same Buy-only scope decision TASK-20 made
+for listings — offer creation/accept/cancel was explicitly TASK-29's own surface
+(`Depende de: TASK-19, TASK-24`). TASK-29 built it: `MakeOfferForm` (price + expiry) and
+`OfferRowActions` (Accept for the NFFC's owner, Cancel for that offer's buyer, nothing for anyone
+else) are both now part of this same card — see `docs/marketplace-ui.md` and
+`docs/reports/TASK-29-REPORT.md`.
 
 ## What's still a fixture
 

@@ -3,7 +3,7 @@
 import type { useWriteContract } from "wagmi";
 import { Button } from "@/components/ui/button";
 import { TransactionStatus } from "@/components/ui/transaction-status";
-import { useBuyFlow } from "@/lib/marketplace/use-buy-flow";
+import { useMarketplaceActionFlow } from "@/lib/marketplace/use-marketplace-action-flow";
 
 type WriteContractParams = Parameters<ReturnType<typeof useWriteContract>["writeContract"]>[0];
 
@@ -34,7 +34,7 @@ function buildBuyCallFixture(): WriteContractParams {
  * (`transaction-status.tsx`: "Drop-in for the mint / buy / offer flows").
  */
 export function BuyButton({ tokenId, priceWei }: BuyButtonProps) {
-  const flow = useBuyFlow({ simulateBuy: simulateBuyFixture, buildBuyCall: buildBuyCallFixture });
+  const flow = useMarketplaceActionFlow({ simulate: simulateBuyFixture, buildCall: buildBuyCallFixture });
 
   return (
     <div className="flex flex-col gap-2">
@@ -53,7 +53,7 @@ export function BuyButton({ tokenId, priceWei }: BuyButtonProps) {
       <Button
         type="button"
         size="sm"
-        onClick={flow.buy}
+        onClick={flow.execute}
         disabled={flow.isSimulating || (flow.state !== "idle" && flow.state !== "failed" && flow.state !== "rejected")}
         aria-label={`Buy NFFC #${tokenId} for ${priceWei} wei`}
       >
