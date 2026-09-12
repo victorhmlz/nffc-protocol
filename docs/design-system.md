@@ -27,15 +27,20 @@ utilities respond to it. See §6 for the mechanism.
 | `surface-raised` | `#ffffff` | `#212120` | Dialogs, popovers |
 | `muted` | `#f1f1ee` | `#242423` | Fills, row hover, skeletons |
 | `muted-foreground` | `#52514e` | `#c3c2b7` | Secondary text |
-| `subtle-foreground` | `#898781` | `#898781` | Meta, axis labels, timestamps |
+| `subtle-foreground` | `#6e6c67`¹ | `#898781` | Meta, axis labels, timestamps |
 | `border` | `#e1e0d9` | `#2c2c2a` | Hairline dividers, default border |
 | `border-strong` | `#c3c2b7` | `#383835` | Emphasised border, secondary button |
-| `input` | `#d7d6ce` | `#383835` | Form control border |
-| `ring` | `#2a78d6` | `#3987e5` | Focus outline (2px, 2px offset) |
-| `primary` | `#2a78d6` | `#3987e5` | Primary action; brand |
+| `input` | `#8c8b86`¹ | `#6a6a65`¹ | Form control border |
+| `ring` | `#2569c4`¹ | `#3987e5` | Focus outline (2px, 2px offset) |
+| `primary` | `#2569c4`¹ | `#3987e5` | Primary action; brand |
 | `primary-foreground` | `#ffffff` | `#0b0b0b` | Text on primary |
 | `accent` | `#eef4fc` | `#17263b` | Hover wash, quiet highlight |
 | `accent-foreground` | `#184f95` | `#cde2fb` | Text on accent |
+
+¹ Darkened from TASK-03's original value in TASK-34's contrast audit — the original failed WCAG AA
+for its role (4.5:1 text or 3:1 non-text UI boundary) at the sizes it's actually used at. See
+`docs/reports/TASK-34-REPORT.md` and `docs/accessibility.md` for the exact ratios, before and
+after.
 
 ### Financial deltas
 
@@ -145,7 +150,7 @@ Chart chrome: `chart-surface`, `chart-grid` (hairline), `chart-axis` (baseline),
   body must never scroll horizontally.
 - Touch targets ≥ 36px (`size-9`) for interactive controls.
 - Keyboard: one visible focus ring everywhere (`:focus-visible`, 2px `ring`, 2px offset). Full
-  keyboard/focus/contrast audit is TASK-34.
+  keyboard/focus/contrast audit: TASK-34, `docs/accessibility.md`.
 
 ## 6. Theming mechanism
 

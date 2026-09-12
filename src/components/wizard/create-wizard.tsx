@@ -129,7 +129,7 @@ export function CreateWizard({
         <StepMint
           state={mint.state}
           isPreparing={mint.isPreparing}
-          error={mint.error}
+          errorCode={mint.errorCode}
           onMint={mint.mint}
         />
       )}

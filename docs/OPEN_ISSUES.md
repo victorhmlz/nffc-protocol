@@ -4,7 +4,7 @@ Registro vivo de issues abiertos entre TASKS — ver `NFFC_Claude_Master_Prompt.
 
 Reglas: cada entrada tiene un ID único, secuencial, en números naturales — el ID nunca se reutiliza. Al resolverse un issue, su entrada se borra (no se marca como resuelta).
 
-**Próximo ID a usar: 13**
+**Próximo ID a usar: 14**
 
 ---
 
@@ -139,3 +139,17 @@ Es un error puramente de **cita/documentación**, no funcional ni de seguridad: 
 No bloqueante — ningún comportamiento depende de este número siendo correcto. Los `docs/reports/TASK-XX-REPORT.md` ya mergeados son además snapshots históricos que esta sesión no reescribe unilateralmente (mismo criterio ya aplicado en TASK-19/TASK-20/TASK-21).
 
 **Posible resolución en:** una TASK/chore dedicada y pequeña (mismo patrón que `docs/fix-task-19-test-count`) que reemplace "TASK-31" por "TASK-36" en los archivos listados arriba que aún no lo tienen corregido — código fuente y `docs/*.md` vigentes sin problema; para los `docs/reports/TASK-XX-REPORT.md` ya mergeados, el Project Lead debería decidir si se corrigen in situ (son snapshots, no se han tratado como inmutables en otros casos de esta magnitud) o se dejan como están con una nota aclaratoria.
+
+---
+
+## Issue #13 — No existe navegación global entre las superficies de primer nivel (`/market`, `/portfolio`, `/activity`, `/search`, `/create`, `/`)
+
+**Origen:** TASK-34 (Responsive & Accessibility), descubierto al auditar la estructura de landmarks del layout raíz.
+
+Ninguna página tiene ni un `<nav>` global ni un header persistente con links entre superficies — cada ruta de primer nivel es alcanzable solo tecleando la URL directamente o, en el caso de `/nffc/[tokenId]`/`/profile/[address]`, siguiendo un link contextual desde otra página. `AdminNav` (TASK-31) es el único nav real del proyecto, y es local a `/admin/*`. Esto es un problema real de "navegación por teclado" además de descubribilidad general: un usuario de teclado o de lector de pantalla no tiene ningún atajo estructural (landmark `nav`, lista de links) para moverse entre `/market`, `/portfolio`, `/activity`, `/search` y `/create` — tiene que depender de bookmarks o de recordar URLs.
+
+Se corrigió en esta misma TASK el hallazgo relacionado más barato y no-ambiguo (falta de landmark `<main>` en el layout raíz — ver `docs/reports/TASK-34-REPORT.md`), pero construir la navegación global en sí es una decisión de IA/diseño real (qué superficies incluir, dónde vive, cómo se ve), no un fix mecánico — y coincide, además, con el rediseño del marketplace que el Project Lead ya adelantó que va a pedir como TASK aparte (layout tipo OpenSea). Diseñar un nav ahora arriesgaría no sobrevivir intacto a ese rediseño.
+
+No bloqueante — cada superficie sigue siendo alcanzable y usable individualmente; el gap es de navegación entre superficies, no dentro de ninguna de ellas.
+
+**Posible resolución en:** sin asignar todavía — candidato natural para la TASK del rediseño del marketplace que el Project Lead ya mencionó, o para TASK-35 (UI/UX Polish) si esa TASK llega antes.

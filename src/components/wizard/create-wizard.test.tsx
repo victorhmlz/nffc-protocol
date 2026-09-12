@@ -48,7 +48,7 @@ const QUOTE: FeeQuote = {
   totalWei: 3n,
 };
 
-function renderWizard() {
+function renderWizard(overrides: { simulateMint?: () => Promise<void> } = {}) {
   return render(
     <WagmiTestProviders config={createTestWagmiConfig()}>
       <CreateWizard
@@ -56,7 +56,7 @@ function renderWizard() {
         lookup={LOOKUP}
         quoteFees={() => QUOTE}
         prepareMintMetadata={() => Promise.resolve("ipfs://meta")}
-        simulateMint={() => Promise.resolve()}
+        simulateMint={overrides.simulateMint ?? (() => Promise.resolve())}
         buildMintCall={() => ({
           address: "0x0000000000000000000000000000000000000001",
           abi: [],
@@ -68,8 +68,8 @@ function renderWizard() {
 }
 
 /** Drives the wizard from basic-info through Preview with a valid 60/40 split. */
-async function reachPreview() {
-  const utils = renderWizard();
+async function reachPreview(overrides: Parameters<typeof renderWizard>[0] = {}) {
+  const utils = renderWizard(overrides);
 
   fireEvent.change(screen.getByPlaceholderText("e.g. Blue Chips"), {
     target: { value: "Blue Chips" },
@@ -112,6 +112,25 @@ describe("CreateWizard — asset selection is one surface for both providers (ac
     expect(within(table).getByText("ROBINHOOD")).toBeInTheDocument();
     expect(within(table).getByText("BTC")).toBeInTheDocument();
     expect(within(table).getByText("CRYPTO_NATIVE")).toBeInTheDocument();
+  });
+});
+
+describe("CreateWizard — every row's Add/Remove button has a distinct accessible name (TASK-34)", () => {
+  it("labels each button with the asset it acts on, not a bare 'Add'/'Remove'", () => {
+    renderWizard();
+    fireEvent.change(screen.getByPlaceholderText("e.g. Blue Chips"), {
+      target: { value: "x" },
+    });
+    fireEvent.click(screen.getByRole("button", { name: /continue$/i }));
+
+    // Before this fix, both rows' buttons shared the identical accessible
+    // name "Add" — a screen reader user tabbing through form controls (not
+    // navigating the table structurally) couldn't tell them apart.
+    expect(screen.getByRole("button", { name: "Add NVDA" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Add BTC" })).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole("button", { name: "Add NVDA" }));
+    expect(screen.getByRole("button", { name: "Remove NVDA" })).toBeInTheDocument();
   });
 });
 
@@ -212,5 +231,20 @@ describe("CreateWizard — the fee total is shown before Mint is reachable (acce
     // "Mint" is step 7, still ahead of "preview" (step 5) — GOTO must reject it.
     const mintTab = screen.getByRole("button", { name: /7\. mint/i });
     expect(mintTab).toBeDisabled();
+  });
+});
+
+describe("CreateWizard — the mint step uses the unified error vocabulary (TASK-34)", () => {
+  it("shows ErrorNotice's simulation_failed message, not the raw exception, on a failed simulation", async () => {
+    await reachPreview({
+      simulateMint: () => Promise.reject(new Error("would revert: WeightSumNot10000")),
+    });
+    fireEvent.click(screen.getByRole("button", { name: /continue to fees/i }));
+    fireEvent.click(screen.getByRole("button", { name: /continue to mint/i }));
+    fireEvent.click(screen.getByRole("button", { name: /^mint$/i }));
+
+    const alert = await screen.findByRole("alert");
+    expect(alert).toHaveTextContent(/can't be completed right now/i);
+    expect(alert).not.toHaveTextContent(/WeightSumNot10000/);
   });
 });

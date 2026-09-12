@@ -20,6 +20,7 @@ import { useState } from "react";
 import type { useWriteContract } from "wagmi";
 import { useTransactionFlow, type UseTransactionFlowResult } from "@/lib/wallet/transaction-flow";
 import type { TransactionState } from "@/lib/wallet/transaction-state";
+import type { ErrorCode } from "@domain/errors/errors";
 
 type WriteContractParams = Parameters<ReturnType<typeof useWriteContract>["writeContract"]>[0];
 
@@ -33,7 +34,10 @@ export interface UseMintFlowParams {
 export interface UseMintFlowResult {
   readonly state: TransactionState;
   readonly isPreparing: boolean;
+  /** Raw message — kept for logs, never rendered directly (TASK-33/34). */
   readonly error: string | null;
+  /** The unified vocabulary code for `error` — `null` while there is none. */
+  readonly errorCode: ErrorCode | null;
   readonly txHash: UseTransactionFlowResult["txHash"];
   readonly mint: () => void;
   readonly reset: () => void;
@@ -66,6 +70,10 @@ export function useMintFlow({ prepareMetadata, simulateMint, buildMintCall }: Us
     state: flow.state,
     isPreparing,
     error: prepError ?? flow.error,
+    // A prepare/simulate failure never reaches transactionFlowReducer (`mint`
+    // returns before `flow.request` is ever called) — same reasoning as
+    // useWriteFlow's `simulation_failed`, TASK-33/34.
+    errorCode: prepError ? "simulation_failed" : flow.errorCode,
     txHash: flow.txHash,
     mint,
     reset: () => {
