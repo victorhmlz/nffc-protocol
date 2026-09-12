@@ -17,14 +17,16 @@ around that existing guarantee — every offer action here calls the real contra
 respects whatever it decides; nothing in this codebase second-guesses or bypasses the on-chain
 check with client-side "is it expired" logic of its own.
 
-## `useMarketplaceActionFlow` — generalized from TASK-20's `useBuyFlow`
+## `useMarketplaceActionFlow` (since renamed to `useWriteFlow` in TASK-31) — generalized from TASK-20's `useBuyFlow`
 
-`src/lib/marketplace/use-marketplace-action-flow.ts`. TASK-20's `useBuyFlow` was already generic
-in every way that mattered (a `simulate` → `buildCall` pre-flight outside TASK-16's
-`transactionFlowReducer`, so a simulation failure surfaces before any signature is requested) — it
-just had "buy"-specific parameter and method names. Offers need the exact same shape three more
-times (create, cancel, accept), so the hook was renamed and generalized rather than copied a
-fourth time; `BuyButton`'s one call site was updated to match, with no behavior change (its own
+`src/lib/marketplace/use-marketplace-action-flow.ts` at the time of this TASK (relocated to
+`src/lib/wallet/use-write-flow.ts` in TASK-31, once admin writes needed the identical shape too —
+see `docs/admin.md`). TASK-20's `useBuyFlow` was already generic in every way that mattered (a
+`simulate` → `buildCall` pre-flight outside TASK-16's `transactionFlowReducer`, so a simulation
+failure surfaces before any signature is requested) — it just had "buy"-specific parameter and
+method names. Offers need the exact same shape three more times (create, cancel, accept), so the
+hook was renamed and generalized rather than copied a fourth time; `BuyButton`'s one call site was
+updated to match, with no behavior change (its own
 test suite is unchanged and still green).
 
 ## UI (`src/components/nffc/`)
@@ -43,13 +45,13 @@ test suite is unchanged and still green).
   components above; its own read-only rendering (buyer/price/expiry columns) is unchanged.
 
 Every action fixture (`simulateMakeOfferFixture`, `simulateCancelOfferFixture`,
-`simulateAcceptOfferFixture`) rejects with an honest "Marketplace is not deployed yet (TASK-31)"
+`simulateAcceptOfferFixture`) rejects with an honest "Marketplace is not deployed yet (TASK-36)"
 until then — the same live-provable "the wallet is never engaged" property `BuyButton`/`useMintFlow`
 already established, extended to three more actions.
 
 ## What's still deferred
 
-- No live contract — same blocker (TASK-31) every marketplace-write surface in this codebase
+- No live contract — same blocker (TASK-36) every marketplace-write surface in this codebase
   shares.
 - No UI-side "this offer looks expired" indicator ahead of a failed on-chain attempt — not
   required by the acceptance criterion (which is about the chain being authoritative, not about

@@ -3,7 +3,7 @@
 import type { useWriteContract } from "wagmi";
 import { Button } from "@/components/ui/button";
 import { TransactionStatus } from "@/components/ui/transaction-status";
-import { useMarketplaceActionFlow } from "@/lib/marketplace/use-marketplace-action-flow";
+import { useWriteFlow } from "@/lib/wallet/use-write-flow";
 
 type WriteContractParams = Parameters<ReturnType<typeof useWriteContract>["writeContract"]>[0];
 
@@ -13,7 +13,7 @@ export interface BuyButtonProps {
   readonly priceWei: string;
 }
 
-// Marketplace has no deployed address yet (TASK-31) — every simulation fails,
+// Marketplace has no deployed address yet (TASK-36) — every simulation fails,
 // which is the honest, live demonstration of the same acceptance property
 // TASK-18 established for mint: the wallet is never engaged (buildBuyCall
 // below is provably unreachable here). Functions are defined inside this
@@ -21,11 +21,11 @@ export interface BuyButtonProps {
 // because a function cannot cross the server/client RSC boundary — only
 // serializable values (`tokenId`, `priceWei`) do.
 function simulateBuyFixture(): Promise<void> {
-  return Promise.reject(new Error("Marketplace is not deployed yet (TASK-31) — buying is unavailable."));
+  return Promise.reject(new Error("Marketplace is not deployed yet (TASK-36) — buying is unavailable."));
 }
 
 function buildBuyCallFixture(): WriteContractParams {
-  throw new Error("unreachable — simulateBuyFixture always rejects until Marketplace is deployed (TASK-31)");
+  throw new Error("unreachable — simulateBuyFixture always rejects until Marketplace is deployed (TASK-36)");
 }
 
 /**
@@ -34,7 +34,7 @@ function buildBuyCallFixture(): WriteContractParams {
  * (`transaction-status.tsx`: "Drop-in for the mint / buy / offer flows").
  */
 export function BuyButton({ tokenId, priceWei }: BuyButtonProps) {
-  const flow = useMarketplaceActionFlow({ simulate: simulateBuyFixture, buildCall: buildBuyCallFixture });
+  const flow = useWriteFlow({ simulate: simulateBuyFixture, buildCall: buildBuyCallFixture });
 
   return (
     <div className="flex flex-col gap-2">

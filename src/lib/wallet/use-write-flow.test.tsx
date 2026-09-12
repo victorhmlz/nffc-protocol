@@ -1,14 +1,14 @@
 import { act, renderHook, waitFor } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 import { useConnect } from "wagmi";
-import { useMarketplaceActionFlow } from "@/lib/marketplace/use-marketplace-action-flow";
+import { useWriteFlow } from "@/lib/wallet/use-write-flow";
 import { createTestWagmiConfig, WagmiTestProviders } from "../../../tests/support/wagmi-test-config";
 
 function wrapper({ children }: { children: React.ReactNode }) {
   return <WagmiTestProviders config={createTestWagmiConfig()}>{children}</WagmiTestProviders>;
 }
 
-function setup(overrides: Partial<Parameters<typeof useMarketplaceActionFlow>[0]> = {}) {
+function setup(overrides: Partial<Parameters<typeof useWriteFlow>[0]> = {}) {
   const simulate = vi.fn().mockResolvedValue(undefined);
   const buildCall = vi.fn().mockReturnValue({
     address: "0x0000000000000000000000000000000000000002",
@@ -25,7 +25,7 @@ function setup(overrides: Partial<Parameters<typeof useMarketplaceActionFlow>[0]
   } as never);
 
   const { result } = renderHook(
-    () => ({ connect: useConnect(), flow: useMarketplaceActionFlow({ simulate, buildCall, ...overrides }) }),
+    () => ({ connect: useConnect(), flow: useWriteFlow({ simulate, buildCall, ...overrides }) }),
     { wrapper },
   );
   return { result, simulate, buildCall };
@@ -38,7 +38,7 @@ async function connectWallet(result: ReturnType<typeof setup>["result"]) {
   await waitFor(() => expect(result.current.connect.connectors.length).toBeGreaterThan(0));
 }
 
-describe("useMarketplaceActionFlow — a simulation failure is communicated before a signature is requested (acceptance)", () => {
+describe("useWriteFlow — a simulation failure is communicated before a signature is requested (acceptance)", () => {
   it("never calls the wallet write when simulate rejects — state stays idle", async () => {
     const { result, buildCall } = setup({
       simulate: vi.fn().mockRejectedValue(new Error("would revert: OfferExpired")),
@@ -68,7 +68,7 @@ describe("useMarketplaceActionFlow — a simulation failure is communicated befo
   });
 });
 
-describe("useMarketplaceActionFlow — a successful simulation proceeds to the wallet", () => {
+describe("useWriteFlow — a successful simulation proceeds to the wallet", () => {
   it("calls buildCall and leaves idle only after simulation succeeds", async () => {
     const { result, buildCall } = setup();
     await connectWallet(result);

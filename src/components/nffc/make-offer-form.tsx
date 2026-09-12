@@ -4,7 +4,7 @@ import { useState } from "react";
 import type { useWriteContract } from "wagmi";
 import { Button, Field, FieldControl, FieldLabel, Input, Select } from "@/components/ui";
 import { TransactionStatus } from "@/components/ui/transaction-status";
-import { useMarketplaceActionFlow } from "@/lib/marketplace/use-marketplace-action-flow";
+import { useWriteFlow } from "@/lib/wallet/use-write-flow";
 
 type WriteContractParams = Parameters<ReturnType<typeof useWriteContract>["writeContract"]>[0];
 
@@ -21,27 +21,27 @@ const DURATION_OPTIONS = [
 
 // Marketplace.sol.createOffer(tokenId, expiry) is payable — price is
 // msg.value, not a separate argument (contracts/Marketplace.sol). No deployed
-// address yet (TASK-31), so every simulation fails, the same honest, live
+// address yet (TASK-36), so every simulation fails, the same honest, live
 // demonstration BuyButton (TASK-20) established: the wallet is never engaged.
 function simulateMakeOfferFixture(): Promise<void> {
-  return Promise.reject(new Error("Marketplace is not deployed yet (TASK-31) — making an offer is unavailable."));
+  return Promise.reject(new Error("Marketplace is not deployed yet (TASK-36) — making an offer is unavailable."));
 }
 
 function buildMakeOfferCallFixture(): WriteContractParams {
-  throw new Error("unreachable — simulateMakeOfferFixture always rejects until Marketplace is deployed (TASK-31)");
+  throw new Error("unreachable — simulateMakeOfferFixture always rejects until Marketplace is deployed (TASK-36)");
 }
 
 /**
  * Create-offer form (TASK-29) — price + expiry, then the same
  * simulate → sign → submit → confirm flow every other marketplace write
- * uses (`useMarketplaceActionFlow`). Lives inside `OffersList` rather than a
+ * uses (`useWriteFlow`). Lives inside `OffersList` rather than a
  * separate card — offers are one concept (view existing + make a new one),
  * the same way `ListingCard` combines viewing a listing with buying it.
  */
 export function MakeOfferForm({ tokenId }: MakeOfferFormProps) {
   const [priceEth, setPriceEth] = useState("");
   const [durationSeconds, setDurationSeconds] = useState<number>(DURATION_OPTIONS[0].seconds);
-  const flow = useMarketplaceActionFlow({
+  const flow = useWriteFlow({
     simulate: simulateMakeOfferFixture,
     buildCall: buildMakeOfferCallFixture,
   });
