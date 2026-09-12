@@ -31,4 +31,10 @@ interface ICollection {
     function quoteCollectionCreationFee(uint16 componentCount) external view returns (uint256);
     function ownerOfCollection(uint256 collectionId) external view returns (address);
     function setCollectionMetadata(uint256 collectionId, string calldata metadataURI) external; // owner only
+    /// Added TASK-30 (additive) — `FeeConfig.sol` checks this before accepting a
+    /// nonzero royalty for a `collectionId`, so `royaltyBps` can never be set for
+    /// a collection that doesn't exist (closes `docs/OPEN_ISSUES.md` former Issue #3's
+    /// underlying risk: `Marketplace._settle` reverting on `UnknownCollection` for a
+    /// bogus `collectionId` that somehow acquired a nonzero royalty).
+    function collectionExists(uint256 collectionId) external view returns (bool);
 }

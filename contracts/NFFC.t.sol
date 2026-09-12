@@ -15,6 +15,8 @@ import {NFFC} from "./NFFC.sol";
 import {CompositionSegmentLib} from "./lib/CompositionSegmentLib.sol";
 import {StaticRarityLib} from "./lib/StaticRarityLib.sol";
 import {MockERC20} from "./mocks/MockERC20.sol";
+import {MockFeeConfig} from "./mocks/MockFeeConfig.sol";
+import {RejectEther} from "./mocks/FeeRecipients.sol";
 
 contract NFFCTest is Test {
     // re-declared locally so `vm.expectEmit` matches without importing an event ref
@@ -41,11 +43,13 @@ contract NFFCTest is Test {
 
     AssetIdentityRegistry internal assets;
     RepresentationRegistry internal reps;
+    MockFeeConfig internal fees;
     NFFC internal nffc;
 
     address internal admin = makeAddr("admin");
     address internal alice = makeAddr("alice");
     address internal bob = makeAddr("bob");
+    address internal treasury = makeAddr("treasury");
 
     bytes32 internal nvda;
     bytes32 internal nvdaRep;
@@ -79,7 +83,8 @@ contract NFFCTest is Test {
                 _register(string.concat("C", vm.toString(i)), CRYPTO, CRYPTO_NATIVE);
         }
 
-        nffc = new NFFC(admin, address(assets), address(reps));
+        fees = new MockFeeConfig(0, 0, treasury); // zero mint fee by default — see the "fees" section below
+        nffc = new NFFC(admin, address(assets), address(reps), address(fees));
     }
 
     // --------------------------------------------------------------- helpers ---
@@ -358,10 +363,61 @@ contract NFFCTest is Test {
     // -------------------------------------------------------------------- fee ---
 
     function test_mint_withValue_reverts() public {
+        // fee is 0 by default (see setUp) — any nonzero msg.value is unmet.
         vm.deal(alice, 1 ether);
         vm.prank(alice);
-        vm.expectRevert(INFFC.UnexpectedPayment.selector);
+        vm.expectRevert(abi.encodeWithSelector(INFFC.MintFeeNotMet.selector, 1, 0));
         nffc.mint{value: 1}(_params(0, _arr(_c(nvda, nvdaRep, BPS_TOTAL))));
+    }
+
+    // -------------------------------------------------------------------- fees ---
+
+    function test_quoteMintFee_matchesFeeConfig() public {
+        fees.setCurve(0.01 ether, 0.005 ether);
+        assertEq(nffc.quoteMintFee(3), fees.mintFee(3));
+    }
+
+    function test_mint_underpay_reverts() public {
+        fees.setCurve(0.01 ether, 0.005 ether);
+        uint256 fee = nffc.quoteMintFee(2);
+        vm.deal(alice, fee);
+        vm.prank(alice);
+        vm.expectRevert(abi.encodeWithSelector(INFFC.MintFeeNotMet.selector, fee - 1, fee));
+        nffc.mint{value: fee - 1}(_params(0, _arr(_c(nvda, nvdaRep, 5000), _c(btc, btcRep, 5000))));
+    }
+
+    function test_mint_overpay_reverts() public {
+        fees.setCurve(0.01 ether, 0.005 ether);
+        uint256 fee = nffc.quoteMintFee(1);
+        vm.deal(alice, fee + 1);
+        vm.prank(alice);
+        vm.expectRevert(abi.encodeWithSelector(INFFC.MintFeeNotMet.selector, fee + 1, fee));
+        nffc.mint{value: fee + 1}(_params(0, _arr(_c(nvda, nvdaRep, BPS_TOTAL))));
+    }
+
+    function test_mint_correctFee_forwardsToRecipient() public {
+        fees.setCurve(0.01 ether, 0.005 ether);
+        uint256 fee = nffc.quoteMintFee(1);
+        vm.deal(alice, fee);
+        uint256 before = treasury.balance;
+
+        vm.prank(alice);
+        nffc.mint{value: fee}(_params(0, _arr(_c(nvda, nvdaRep, BPS_TOTAL))));
+
+        assertEq(treasury.balance, before + fee);
+        assertEq(alice.balance, 0);
+    }
+
+    function test_mint_feeTransferFails_reverts() public {
+        RejectEther sink = new RejectEther();
+        fees.setFeeRecipient(address(sink));
+        fees.setCurve(0.01 ether, 0.005 ether);
+
+        uint256 fee = nffc.quoteMintFee(1);
+        vm.deal(alice, fee);
+        vm.prank(alice);
+        vm.expectRevert(INFFC.FeeTransferFailed.selector);
+        nffc.mint{value: fee}(_params(0, _arr(_c(nvda, nvdaRep, BPS_TOTAL))));
     }
 
     // --------------------------------------------------------------- pausing ---
@@ -396,17 +452,22 @@ contract NFFCTest is Test {
 
     function test_constructor_rejectsZeroAdmin() public {
         vm.expectRevert(INFFC.ZeroAddress.selector);
-        new NFFC(address(0), address(assets), address(reps));
+        new NFFC(address(0), address(assets), address(reps), address(fees));
     }
 
     function test_constructor_rejectsZeroAssetRegistry() public {
         vm.expectRevert(INFFC.ZeroAddress.selector);
-        new NFFC(admin, address(0), address(reps));
+        new NFFC(admin, address(0), address(reps), address(fees));
     }
 
     function test_constructor_rejectsZeroRepresentationRegistry() public {
         vm.expectRevert(INFFC.ZeroAddress.selector);
-        new NFFC(admin, address(assets), address(0));
+        new NFFC(admin, address(assets), address(0), address(fees));
+    }
+
+    function test_constructor_rejectsZeroFeeConfig() public {
+        vm.expectRevert(INFFC.ZeroAddress.selector);
+        new NFFC(admin, address(assets), address(reps), address(0));
     }
 
     // ------------------------------------------------------------- ERC-721 ---

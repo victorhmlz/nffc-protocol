@@ -82,8 +82,8 @@ contract MarketplaceTest is Test {
         );
         vm.stopPrank();
 
-        nffc = new NFFC(admin, address(assets), address(reps));
         fees = new MockFeeConfig(0, 0, treasury);
+        nffc = new NFFC(admin, address(assets), address(reps), address(fees));
         coll = new Collection(admin, address(fees));
         mkt = new Marketplace(admin, address(nffc), address(coll), address(fees));
     }

@@ -57,9 +57,9 @@ what Step 5 rendered.
 
 ## Fees (Step 6) and Mint (Step 7)
 
-Neither the on-chain fee quote (`Collection.quoteCollectionCreationFee`,
-TASK-10; the mint fee, `IFeeConfig`, TASK-30 — not yet wired into `NFFC.sol`)
-nor a deployed `NFFC` address (TASK-31) exist yet. `CreateWizard` takes both as
+Neither the on-chain fee quote (`Collection.quoteCollectionCreationFee`, TASK-10; the mint fee,
+`NFFC.quoteMintFee`, wired to `FeeConfig.sol` in TASK-30) nor a deployed `NFFC` address (TASK-31)
+exist yet. `CreateWizard` takes both as
 props — `quoteFees: (componentCount) => FeeQuote` and `mint: { state, error,
 onMint }` — so the wizard itself is contract-agnostic; `/create` supplies a
 documented fixture for both until deployment. `StepMint` renders TASK-16's
