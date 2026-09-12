@@ -240,6 +240,56 @@ contract RepresentationRegistryTest is Test {
         assertEq(r.multiplier, 1e18);
     }
 
+    /// TASK-32 access-control review: `_requireProviderAuth` (shared by
+    /// {setRepresentationStatus}, {deactivateRepresentation},
+    /// {updateOracleMetadata}) was proven for the registration path
+    /// (`test_adapter_cannotRegisterForOtherProvider`) but not for these three —
+    /// same gate, same property: neither a stranger nor another provider's own
+    /// adapter may act on a representation that isn't theirs.
+    function test_setRepresentationStatus_unauthorizedCaller_reverts() public {
+        vm.prank(admin);
+        bytes32 id = reps.registerRepresentation(_params(nvda, ROBINHOOD, address(nvdaToken), 18));
+
+        address[2] memory unauthorized = [stranger, cryptoAdapter];
+        for (uint256 i; i < unauthorized.length; ++i) {
+            vm.prank(unauthorized[i]);
+            vm.expectRevert(
+                abi.encodeWithSelector(IRepresentationRegistry.NotProviderAuthorized.selector, ROBINHOOD, unauthorized[i])
+            );
+            reps.setRepresentationStatus(id, IRepresentationRegistry.RepStatus.INACTIVE);
+        }
+    }
+
+    function test_deactivateRepresentation_unauthorizedCaller_reverts() public {
+        vm.prank(admin);
+        bytes32 id = reps.registerRepresentation(_params(nvda, ROBINHOOD, address(nvdaToken), 18));
+
+        address[2] memory unauthorized = [stranger, cryptoAdapter];
+        for (uint256 i; i < unauthorized.length; ++i) {
+            vm.prank(unauthorized[i]);
+            vm.expectRevert(
+                abi.encodeWithSelector(IRepresentationRegistry.NotProviderAuthorized.selector, ROBINHOOD, unauthorized[i])
+            );
+            reps.deactivateRepresentation(id);
+        }
+    }
+
+    function test_updateOracleMetadata_unauthorizedCaller_reverts() public {
+        vm.prank(admin);
+        bytes32 id = reps.registerRepresentation(_params(nvda, ROBINHOOD, address(nvdaToken), 18));
+
+        address[2] memory unauthorized = [stranger, cryptoAdapter];
+        for (uint256 i; i < unauthorized.length; ++i) {
+            vm.prank(unauthorized[i]);
+            vm.expectRevert(
+                abi.encodeWithSelector(IRepresentationRegistry.NotProviderAuthorized.selector, ROBINHOOD, unauthorized[i])
+            );
+            reps.updateOracleMetadata(
+                id, IRepresentationRegistry.OracleMetadata({feed: address(0xBEEF), heartbeat: 60, feedDecimals: 18})
+            );
+        }
+    }
+
     function test_setStatus_unknownRep_reverts() public {
         vm.prank(admin);
         vm.expectRevert(
@@ -257,6 +307,27 @@ contract RepresentationRegistryTest is Test {
             abi.encodeWithSelector(IAccessControl.AccessControlUnauthorizedAccount.selector, stranger, role)
         );
         reps.registerProvider(bytes32("X"), address(0));
+    }
+
+    /// TASK-32 access-control review: `setProviderAdapter` had no dedicated
+    /// unauthorized-caller test before this TASK (only `registerProvider` did).
+    function test_setProviderAdapter_onlyAdmin_reverts() public {
+        bytes32 role = reps.REGISTRY_ADMIN_ROLE();
+        vm.prank(stranger);
+        vm.expectRevert(
+            abi.encodeWithSelector(IAccessControl.AccessControlUnauthorizedAccount.selector, stranger, role)
+        );
+        reps.setProviderAdapter(ROBINHOOD, stranger);
+    }
+
+    /// TASK-32 access-control review: same gap as above, for `setProviderActive`.
+    function test_setProviderActive_onlyAdmin_reverts() public {
+        bytes32 role = reps.REGISTRY_ADMIN_ROLE();
+        vm.prank(stranger);
+        vm.expectRevert(
+            abi.encodeWithSelector(IAccessControl.AccessControlUnauthorizedAccount.selector, stranger, role)
+        );
+        reps.setProviderActive(ROBINHOOD, false);
     }
 
     function test_registerProvider_duplicate_reverts() public {

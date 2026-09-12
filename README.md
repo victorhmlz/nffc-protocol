@@ -27,13 +27,14 @@ supported providers from V1.
 - Offers: [`docs/offers.md`](docs/offers.md) — create/accept/cancel, on `/nffc/[tokenId]` (TASK-29)
 - Fee engine: [`docs/fee-engine.md`](docs/fee-engine.md) — `FeeConfig.sol`, the concrete `IFeeConfig` (TASK-30)
 - Admin: [`docs/admin.md`](docs/admin.md) · live at `/admin` (TASK-31)
+- Threat model & security hardening: [`docs/threat-model.md`](docs/threat-model.md) (TASK-32)
 - Design system: [`docs/design-system.md`](docs/design-system.md) · live at `/style-guide`
 - Governance: `NFFC_Claude_Master_Prompt.md` (v2.5), `NFFC_Development_Plan.md` (v3.4),
   `NFFC_Whitepaper.md` (v1.4), `NFFC_Roadmap.md` (v1.3)
 - Per-task reports: [`docs/reports/`](docs/reports/)
 - Open issues log: [`docs/OPEN_ISSUES.md`](docs/OPEN_ISSUES.md) — live record of unresolved findings between TASKS
 
-> **Status: Admin (TASK-31).** Toolchain (TASK-01) → boundaries (TASK-02) → design
+> **Status: Security Hardening (TASK-32).** Toolchain (TASK-01) → boundaries (TASK-02) → design
 > system (TASK-03) → infrastructure (TASK-04) → registries (TASK-05) → Robinhood + crypto adapters
 > (TASK-06/07) → composition segmentation (TASK-08) → NFFC ERC-721 core (TASK-09) → Collection
 > contract (TASK-10) → metadata split (TASK-11) → generative art (TASK-12) → mint-condition trait
@@ -42,19 +43,19 @@ supported providers from V1.
 > → `/market` explore/filter/sort/buy (TASK-20) → the NFFC detail page (TASK-21) → the price engine
 > (TASK-22) → the Reference NAV engine (TASK-23) → the blockchain indexer (TASK-24) →
 > `/portfolio` (TASK-25) → `/activity` (TASK-26) → `/profile/[address]` (TASK-27) → `/search`
-> (TASK-28) → the offer flows (TASK-29) → `FeeConfig.sol` (TASK-30), and now **`/admin`**: assets,
-> representations, fees, collections, reports, and system health (the one facet with something
-> genuinely live today — `infra/health.ts`), each write action calling the real, already-role-gated
-> contract function and honestly refusing until deployed (`docs/admin.md`). Also corrects a
-> citation bug found while writing this TASK's own "not deployed yet" text: this session had been
-> citing "TASK-31" for "contracts not deployed" throughout TASK-18–30 — the correct number is
-> **TASK-36** (Testnet Deployment); fixed everywhere this TASK touches a file for another reason,
-> logged as `docs/OPEN_ISSUES.md` Issue #12 for the rest. `Marketplace.sol`'s deployment (TASK-36)
-> is still the only thing standing between every one of these read/write paths and live data —
-> every layer (`provider-sync/`, `nav-materializer/`, `indexer/`, `portfolio`, `activity`,
-> `profile`, `search`, the offer flows, the fee engine, now admin) is complete and fully tested,
-> and reports "not available yet" (or, for writes, never actually opens a wallet) honestly until
-> then.
+> (TASK-28) → the offer flows (TASK-29) → `FeeConfig.sol` (TASK-30) → `/admin` (TASK-31), and now a
+> **written threat model** (`docs/threat-model.md`): a STRIDE analysis per contract, an
+> access-control review that found and closed 5 untested (but correctly-gated) functions in
+> `RepresentationRegistry.sol`, and 8 new fuzz tests hardening the mint and marketplace critical
+> paths (256 runs each) — `pnpm contracts:test` now at 224 Solidity tests (was 211). Evaluates
+> `docs/OPEN_ISSUES.md` Issue #4 (front-running) explicitly and defers it to TASK-40 with reasoning,
+> and records the Whitepaper §14 composite-instrument classification risk as an **open finding**,
+> deliberately not resolved here — that determination is the Project Lead's, made with legal
+> counsel, not an engineering threat model's to close. `Marketplace.sol`'s deployment (TASK-36) is
+> still the only thing standing between every read/write path built so far and live data — every
+> layer (`provider-sync/`, `nav-materializer/`, `indexer/`, `portfolio`, `activity`, `profile`,
+> `search`, the offer flows, the fee engine, admin) is complete and fully tested, and reports "not
+> available yet" (or, for writes, never actually opens a wallet) honestly until then.
 
 ## Stack
 

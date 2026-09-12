@@ -32,15 +32,15 @@ No bloqueante para TASK-18, pero tensiona la garantía de verificabilidad promet
 
 ---
 
-## Issue #4 — Front-running de listings y ofertas, sin mitigación en V1
+## Issue #4 — Front-running de listings y ofertas: evaluado en TASK-32, deferido explícitamente a TASK-40
 
-**Origen:** TASK-19 (Marketplace Contract). El propio `docs/spec/08-security-principles.md` (tabla de superficie de amenazas, área "Marketplace") ya nombra *"front-running a listing price change"* como un riesgo conocido, sin asignarle una TASK de mitigación.
+**Origen:** TASK-19 (Marketplace Contract). El propio `docs/spec/08-security-principles.md` (tabla de superficie de amenazas, área "Marketplace") ya nombra *"front-running a listing price change"* como un riesgo conocido, sin asignarle una TASK de mitigación. Se auto-nominó para revisión en TASK-32.
 
-Ni un cambio de precio de listing ni una compra tienen protección alguna contra MEV/front-running (sin commit-reveal, sin price-time lock, sin slippage tolerance). Es un riesgo inherente a cualquier mercado on-chain sin mitigación explícita, no un defecto introducido por esta implementación — pero no está mitigado ni trackeado en ningún TASK futuro del Development Plan.
+**Evaluado en TASK-32** (`docs/threat-model.md` §3, análisis completo de los seis entry points de `Marketplace.sol`): en este diseño concreto — precio fijo, `msg.value` debe matchear exacto, settlement atómico — ninguna carrera (dos compradores, cambio de precio del vendedor mientras hay un `buy` pendiente, `cancelOffer` vs `acceptOffer`) tiene un vector de pérdida de fondos: el perdedor de la carrera revierte por completo (su ETH nunca sale de su wallet) y ningún tercero extrae valor de la contraparte — los dos rasgos que definen un ataque MEV (ganancia del atacante + pérdida de la víctima) están ambos ausentes. No es un defecto introducido por esta implementación ni un riesgo sin analizar; es un riesgo de la categoría general que, analizado contra la mecánica real de este contrato, no tiene el vector de daño que la entrada original de `08-security-principles.md` nombraba en abstracto.
 
-No bloqueante para TASK-19. El Project Lead debería decidir si amerita una TASK de mitigación explícita antes de mainnet (TASK-40 gate) o si se acepta como riesgo conocido del diseño V1.
+**Decisión explícita de esta TASK: deferido a TASK-40, no mitigado ahora.** Una mitigación MEV formal (commit-reveal, un relay privado, `buy(tokenId, maxPrice)` en vez de match exacto) depende de hechos operacionales que todavía no se conocen — cómo se comporta el mempool real de Robinhood Chain, si existe un relay privado para esa chain, qué fricción de UX es aceptable — y TASK-40 ya incluye explícitamente "deployment scripts probados en testnet" y auditoría de seguridad independiente: es el lugar correcto para pesar una mitigación concreta contra condiciones reales de testnet, no una decisión de Solidity aislada tomada antes de que exista esa infraestructura. Esto es un análisis y una decisión de scope, no un "no bloqueante, sin loguear" repetido una tercera vez.
 
-**Posible resolución en:** sin asignar todavía — candidato para revisión en TASK-32 (threat model) o TASK-40 (mainnet gate).
+**Posible resolución en:** TASK-40 (mainnet gate) — evaluar una mitigación concreta (o ratificar el riesgo aceptado) contra el mempool real de Robinhood Chain, informado por `docs/threat-model.md` §3.
 
 ---
 
