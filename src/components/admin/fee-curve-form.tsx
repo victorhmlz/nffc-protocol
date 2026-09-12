@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import type { useWriteContract } from "wagmi";
-import { Button, Field, FieldControl, FieldLabel, Input } from "@/components/ui";
+import { Button, ErrorNotice, Field, FieldControl, FieldLabel, Input } from "@/components/ui";
 import { TransactionStatus } from "@/components/ui/transaction-status";
 import { useWriteFlow } from "@/lib/wallet/use-write-flow";
 import type { FeeCurve } from "@/lib/admin/types";
@@ -80,11 +80,7 @@ export function FeeCurveForm({ kind, current }: FeeCurveFormProps) {
       ) : (
         flow.state !== "idle" && <TransactionStatus state={flow.state} />
       )}
-      {flow.error && (
-        <p role="alert" className="text-xs text-loss">
-          {flow.error}
-        </p>
-      )}
+      {flow.errorCode && <ErrorNotice code={flow.errorCode} />}
     </form>
   );
 }

@@ -24,9 +24,9 @@ describe("FeeCurveForm", () => {
     expect(screen.getByText("Collection creation fee")).toBeInTheDocument();
   });
 
-  it("surfaces the honest 'not deployed yet' error without ever opening a wallet", async () => {
+  it("surfaces the unified simulation_failed notice without ever opening a wallet", async () => {
     renderForm({ kind: "mint", current: { base: 0n, slope: 0n } });
     fireEvent.click(screen.getByRole("button", { name: /update curve/i }));
-    await waitFor(() => expect(screen.getByRole("alert")).toHaveTextContent(/not deployed yet/i));
+    await waitFor(() => expect(screen.getByRole("alert")).toHaveTextContent(/can't be completed right now/i));
   });
 });

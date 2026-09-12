@@ -20,11 +20,11 @@ describe("RegisterAssetForm", () => {
     expect(screen.getByRole("button", { name: /register asset/i })).not.toBeDisabled();
   });
 
-  it("surfaces the honest 'not deployed yet' error without ever opening a wallet", async () => {
+  it("surfaces the unified simulation_failed notice without ever opening a wallet", async () => {
     renderForm();
     fireEvent.change(screen.getByLabelText("Symbol"), { target: { value: "NVDA" } });
     fireEvent.change(screen.getByLabelText("Name"), { target: { value: "NVIDIA Corporation" } });
     fireEvent.click(screen.getByRole("button", { name: /register asset/i }));
-    await waitFor(() => expect(screen.getByRole("alert")).toHaveTextContent(/not deployed yet/i));
+    await waitFor(() => expect(screen.getByRole("alert")).toHaveTextContent(/can't be completed right now/i));
   });
 });

@@ -24,6 +24,7 @@ export * from "@domain/activity/activity";
 export * from "@domain/profile/profile";
 export * from "@domain/search/search";
 export * from "@domain/admin/admin";
+export * from "@domain/errors/errors";
 export * from "@domain/nffc-detail/detail";
 export * from "@domain/portfolio/portfolio";
 export * from "@domain/indexer/events";

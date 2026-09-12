@@ -27,10 +27,10 @@ describe("RegisterRepresentationForm", () => {
     expect(screen.getByRole("button", { name: /register representation/i })).not.toBeDisabled();
   });
 
-  it("surfaces the honest 'not deployed yet' error without ever opening a wallet", async () => {
+  it("surfaces the unified simulation_failed notice without ever opening a wallet", async () => {
     renderForm();
     fireEvent.change(screen.getByLabelText(/token address/i), { target: { value: "0xabc" } });
     fireEvent.click(screen.getByRole("button", { name: /register representation/i }));
-    await waitFor(() => expect(screen.getByRole("alert")).toHaveTextContent(/not deployed yet/i));
+    await waitFor(() => expect(screen.getByRole("alert")).toHaveTextContent(/can't be completed right now/i));
   });
 });

@@ -1,4 +1,5 @@
 import type { MarketDataPoint } from "@domain/metadata/metadata";
+import { ERROR_VOCABULARY } from "@domain/errors/errors";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/cn";
@@ -72,7 +73,11 @@ export function ReferenceNavStat({
         <span>{data.source}</span>
         <span aria-hidden>·</span>
         <span>{formatAge(data.observedAt, now)}</span>
-        {data.stale && <Badge variant="warning">Stale</Badge>}
+        {data.stale && (
+          <Badge variant="warning" title={ERROR_VOCABULARY.oracle_stale.recoveryAction}>
+            Stale
+          </Badge>
+        )}
       </span>
     </div>
   );

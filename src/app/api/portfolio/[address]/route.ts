@@ -1,6 +1,7 @@
 import { isAddress } from "viem";
 import type { NextRequest } from "next/server";
 import { getPortfolio } from "@/lib/portfolio/get-portfolio";
+import { withApiErrorHandling } from "@/lib/api/error-response";
 
 /**
  * A wallet's portfolio (TASK-25) — owned NFFCs, Reference NAV, performance,
@@ -16,7 +17,7 @@ import { getPortfolio } from "@/lib/portfolio/get-portfolio";
  */
 export const dynamic = "force-dynamic";
 
-export async function GET(
+export const GET = withApiErrorHandling(async function GET(
   _req: NextRequest,
   ctx: RouteContext<"/api/portfolio/[address]">,
 ): Promise<Response> {
@@ -32,4 +33,4 @@ export async function GET(
   const portfolio = await getPortfolio(address);
 
   return Response.json(portfolio, { status: 200, headers: { "Cache-Control": "no-store" } });
-}
+});

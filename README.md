@@ -28,13 +28,14 @@ supported providers from V1.
 - Fee engine: [`docs/fee-engine.md`](docs/fee-engine.md) — `FeeConfig.sol`, the concrete `IFeeConfig` (TASK-30)
 - Admin: [`docs/admin.md`](docs/admin.md) · live at `/admin` (TASK-31)
 - Threat model & security hardening: [`docs/threat-model.md`](docs/threat-model.md) (TASK-32)
+- Error handling: [`docs/error-handling.md`](docs/error-handling.md) (TASK-33)
 - Design system: [`docs/design-system.md`](docs/design-system.md) · live at `/style-guide`
 - Governance: `NFFC_Claude_Master_Prompt.md` (v2.5), `NFFC_Development_Plan.md` (v3.4),
   `NFFC_Whitepaper.md` (v1.4), `NFFC_Roadmap.md` (v1.3)
 - Per-task reports: [`docs/reports/`](docs/reports/)
 - Open issues log: [`docs/OPEN_ISSUES.md`](docs/OPEN_ISSUES.md) — live record of unresolved findings between TASKS
 
-> **Status: Security Hardening (TASK-32).** Toolchain (TASK-01) → boundaries (TASK-02) → design
+> **Status: Error Handling (TASK-33).** Toolchain (TASK-01) → boundaries (TASK-02) → design
 > system (TASK-03) → infrastructure (TASK-04) → registries (TASK-05) → Robinhood + crypto adapters
 > (TASK-06/07) → composition segmentation (TASK-08) → NFFC ERC-721 core (TASK-09) → Collection
 > contract (TASK-10) → metadata split (TASK-11) → generative art (TASK-12) → mint-condition trait
@@ -43,19 +44,21 @@ supported providers from V1.
 > → `/market` explore/filter/sort/buy (TASK-20) → the NFFC detail page (TASK-21) → the price engine
 > (TASK-22) → the Reference NAV engine (TASK-23) → the blockchain indexer (TASK-24) →
 > `/portfolio` (TASK-25) → `/activity` (TASK-26) → `/profile/[address]` (TASK-27) → `/search`
-> (TASK-28) → the offer flows (TASK-29) → `FeeConfig.sol` (TASK-30) → `/admin` (TASK-31), and now a
-> **written threat model** (`docs/threat-model.md`): a STRIDE analysis per contract, an
-> access-control review that found and closed 5 untested (but correctly-gated) functions in
-> `RepresentationRegistry.sol`, and 8 new fuzz tests hardening the mint and marketplace critical
-> paths (256 runs each) — `pnpm contracts:test` now at 224 Solidity tests (was 211). Evaluates
-> `docs/OPEN_ISSUES.md` Issue #4 (front-running) explicitly and defers it to TASK-40 with reasoning,
-> and records the Whitepaper §14 composite-instrument classification risk as an **open finding**,
-> deliberately not resolved here — that determination is the Project Lead's, made with legal
-> counsel, not an engineering threat model's to close. `Marketplace.sol`'s deployment (TASK-36) is
-> still the only thing standing between every read/write path built so far and live data — every
-> layer (`provider-sync/`, `nav-materializer/`, `indexer/`, `portfolio`, `activity`, `profile`,
-> `search`, the offer flows, the fee engine, admin) is complete and fully tested, and reports "not
-> available yet" (or, for writes, never actually opens a wallet) honestly until then.
+> (TASK-28) → the offer flows (TASK-29) → `FeeConfig.sol` (TASK-30) → `/admin` (TASK-31) → a written
+> threat model (TASK-32), and now a **unified error vocabulary** (`docs/error-handling.md`): nine
+> categories (`domain/errors/errors.ts`) seeded in `docs/spec/07-ux-map.md` §7, rendered by one
+> shared `ErrorNotice` component. Found and fixed a real gap along the way — all ten write-flow
+> components (`BuyButton`, offer/admin forms, `StatusToggleButton`) were rendering raw, unfiltered
+> wagmi/viem exception text directly to users; every one now renders the unified vocabulary instead.
+> Also unified three different wordings for the same "oracle stale" condition down to one, gave
+> `/api/portfolio/[address]` and `/api/nffc/[tokenId]/market` a consistent JSON error envelope for
+> unexpected RPC/DB failures, and defined (but honestly can't yet wire up) an `indexer_lag` category
+> — no live indexer-freshness signal exists anywhere in the pipeline before TASK-36 deploys.
+> `Marketplace.sol`'s deployment (TASK-36) is still the only thing standing between every read/write
+> path built so far and live data — every layer (`provider-sync/`, `nav-materializer/`, `indexer/`,
+> `portfolio`, `activity`, `profile`, `search`, the offer flows, the fee engine, admin) is complete
+> and fully tested, and reports "not available yet" (or, for writes, never actually opens a wallet)
+> honestly until then.
 
 ## Stack
 

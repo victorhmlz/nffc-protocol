@@ -2,6 +2,7 @@ import type { NextRequest } from "next/server";
 import { MARKET_DATA_CACHE_CONTROL, MARKET_DATA_NOTICE } from "@domain/metadata/metadata";
 import { getNffcMarketSnapshot } from "@/lib/nffc-detail/get-nffc-market-snapshot";
 import { isValidTokenId } from "@/lib/token-id";
+import { withApiErrorHandling } from "@/lib/api/error-response";
 
 /**
  * **Dynamic** market data for an NFFC — Reference NAV and per-component prices
@@ -16,7 +17,7 @@ import { isValidTokenId } from "@/lib/token-id";
  */
 export const dynamic = "force-dynamic";
 
-export async function GET(
+export const GET = withApiErrorHandling(async function GET(
   _req: NextRequest,
   ctx: RouteContext<"/api/nffc/[tokenId]/market">,
 ): Promise<Response> {
@@ -35,4 +36,4 @@ export async function GET(
     { ...snapshot, notice: MARKET_DATA_NOTICE },
     { status: 200, headers: { "Cache-Control": MARKET_DATA_CACHE_CONTROL } },
   );
-}
+});

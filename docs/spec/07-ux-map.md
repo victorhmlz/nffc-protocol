@@ -105,12 +105,19 @@ trait, ownership, current listing, offers, activity.
 | Filters (composition, segment, rarity, mint condition) operate on **indexed** data, not per-item on-chain reads | `NFFC_Development_Plan.md` TASK-20 |
 | "Estado del Mercado" / leaderboard-style views are **V1.5**, and their copy is legal-reviewed before publishing | `NFFC_Whitepaper.md` §16; `NFFC_Development_Plan.md` TASK-42 |
 
-## 7. Error vocabulary (TASK-33 — unified later, seeded here)
+## 7. Error vocabulary (TASK-33 — unified)
 
 Wallet rejected · insufficient funds · wrong network · reverted transaction · simulation failed ·
 RPC unavailable · indexer lag (data may be behind) · API unavailable · oracle stale. Each maps to
-one consistent user-facing message and a recovery action. Full unification is TASK-33; every earlier
-surface uses this vocabulary rather than inventing its own.
+one consistent user-facing message and a recovery action — `domain/errors/errors.ts`
+(`ErrorCode`/`ERROR_VOCABULARY`), rendered by `src/components/ui/error-notice.tsx`. Every write-flow
+surface (`useWriteFlow`/`useTransactionFlow`, `src/lib/wallet/classify-wallet-error.ts`) and every
+API Route Handler with a genuine external call (`src/lib/api/error-response.ts`) uses this
+vocabulary instead of a raw exception message; `wrong_network` (`NetworkBanner`) and `oracle_stale`
+(`ReferenceNavStat`, `NffcMarketPanel`, `PortfolioSummary`) reuse the same wording their own
+specialized widgets already needed. `indexer_lag` is defined and ready but not yet reachable by any
+UI path — no live indexer-freshness signal exists anywhere in the pipeline before TASK-36 deploys
+real contracts to index (`docs/reports/TASK-33-REPORT.md`).
 
 ## 8. Accessibility & responsive (TASK-34, seeded here)
 

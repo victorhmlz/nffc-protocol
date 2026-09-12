@@ -12,12 +12,15 @@ function renderButton() {
 }
 
 describe("BuyButton — honest fixture demonstrates the acceptance property live", () => {
-  it("shows 'Marketplace is not deployed yet' and never opens the wallet, since Marketplace has no address until TASK-36", async () => {
+  it("shows the unified simulation_failed notice and never opens the wallet, since Marketplace has no address until TASK-36", async () => {
     renderButton();
     fireEvent.click(screen.getByRole("button", { name: /buy nffc #1/i }));
 
+    // TASK-33: the raw fixture message ("Marketplace is not deployed yet
+    // (TASK-36)") is never rendered directly — only the unified vocabulary
+    // (`ERROR_VOCABULARY.simulation_failed`, docs/spec/07-ux-map.md §7).
     const alert = await screen.findByRole("alert");
-    expect(alert).toHaveTextContent(/not deployed yet \(task-36\)/i);
+    expect(alert).toHaveTextContent(/can't be completed right now/i);
     // idle/failed/rejected are all still clickable — confirms no wallet flow
     // was ever entered (a truly "in-flight" transaction would disable it).
     await waitFor(() => expect(screen.getByRole("button", { name: /buy nffc #1/i })).not.toBeDisabled());

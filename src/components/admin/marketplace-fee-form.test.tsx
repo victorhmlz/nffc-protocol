@@ -17,9 +17,9 @@ describe("MarketplaceFeeForm", () => {
     expect(screen.getByLabelText(/marketplace fee/i)).toHaveValue(150);
   });
 
-  it("surfaces the honest 'not deployed yet' error without ever opening a wallet", async () => {
+  it("surfaces the unified simulation_failed notice without ever opening a wallet", async () => {
     renderForm(150);
     fireEvent.click(screen.getByRole("button", { name: /update/i }));
-    await waitFor(() => expect(screen.getByRole("alert")).toHaveTextContent(/not deployed yet/i));
+    await waitFor(() => expect(screen.getByRole("alert")).toHaveTextContent(/can't be completed right now/i));
   });
 });
