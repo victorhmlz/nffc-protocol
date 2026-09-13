@@ -17,11 +17,17 @@
  * only job is knowing which address to ask for. Flagged as
  * `docs/OPEN_ISSUES.md` Issue #10 rather than silently deviating from the
  * documented split.
+ *
+ * TASK-35: dropped the page-local `<NetworkBanner>` and the second,
+ * already-connected `<ConnectWalletButton>` that used to sit above this
+ * content — both are now `SiteHeader`'s job, reachable from every route
+ * instead of only this one. The "not connected" CTA below stays: it's a
+ * contextual prompt tied to this page's own empty state, not a duplicate of
+ * the header's persistent connection status.
  */
 import { useAccount } from "wagmi";
 import { Container } from "@/components/ui/container";
 import { ConnectWalletButton } from "@/components/wallet/connect-wallet-button";
-import { NetworkBanner } from "@/components/wallet/network-banner";
 import { NffcSummaryGrid } from "@/components/nffc/nffc-summary-grid";
 import { PortfolioSummary } from "@/components/portfolio/portfolio-summary";
 import { ExposureBreakdown, type ExposureRow } from "@/components/portfolio/exposure-breakdown";
@@ -42,8 +48,6 @@ export default function PortfolioPage() {
         </p>
       </header>
 
-      <NetworkBanner />
-
       {!isConnected ? (
         <div className="flex flex-col items-start gap-3 rounded-lg border border-dashed border-border p-8">
           <p className="text-sm text-muted-foreground">
@@ -53,7 +57,6 @@ export default function PortfolioPage() {
         </div>
       ) : (
         <>
-          <ConnectWalletButton />
           {loading && (
             <p role="status" aria-live="polite" className="text-sm text-muted-foreground">
               Loading portfolio…

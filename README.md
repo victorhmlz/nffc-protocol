@@ -30,13 +30,14 @@ supported providers from V1.
 - Threat model & security hardening: [`docs/threat-model.md`](docs/threat-model.md) (TASK-32)
 - Error handling: [`docs/error-handling.md`](docs/error-handling.md) (TASK-33)
 - Responsive & accessibility: [`docs/accessibility.md`](docs/accessibility.md) (TASK-34)
+- UI/UX polish: [`docs/ui-polish.md`](docs/ui-polish.md) (TASK-35)
 - Design system: [`docs/design-system.md`](docs/design-system.md) · live at `/style-guide`
 - Governance: `NFFC_Claude_Master_Prompt.md` (v2.5), `NFFC_Development_Plan.md` (v3.4),
   `NFFC_Whitepaper.md` (v1.4), `NFFC_Roadmap.md` (v1.3)
 - Per-task reports: [`docs/reports/`](docs/reports/)
 - Open issues log: [`docs/OPEN_ISSUES.md`](docs/OPEN_ISSUES.md) — live record of unresolved findings between TASKS
 
-> **Status: Responsive & Accessibility (TASK-34).** Toolchain (TASK-01) → boundaries (TASK-02) →
+> **Status: UI/UX Polish (TASK-35).** Toolchain (TASK-01) → boundaries (TASK-02) →
 > design system (TASK-03) → infrastructure (TASK-04) → registries (TASK-05) → Robinhood + crypto
 > adapters (TASK-06/07) → composition segmentation (TASK-08) → NFFC ERC-721 core (TASK-09) →
 > Collection contract (TASK-10) → metadata split (TASK-11) → generative art (TASK-12) →
@@ -46,20 +47,18 @@ supported providers from V1.
 > (TASK-21) → the price engine (TASK-22) → the Reference NAV engine (TASK-23) → the blockchain
 > indexer (TASK-24) → `/portfolio` (TASK-25) → `/activity` (TASK-26) → `/profile/[address]`
 > (TASK-27) → `/search` (TASK-28) → the offer flows (TASK-29) → `FeeConfig.sol` (TASK-30) →
-> `/admin` (TASK-31) → a written threat model (TASK-32) → a unified error vocabulary (TASK-33), and
-> now a **contrast + keyboard audit** (`docs/accessibility.md`): 4 design tokens darkened to clear
-> WCAG AA (a real gap in the original palette — `--subtle-foreground`, `--primary`, and both
-> themes' `--input` border all narrowly or badly failed their required ratio; now a regression-
-> tested fixture, `tests/design-tokens-contrast.test.ts`), a `<main>` landmark added once to the
-> root layout for every route, per-row buttons in the create wizard given distinct accessible names,
-> and the mint flow's error surface (missed by TASK-33 — it predates `useWriteFlow`'s lineage) folded
-> into the same unified vocabulary. The rest of the codebase's keyboard/ARIA foundations (Radix
-> primitives, `Field` wiring, real interactive elements everywhere, no click-only `div`s) were
-> audited and confirmed sound, not rebuilt. `Marketplace.sol`'s deployment (TASK-36) is still the
-> only thing standing between every read/write path built so far and live data — every layer
-> (`provider-sync/`, `nav-materializer/`, `indexer/`, `portfolio`, `activity`, `profile`, `search`,
-> the offer flows, the fee engine, admin) is complete and fully tested, and reports "not available
-> yet" (or, for writes, never actually opens a wallet) honestly until then.
+> `/admin` (TASK-31) → a written threat model (TASK-32) → a unified error vocabulary (TASK-33) → a
+> contrast + keyboard audit (TASK-34), and now **`SiteHeader`** (`docs/ui-polish.md`, resolving
+> `docs/OPEN_ISSUES.md`'s former Issue #13): one persistent, site-wide chrome, since
+> `ThemeToggle`/`ConnectWalletButton`/`NetworkBanner` were each reachable from only one or two of the
+> project's 12 routes, and nothing linked any top-level surface to any other at all. Also landed
+> `prefers-reduced-motion` support globally (deferred from TASK-03 to "TASK-30/35" — TASK-30 never
+> touched a TypeScript/CSS file) and refreshed the homepage's stale "foundation only" copy, true at
+> TASK-01 and false since TASK-20. `Marketplace.sol`'s deployment (TASK-36) is still the only thing
+> standing between every read/write path built so far and live data — every layer (`provider-sync/`,
+> `nav-materializer/`, `indexer/`, `portfolio`, `activity`, `profile`, `search`, the offer flows, the
+> fee engine, admin) is complete and fully tested, and reports "not available yet" (or, for writes,
+> never actually opens a wallet) honestly until then.
 
 ## Stack
 
