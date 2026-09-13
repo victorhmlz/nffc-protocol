@@ -166,8 +166,9 @@ TASK — "eliminar inconsistencias visuales y de interacción acumuladas" is its
 
 Branch `task/TASK-35-ui-polish`, based on **`main`** (TASK-00…34).
 
-**PR: (to be filled in once opened)**
-**CI: (to be filled in once green)**
+**PR:** https://github.com/victorhmlz/nffc-protocol/pull/42
+**CI:** green — https://github.com/victorhmlz/nffc-protocol/actions/runs/34751051423
+(`lint · typecheck · test · build` pass, 1m52s; `solidity · compile · test` pass, 29s)
 
 **Do not merge** — Project Lead reviews and authorizes.
 
