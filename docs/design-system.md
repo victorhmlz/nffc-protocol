@@ -109,7 +109,8 @@ Chart chrome: `chart-surface`, `chart-grid` (hairline), `chart-axis` (baseline),
 - **Elevation**: `shadow-xs` resting card · `shadow-sm` raised · `shadow-md` menus · `shadow-lg`
   dialogs. Shadows are soft and near-black; never coloured.
 - **Motion**: `--duration-fast` 120ms (hover/press), `--duration-base` 180ms (enter/leave),
-  `--ease-out`. Respect `prefers-reduced-motion` (added with real transitions in TASK-30/35).
+  `--ease-out`. `prefers-reduced-motion` is respected globally (`globals.css`, TASK-35) — a kill
+  switch, not per-component opt-in.
 
 ## 4. Components
 
@@ -128,6 +129,7 @@ Chart chrome: `chart-surface`, `chart-grid` (hairline), `chart-axis` (baseline),
 | `Stat` | KPI: label + value + optional delta (always arrow + text). `aligned` for stat rows. |
 | `TransactionStatus` | Presentational view of the wallet state machine (`src/lib/wallet/transaction-state.ts`); icon + label + description, `role="status"` `aria-live="polite"`. |
 | `ConnectWalletButton` / `NetworkBanner` | Self-custody wallet connect/disconnect + automatic wrong-network detection with a switch-to-4663 action (TASK-16, `docs/wallet-integration.md`). Client Components — the only ones that touch wagmi. |
+| `SiteHeader` / `NavLink` | The one persistent, site-wide chrome (TASK-35, `docs/ui-polish.md`) — top-level nav + `ThemeToggle`/`ConnectWalletButton`/`NetworkBanner`, rendered once in the root layout. `SiteHeader` is a plain Server Component; `NavLink` is the one Client leaf (`usePathname()` for `aria-current="page"`). |
 | `CreateWizard` (`src/components/wizard/`) | The 7-step `/create` flow — basic info, asset selection (one surface, both providers), weights, I1–I8 validation, exact post-mint art preview, fees before signing, mint (TASK-17, `docs/create-wizard.md`). |
 | `Select` | A native `<select>`, styled to match `Input`. First used by the marketplace filter bar. |
 | `MarketFilters` / `NffcGrid` / `NffcCard` / `BuyButton` / `Pagination` (`src/components/market/`) | The `/market` explore surface — server-rendered grid + pagination, a Client Component filter bar that drives the URL (`?segment=&minRarity=&regime=&listed=&sort=&page=`), and a Client Component buy affordance reusing `TransactionStatus` (TASK-20, `docs/marketplace-ui.md`). |
@@ -166,6 +168,6 @@ Chart chrome: `chart-surface`, `chart-grid` (hairline), `chart-axis` (baseline),
 
 ## 7. Out of scope for TASK-03
 
-Enter/leave animations and `prefers-reduced-motion` handling (TASK-30/35); the real chart plots and
+Enter/leave animations (`prefers-reduced-motion` handling landed in TASK-35 — §3); the real chart plots and
 their hover/table layers (TASK-10+); Select / Combobox / Tabs / Toast / Tooltip (added when a TASK
 needs them); the full accessibility audit (TASK-34); brand-tuned chart palette (optional later swap).

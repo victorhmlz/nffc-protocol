@@ -281,4 +281,24 @@
     font-variant-numeric: tabular-nums;
     font-feature-settings: "tnum";
   }
+
+  /* TASK-35: `docs/design-system.md` §3 deferred this to "TASK-30/35" —
+     TASK-30 never touched a TypeScript file, so it landed here. The
+     industry-standard kill switch (near-instant duration, one iteration)
+     rather than `animation: none` — it still gives immediate visual
+     feedback (a spinner settles instead of vanishing), it just doesn't
+     move. Covers every current use of `transition-*`/`animate-*` in this
+     codebase (`Button`/`Input`/`Select`/`Skeleton`/`TransactionStatus`/
+     `WizardProgress`'s hover and loading states) without listing them
+     individually — any future one inherits this for free. */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
 }
